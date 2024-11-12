@@ -1,7 +1,8 @@
 # DIGITAL DIARY ASSIGNMENT
 ## Directory
 1. [Assignment Topic PDF](#Assignment-Topic)
-2. [Workflow]
+2. [Workflow](#Workflow)
+   - [Before starting a task](#Before-Starting-a-Task)
 3. [Setting Up](#How-To-Setup-GitGitHub)
    - [Setting Up GitHub](#How-To-Setup-GitGitHub)
      * [In VSCode](#In-VSCode)
@@ -9,6 +10,25 @@
 <br/>
 
 ## [Assignment Topic](https://github.com/user-attachments/files/17698336/WIX1002.Assignment.Topic.7.PDF)
+
+## Workflow
+### Before Starting a Task
+Merge conflicts are the most common issue when everyone is working on the same project. So to prevent this issue, before starting on your module or task, please create a branch first:
+1. Go on GitHub in your browser and to the page of our repo. Click on Branch and then New Branch.
+    <br/>![image](https://github.com/user-attachments/assets/dfa81910-8835-4002-ad0c-d51f37a60731)
+    <br/>![image](https://github.com/user-attachments/assets/32e320cb-1be3-4af2-9c1b-3e95c8bcf834)
+2. For the branch name, type in whichever module that you are working on (Eg. new-diary-page) and for the source, choose main. (If you are fixing a branch, you can change the source to the branch that you are trying to fix and name it fixing-new-diary-page or something like that). Then click on create new branch.
+    <br/>![image](https://github.com/user-attachments/assets/0ece6854-9cd0-4872-a8a2-b5b8f1ad5475)
+3. Now, go to GitHub Desktop and switch to the branch. Now you can proceed to whatever you are planning to do without disrupting other's work!
+    <br/>![image](https://github.com/user-attachments/assets/98657d8c-b499-405c-a0eb-61621f25b1b8)
+
+<br/>Now if you are done with your work, you can start a PR or Pull Request:
+1. Go on GitHub in your browser and to the page of our repo. At the navigation bar click on Pull Requests and then New Pull Requests.
+   <br/>![image](https://github.com/user-attachments/assets/2cc921f2-33f1-4e6a-8a61-267b3bac50a1)
+3. Choose the base as the branch that you want to merge into, and then for the compare, choose the branch that you want it to merge to the base. Once done, click on Create Pull Request.
+    <br/>![image](https://github.com/user-attachments/assets/76aef9dd-8d7d-44fc-8efd-105ba6c8f462)
+4. Write your title (Eg. New Diary Page done) and anything you want to add on in the description. Once done, click on Create Pull Request.
+5. **DO NOT CLICK ON MERGE PULL REQUEST!** I'll check on pull requests from time to time, in case anything needs fixing. Once I approve the PR, then you may merge to main. Yay!
 
 ## How To Setup Git/GitHub
 I prefer using VSCode because the Git interface is better, but you do you, choose any IDE based on your own preference! But I only know how to set up Git in VSCode and NetBeans so I will only cover this 2.
