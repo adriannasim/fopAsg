@@ -65,8 +65,8 @@ I prefer using VSCode because the Git interface is better, but you do you, choos
     <br/>![image](https://github.com/user-attachments/assets/292179cd-a5e1-4a78-8d92-26272a6048f6)
 15. Name your project anything you like (Eg. fopAsg), then click on Finish.
     <br/>![image](https://github.com/user-attachments/assets/aaee9cc1-70d3-4cdd-abd6-06459bac3128)
-<br/>    
-*For performing git commands, I don't really like using Netbeans to do so, but that is totally up to you. For me, I always try to use the GitHub Desktop software because I like the user interface better, so here's how to:*
+    
+<br/>*For performing git commands, I don't really like using Netbeans to do so, but that is totally up to you. For me, I always try to use the GitHub Desktop software because I like the user interface better, so here's how to:*
 1. In GitHub Desktop, click on Add Local Repository...
    <br/> ![image](https://github.com/user-attachments/assets/9e625521-4a4b-49ec-bcf2-db01041a55da)
 2. Find your project URL (it should be something like C:\Users\XXX\Documents\NetBeansProjects\fopAsg if you left it by default when you clone it just now) then click Select Folder.
