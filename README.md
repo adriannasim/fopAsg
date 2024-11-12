@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/d4baf218-f3f1-4b4b-a5ce-eba72acc9bb1)# DIGITAL DIARY ASSIGNMENT
+DIGITAL DIARY ASSIGNMENT
 ## Assignment Topic 
 [WIX1002 Assignment Topic 7.PDF](https://github.com/user-attachments/files/17698336/WIX1002.Assignment.Topic.7.PDF)
 
