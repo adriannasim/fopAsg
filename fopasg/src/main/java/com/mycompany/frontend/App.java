@@ -1,4 +1,4 @@
-package com.mycompany.fopasg;
+package com.mycompany.frontend;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
