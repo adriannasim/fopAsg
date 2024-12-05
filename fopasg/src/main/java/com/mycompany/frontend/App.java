@@ -17,7 +17,10 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("primary"), 640, 480);
+        scene = new Scene(loadFXML("diary-entry-page"));
+        stage.sizeToScene();
+        //stage.setResizable(false);
+        scene.getStylesheets().add(App.class.getResource("/com/mycompany/frontend/css/style.css").toExternalForm());
         stage.setScene(scene);
         stage.show();
     }

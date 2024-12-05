@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="TOP_CENTER" fillWidth="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="500.0" minWidth="700.0" prefHeight="500.0" prefWidth="700.0" spacing="20.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.frontend.DiaryEntryPageController">
+   <children>
+      <Pane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="500.0" minWidth="700.0" stylesheets="@css/style.css">
+         <children>
+            <Button layoutX="24.0" layoutY="3.0" mnemonicParsing="false" style="-fx-background-color: #ffffff;" text="Back" textFill="#8f8f8f">
+               <font>
+                  <Font name="Roboto" size="12.0" />
+               </font>
+            </Button>
+            <Label layoutX="34.0" layoutY="51.0" minWidth="-Infinity" style="-fx-background-color: #ffffff;" text="01 December 2024" textFill="#6a669d">
+               <font>
+                  <Font name="Roboto Bold" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="34.0" layoutY="85.0" style="-fx-background-color: #ffffff;" text="Sunday" textFill="#8f8f8f">
+               <font>
+                  <Font name="Roboto Bold" size="15.0" />
+               </font>
+            </Label>
+            <Label layoutX="608.0" layoutY="87.0" style="-fx-background-color: #ffffff;" text="10:15 PM" textFill="#8f8f8f">
+               <font>
+                  <Font name="Roboto Bold" size="12.0" />
+               </font>
+            </Label>
+            <TextField layoutX="34.0" layoutY="124.0" prefHeight="40.0" prefWidth="627.0" promptText="Click here to enter the title" style="-fx-background-color: #F1F1F1; -fx-background-radius: 0px;">
+               <font>
+                  <Font name="Roboto Bold" size="15.0" />
+               </font>
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+            </TextField>
+            <TextArea depthTest="DISABLE" layoutX="34.0" layoutY="186.0" prefHeight="217.0" prefWidth="627.0" promptText="Click here to write your content">
+               <font>
+                  <Font name="Roboto" size="12.0" />
+               </font>
+            </TextArea>
+            <Pane layoutX="104.0" layoutY="196.0" prefHeight="40.0" prefWidth="487.0" style="-fx-background-color: #F1F1F1; -fx-background-radius: 5px;">
+               <children>
+                  <Button alignment="CENTER" layoutX="40.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="36.0" style="-fx-background-color: #f1f1f1;" textAlignment="CENTER">
+                     <graphic>
+                        <ImageView fitHeight="11.0" fitWidth="11.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@images/bold-icon.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button alignment="CENTER" layoutX="76.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="36.0" style="-fx-background-color: #f1f1f1;" textAlignment="CENTER">
+                     <graphic>
+                        <ImageView fitHeight="11.0" fitWidth="11.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@images/italic-icon.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button alignment="CENTER" layoutX="112.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="36.0" style="-fx-background-color: #f1f1f1;" textAlignment="CENTER">
+                     <graphic>
+                        <ImageView fitHeight="11.0" fitWidth="11.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@images/font-size-icon.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button alignment="CENTER" layoutX="148.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="36.0" style="-fx-background-color: #f1f1f1;" textAlignment="CENTER">
+                     <graphic>
+                        <ImageView fitHeight="11.0" fitWidth="11.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@images/underline-icon.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button alignment="CENTER" layoutX="184.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="36.0" style="-fx-background-color: #f1f1f1;" textAlignment="CENTER">
+                     <graphic>
+                        <ImageView fitHeight="11.0" fitWidth="11.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@images/strikethrough-icon.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button alignment="CENTER" layoutX="220.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="36.0" style="-fx-background-color: #f1f1f1;" textAlignment="CENTER">
+                     <graphic>
+                        <ImageView fitHeight="11.0" fitWidth="11.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@images/font-colour-icon.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button alignment="CENTER" layoutX="256.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="36.0" style="-fx-background-color: #f1f1f1;" textAlignment="CENTER">
+                     <graphic>
+                        <ImageView fitHeight="11.0" fitWidth="11.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@images/highlight-colour-icon.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Line endX="12.0" layoutX="303.0" layoutY="20.0" rotate="90.0" startX="-10.0" stroke="#8f8f8f" strokeWidth="0.5" />
+                  <Button alignment="CENTER" layoutX="315.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="36.0" style="-fx-background-color: #f1f1f1;" textAlignment="CENTER">
+                     <graphic>
+                        <ImageView fitHeight="11.0" fitWidth="11.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@images/list-icon.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button alignment="CENTER" layoutX="351.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="36.0" style="-fx-background-color: #f1f1f1;" textAlignment="CENTER">
+                     <graphic>
+                        <ImageView fitHeight="11.0" fitWidth="11.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@images/paragraph-style-icon.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Line endX="12.0" layoutX="395.0" layoutY="20.0" rotate="90.0" startX="-10.0" stroke="#8f8f8f" strokeWidth="0.5" />
+                  <Button alignment="CENTER" layoutX="410.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="36.0" style="-fx-background-color: #f1f1f1;" textAlignment="CENTER">
+                     <graphic>
+                        <ImageView fitHeight="11.0" fitWidth="11.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@images/insert-image-icon.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+               </children>
+            </Pane>
+            <Button layoutX="556.0" layoutY="415.0" mnemonicParsing="false" style="-fx-background-color: #9ABF80; -fx-background-radius: 20px;" text="Save" textFill="WHITE">
+               <font>
+                  <Font name="Roboto Bold" size="15.0" />
+               </font>
+               <padding>
+                  <Insets bottom="8.0" left="40.0" right="40.0" top="8.0" />
+               </padding>
+            </Button>
+            <TextField alignment="CENTER_RIGHT" disable="true" layoutX="32.0" layoutY="435.0" prefHeight="16.0" prefWidth="36.0" promptText="0" style="-fx-background-color: #ffffff;">
+               <font>
+                  <Font name="Roboto" size="10.0" />
+               </font>
+            </TextField>
+            <Label alignment="CENTER" layoutX="68.0" layoutY="431.0" prefHeight="23.0" prefWidth="44.0" text="Words" textFill="#8f8f8f">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Label>
+            <Label alignment="CENTER" layoutX="155.0" layoutY="431.0" prefHeight="23.0" prefWidth="59.0" text="Characters" textFill="#8f8f8f">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Label>
+            <TextField alignment="CENTER_RIGHT" disable="true" layoutX="119.0" layoutY="435.0" prefHeight="16.0" prefWidth="36.0" promptText="0" style="-fx-background-color: #ffffff;">
+               <font>
+                  <Font name="Roboto" size="10.0" />
+               </font>
+            </TextField>
+         </children>
+      </Pane>
+   </children>
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+</VBox>

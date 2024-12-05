@@ -1,0 +1,15 @@
+.text-area {
+    -fx-background-color: #ffffff; 
+    -fx-background-radius: 14px;
+}
+
+.text-area .scroll-pane .viewport {
+    -fx-background-color: #E5E3D4; 
+    -fx-background-radius: 14px; 
+}
+
+.text-area .content {
+    -fx-background-color: #E5E3D4;  
+    -fx-background-radius: 14px; 
+    -fx-padding: 70px 20px 70px 20px;    
+}
