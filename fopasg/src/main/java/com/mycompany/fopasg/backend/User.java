@@ -1,4 +1,4 @@
-package com.mycompany.fopasg.backend;
+package backend;
 
 public class User
 {

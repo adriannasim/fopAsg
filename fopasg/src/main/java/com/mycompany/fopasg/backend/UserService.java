@@ -1,22 +1,21 @@
-package com.mycompany.fopasg.backend;
+package backend;
 
 import java.io.IOException;
 import java.util.List;
 
-import com.mycompany.fopasg.backend.FileIO;
-
 public class UserService
 {
-    public FileIO fileIO;
+    private FileIO fileIO;
+    private String filename;
 
     //if no arg passing through constructor, default to Users.json
     public UserService() {
-        this.fileIO = new FileIO("Users.json");
+        this.filename = "User.txt";
     }
 
     //for testing purposes
-    public UserService(String fileName) {
-        this.fileIO = new FileIO(fileName);
+    public UserService(String filename) {
+        this.filename = filename;
     }
 
     //incase we are using it for something
@@ -42,19 +41,20 @@ public class UserService
     // }
 
     //login
-    public boolean userLogin(String username, String password)
+    public boolean userLogin(String username, String password) throws IOException
     {
         //read user class frm json file
-        List<User> users = fileIO.readFromJson(List.class);
+        List<String> userList = fileIO.readTxt(filename);
 
         //loop through the list
-        for (User user : users)
+        for (String userLine : userList)
         {
+            String[] userInfo = userLine.split(",");
             //check if the given username/email exists in the list
-            if (user.getUsername().equals(username) || user.getEmail().equals(username))
+            if (userInfo[0].equals(username) || userInfo[1].equals(username))
             {
                 //then check password
-                if (user.getPassword().equals(password))
+                if (userInfo[2].equals(password))
                 {
                     //login successful
                     return true;
@@ -72,35 +72,35 @@ public class UserService
         return false;
     }
 
-    //sign up
-    public boolean userSignUp(String username, String email, String password)
-    {
-        User newUser = new User(username, email, password);
-        return fileIO.appendToJson(newUser, newUser.getClass());
-    }
+    // //sign up
+    // public boolean userSignUp(String username, String email, String password)
+    // {
+    //     User newUser = new User(username, email, password);
+    //     return fileIO.appendToJson(newUser, newUser.getClass());
+    // }
 
-    //edit profile
-    public boolean userEdit(String username, String email, String password)
-    {
-        User updatedUser = new User(username, email, password);
-        return fileIO.editJson(updatedUser, username, updatedUser.getClass());
-    }
+    // //edit profile
+    // public boolean userEdit(String username, String email, String password)
+    // {
+    //     User updatedUser = new User(username, email, password);
+    //     return fileIO.editJson(updatedUser, username, updatedUser.getClass());
+    // }
 
-    //delete user
-    public boolean userDelete(String username)
-    {
-        //delete user
-        boolean userDeleted = fileIO.deleteJson(username, User.class);
+    // //delete user
+    // public boolean userDelete(String username)
+    // {
+    //     //delete user
+    //     boolean userDeleted = fileIO.deleteJson(username, User.class);
 
-        //delete all diary entries of the user (tbc)
+    //     //delete all diary entries of the user (tbc)
 
-        if (userDeleted)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
+    //     if (userDeleted)
+    //     {
+    //         return true;
+    //     }
+    //     else
+    //     {
+    //         return false;
+    //     }
+    // }
 }

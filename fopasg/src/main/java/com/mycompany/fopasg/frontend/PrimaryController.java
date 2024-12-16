@@ -1,4 +1,4 @@
-package com.mycompany.fopasg.frontend;
+package frontend;
 
 import java.io.IOException;
 import javafx.fxml.FXML;

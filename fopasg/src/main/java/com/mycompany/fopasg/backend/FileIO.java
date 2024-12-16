@@ -1,4 +1,4 @@
-package com.mycompany.fopasg.backend;
+package backend;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -7,28 +7,78 @@ import java.util.List;
 
 public class FileIO 
 {
-    //TXT file manipulation methods for user info
-    //Write
-    public void writeTxt(String fileName, String[] info) 
+    //TXT file manipulation methods
+    /* Asssuming we are saving user as: "username, email, password"  */
+    //Read
+    public List<String> readTxt(String filePath) throws IOException 
     {
-        try 
+        List<String> dataArr = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) 
         {
-            FileWriter fileWriter = new FileWriter(fileName);
-            for (String line : info)
+            String data;
+            while ((data = br.readLine()) != null) 
             {
-                fileWriter.write();
+                dataArr.add(data);
             }
-            fileWriter.close();
-            System.out.println("Successfully wrote to the file.");
-        } 
-        catch (IOException e) 
+        }
+        return dataArr;
+    }
+
+    //Write
+    public void writeTxt(String filePath, List<String> lines) throws IOException 
+    {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) 
         {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
+            for (String line : lines) 
+            {
+                bw.write(line);
+                bw.newLine();
+            }
         }
     }
 
-    //CSV file manipulation methods for diary entries
+    //Append
+    public void appendTxt(String filePath, String data) throws IOException 
+    {
+        //add new line of data at the end of the file
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath, true))) 
+        {
+            bw.write(data);
+            bw.newLine();
+            }
+    }
+
+    //Edit
+    public void editTxt(String filePath, String data, int lineNo) throws IOException 
+    {
+        //get the whole file data first
+        List<String> lines = readTxt(filePath);
+        if (lineNo < 1 || lineNo > lines.size()) 
+        {
+            throw new IllegalArgumentException("Invalid line.");
+        }
+
+        lines.set(lineNo, data); //replace the data at the specified line with the new data
+
+        writeTxt(filePath, lines); //rewrite entire thing back to the txt file
+
+    }
+
+    //Delete
+    public void deleteLineTxt(String filePath, int lineNo) throws IOException 
+    {
+        List<String> lines = readTxt(filePath);
+        if (lineNo < 1 || lineNo > lines.size()) 
+        {
+            throw new IllegalArgumentException("Invalid line.");
+        }
+
+        lines.remove(lineNo - 1); //remove the line
+
+        
+    }
+
+    //CSV file manipulation methods
     //Write
     public void writeCsv(String fileName, List<String[]> data) 
     {
