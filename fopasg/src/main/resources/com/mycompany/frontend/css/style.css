@@ -13,3 +13,70 @@
     -fx-background-radius: 14px; 
     -fx-padding: 70px 20px 70px 20px;    
 }
+
+/* Initially hide the hoverPane */
+#hoverPane {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+/* When the parent (diaryPane) is hovered, show the hoverPane */
+#diaryPane:hover #hoverPane {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Styles for Recycle Bin */
+.diary-item-pane {
+    -fx-background-color: #F1F1F1;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);
+    -fx-transition: all 0.2s ease;
+}
+
+.diary-item-pane:hover {
+    -fx-background-color: #E6E6E6;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 4);
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+.diary-title {
+    -fx-text-fill: #9abf80;
+    -fx-font-family: 'Roboto Bold';
+    -fx-font-size: 15px;
+}
+
+.days-left {
+    -fx-text-fill: #1c325b;
+    -fx-font-family: 'Roboto Bold';
+    -fx-font-size: 8px;
+}
+
+.date {
+    -fx-text-fill: #8f8f8f;
+    -fx-font-family: 'Roboto Bold';
+    -fx-font-size: 6px;
+}
+
+/* ScrollPane styling */
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 10px;
+}
+
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #9abf80;
+    -fx-background-radius: 5px;
+}
+
+

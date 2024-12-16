@@ -9,8 +9,10 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.FlowPane?>
 
-<VBox alignment="TOP_CENTER" fillWidth="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="500.0" minWidth="700.0" prefHeight="500.0" prefWidth="700.0" spacing="20.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.frontend.DiaryEntryPageController">
+<VBox alignment="TOP_CENTER" fillWidth="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="500.0" minWidth="700.0" prefHeight="500.0" prefWidth="700.0" spacing="20.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/13" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.frontend.RecycleBinController">
    <children>
       <Pane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="500.0" minWidth="700.0" stylesheets="@css/style.css">
          <children>
@@ -29,35 +31,23 @@
                   <Font name="Roboto" size="12.0" />
                </font>
             </Label>
-            <Pane layoutX="34.0" layoutY="142.0" prefHeight="65.0" prefWidth="195.0" style="-fx-background-color: #F1F1F1;">
-               <children>
-                  <ImageView fitHeight="35.0" fitWidth="42.0" layoutX="14.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/diary-icon.png" />
-                     </image>
-                  </ImageView>
-                  <Label layoutX="74.0" layoutY="23.0" style="-fx-background-color: #F1F1F1;" text="Diary 1" textFill="#9abf80">
-                     <font>
-                        <Font name="Roboto Bold" size="15.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="140.0" layoutY="45.0" style="-fx-background-color: #F1F1F1;" text="29 days left" textFill="#1c325b">
-                     <font>
-                        <Font name="Roboto Bold" size="8.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="135.0" layoutY="10.0" style="-fx-background-color: #F1F1F1;" text="1 December 2024" textFill="#8f8f8f">
-                     <font>
-                        <Font name="Roboto Bold" size="6.0" />
-                     </font>
-                  </Label>
-               </children>
-            </Pane>
             <Text fill="#8f8f8f" layoutX="34.0" layoutY="97.0" strokeType="OUTSIDE" strokeWidth="0.0" text="The entries listed here will remain recoverable for up to 30 days. If no further action is taken, they will be permanently removed after this period." wrappingWidth="638.6666259765625">
                <font>
                   <Font name="Roboto" size="10.0" />
                </font>
             </Text>
+
+            <!-- ScrollPane with FlowPane for Diary Items -->
+                <ScrollPane layoutX="34.0" layoutY="142.0" prefHeight="300.0" prefWidth="632.0" 
+                             fitToWidth="true" 
+                             hbarPolicy="NEVER" 
+                             vbarPolicy="AS_NEEDED">
+                    <FlowPane fx:id="diaryItemsFlowPane" 
+                               hgap="15.0" 
+                               vgap="20.0" 
+                               alignment="TOP_LEFT" 
+                               prefWidth="632.0"/>
+                </ScrollPane>
          </children>
       </Pane>
    </children>

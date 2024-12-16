@@ -17,7 +17,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("diary-entry-page"));
+        scene = new Scene(loadFXML("diary-recycle-bin"));
         stage.sizeToScene();
         //stage.setResizable(false);
         scene.getStylesheets().add(App.class.getResource("/com/mycompany/frontend/css/style.css").toExternalForm());
