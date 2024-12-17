@@ -1,4 +1,4 @@
-package backend;
+package com.mycompany.fopasg.backend;
 
 public class User
 {
@@ -46,5 +46,11 @@ public class User
     public void setPassword(String password)
     {
         this.password = password;
+    }
+
+    //to string
+    public String toString()
+    {
+        return username + "," + email + "," + password;
     }
 }

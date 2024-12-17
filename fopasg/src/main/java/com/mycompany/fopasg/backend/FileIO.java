@@ -1,19 +1,47 @@
-package backend;
+package com.mycompany.fopasg.backend;
 
 import java.io.*;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class FileIO 
 {
+    //Load file
+    public File loadFile(String filename)
+    {
+        File file;
+        if (filename.toLowerCase().contains("test"))
+        {
+            file = new File("fopasg/src/test/resources/" + filename);
+        }
+        else
+        {
+            file = new File("fopasg/src/main/resources/" + filename);
+        }
+        return file;
+
+        // URL resource = getClass().getClassLoader().getResource(filename);
+        // if (resource == null)
+        // {
+        //     throw new RuntimeException("File not found: " + filename);
+        // }
+        //try 
+        //{
+            //return new File(resource.toURI());
+        //} 
+        // catch (URISyntaxException e) {
+        //     throw new RuntimeException(e);
+        // }
+    }
+
     //TXT file manipulation methods
-    /* Asssuming we are saving user as: "username, email, password"  */
+    /* Asssuming we are saving user as: "username,email,password" in the txt file */
     //Read
-    public List<String> readTxt(String filePath) throws IOException 
+    public List<String> readTxt(String filename) throws IOException, URISyntaxException
     {
         List<String> dataArr = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) 
+        try (BufferedReader br = new BufferedReader(new FileReader(loadFile(filename)))) 
         {
             String data;
             while ((data = br.readLine()) != null) 
@@ -25,9 +53,9 @@ public class FileIO
     }
 
     //Write
-    public void writeTxt(String filePath, List<String> lines) throws IOException 
+    public void writeTxt(String filename, List<String> lines) throws IOException 
     {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) 
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(loadFile(filename)))) 
         {
             for (String line : lines) 
             {
@@ -38,44 +66,70 @@ public class FileIO
     }
 
     //Append
-    public void appendTxt(String filePath, String data) throws IOException 
+    public void appendTxt(String filename, Object dataToAdd) throws IOException 
     {
         //add new line of data at the end of the file
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath, true))) 
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(loadFile(filename), true))) 
         {
-            bw.write(data);
+            bw.write(dataToAdd.toString());
             bw.newLine();
-            }
+        }
     }
 
     //Edit
-    public void editTxt(String filePath, String data, int lineNo) throws IOException 
+    //use key to find which line to replace/edit
+    public void editTxt(String filename, Object dataToUpdate, String key) throws IOException, URISyntaxException
     {
+        int index = -1;
+
         //get the whole file data first
-        List<String> lines = readTxt(filePath);
-        if (lineNo < 1 || lineNo > lines.size()) 
+        List<String> lines = readTxt(filename);
+
+        //find which line to update
+        for (String line : lines)
         {
-            throw new IllegalArgumentException("Invalid line.");
+            String[] data = line.split(",");
+            if (data[0].equals(key))
+            {
+                index = lines.indexOf(line);
+            }
         }
 
-        lines.set(lineNo, data); //replace the data at the specified line with the new data
+        if (index == -1 || index > lines.size()) 
+        {
+            throw new IllegalArgumentException("Invalid line " + index);
+        } 
 
-        writeTxt(filePath, lines); //rewrite entire thing back to the txt file
+        lines.set(index, dataToUpdate.toString()); //replace the data at the specified line with the new data
 
+        writeTxt(filename, lines); //rewrite entire thing back to the txt file
     }
 
     //Delete
-    public void deleteLineTxt(String filePath, int lineNo) throws IOException 
+    public void deleteLineTxt(String filename, String key) throws IOException, URISyntaxException 
     {
-        List<String> lines = readTxt(filePath);
-        if (lineNo < 1 || lineNo > lines.size()) 
+        int index = -1;
+
+        List<String> lines = readTxt(filename);
+
+        //find which line to update
+        for (String line : lines)
+        {
+            String[] data = line.split(",");
+            if (data[0].equals(key))
+            {
+                index = lines.indexOf(line);
+            }
+        }
+
+        if (index == -1 || index > lines.size()) 
         {
             throw new IllegalArgumentException("Invalid line.");
         }
 
-        lines.remove(lineNo - 1); //remove the line
+        lines.remove(index); //remove the line
 
-        
+        writeTxt(filename, lines); //rewrite entire thing back to the txt file
     }
 
     //CSV file manipulation methods
