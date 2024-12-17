@@ -8,10 +8,16 @@
     -fx-background-radius: 14px; 
 }
 
-.text-area .content {
+.text-area#padding-top .content {
     -fx-background-color: #E5E3D4;  
     -fx-background-radius: 14px; 
     -fx-padding: 70px 20px 70px 20px;    
+}
+
+.text-area .content {
+    -fx-background-color: #E5E3D4;  
+    -fx-background-radius: 14px; 
+    -fx-padding: 20px 20px 70px 20px;    
 }
 
 /* Initially hide the hoverPane */

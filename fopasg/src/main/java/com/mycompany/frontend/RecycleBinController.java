@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.FlowPane;
@@ -20,6 +21,9 @@ import javafx.scene.image.ImageView;
 public class RecycleBinController {
     @FXML
     private FlowPane diaryItemsFlowPane;; // Reference to the FlowPane in diary-recycle-bin.fxml
+
+    @FXML
+    private Button backButton;
 
     // A class representing a diary item (Can Change Later)
     static class DiaryItem {
@@ -36,6 +40,7 @@ public class RecycleBinController {
 
     @FXML
     public void initialize() {
+
         // Sample data for diary items
         List<DiaryItem> diaryItems = new ArrayList<>();
         diaryItems.add(new DiaryItem("Diary 1", "1 December 2024", "29 days left"));
@@ -141,61 +146,54 @@ public class RecycleBinController {
         restoreIcon.setOnMouseClicked(e -> {
             // Perform the restore action here (e.g., navigate to restore page or restore
             // item)
-            handleRestore(item, pane); // Custom method to handle restoration
+            handleRestore(); // Custom method to handle restoration
         });
 
         // Event handler for delete icon
         deleteIcon.setOnMouseClicked(e -> {
             // Perform the delete action here (e.g., navigate to delete page or delete item)
-            handleDelete(item, pane); // Custom method to handle deletion
+            handleDelete(); // Custom method to handle deletion
         });
+
+        // Event handler for view icon
+        viewIcon.setOnMouseClicked(e -> {
+            // Perform the view action here (e.g., navigate to view page or view
+            // item)
+            handleView(); // Custom method to handle restoration
+        });
+
 
         return pane;
     }
 
     // Method to handle the delete action
-    private void handleDelete(DiaryItem item, Pane pane) {
+    private void handleDelete() {
 
         // Show a delete confirmation page
         try {
-            FXMLLoader loader = new FXMLLoader(App.class.getResource("pop-up-box.fxml"));
-            Parent root = loader.load();
-
-            PopUpBoxController controller = loader.getController();
-            controller.setConfirmationText("Are you sure you want to permanently delete this entry?");
-            // Set the pop-up as a modal window so it blocks interaction with the main
-            // window
-            Stage popupStage = new Stage();
-            popupStage.initStyle(StageStyle.UNDECORATED); // Removes the title bar and close button
-            // Makes the window modal (blocks interaction with the main window)
-            popupStage.initModality(Modality.APPLICATION_MODAL);
-            Scene scene = new Scene(root);
-            popupStage.setScene(scene); // Change the scene of the stage
-            popupStage.showAndWait();
+            App.openConfirmationPopUp("Are you sure you want to permanently delete this entry?");
         } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
 
     // Method to handle the restore action
-    private void handleRestore(DiaryItem item, Pane pane) {
+    private void handleRestore() {
 
         // Show a restore confirmation page
         try {
-            FXMLLoader loader = new FXMLLoader(App.class.getResource("pop-up-box.fxml"));
-            Parent root = loader.load();
+            App.openConfirmationPopUp("Do you confirm to restore this entry?");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
 
-            PopUpBoxController controller = loader.getController();
-            controller.setConfirmationText("Do you confirm to restore this entry?");
-            // Set the pop-up as a modal window so it blocks interaction with the main
-            // window
-            Stage popupStage = new Stage();
-            popupStage.initStyle(StageStyle.UNDECORATED); // Removes the title bar and close button
-            // Makes the window modal (blocks interaction with the main window)
-            popupStage.initModality(Modality.APPLICATION_MODAL);
-            Scene scene = new Scene(root);
-            popupStage.setScene(scene); // Change the scene of the stage
-            popupStage.showAndWait();
+    // Method to handle the view action
+    private void handleView() {
+
+        // Show a view page
+        try {
+            App.switchScene("diary-view-page");
         } catch (IOException ex) {
             ex.printStackTrace();
         }
