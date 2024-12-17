@@ -23,11 +23,40 @@ import javafx.stage.StageStyle;
 import java.util.Arrays;
 
 public class HistoryPageController {
+
+    @FXML
+    private Pane historyPane;
+
     @FXML
     private VBox diaryItemsVBox; // Reference to the VBox in diary-history-page.fxml
 
     @FXML
     private Button backButton;
+
+    @FXML
+    private Button exportButton;
+
+    @FXML
+    private Pane exportOptions;
+
+    @FXML
+    private Pane exportOptions2;
+
+    @FXML
+    private Button basedOnDateRange;
+
+    @FXML
+    private Button basedOnPickedEntries;
+
+    @FXML
+    private Button basedOnDay;
+
+    @FXML
+    private Button basedOnWeek;
+
+    @FXML
+    private Button basedOnMonth;
+
 
     // A class representing a diary item (Can Change Later)
     static class DiaryItem {
@@ -69,6 +98,35 @@ public class HistoryPageController {
                 ex.printStackTrace();
             }
             
+        });
+
+
+        exportButton.setOnMouseClicked(e -> {
+            exportOptions.setVisible(true);  
+            exportOptions2.setVisible(false);
+        });
+
+        historyPane.setOnMouseClicked(e -> {
+            if (exportOptions.isVisible()) {
+                // Check if the click is outside exportOptions
+                if (!exportOptions.getBoundsInParent().contains(e.getX(), e.getY()) &&
+                    !exportButton.getBoundsInParent().contains(e.getX(), e.getY())) {
+                    exportOptions.setVisible(false);
+                }
+            }
+
+            if (exportOptions2.isVisible()) {
+                // Check if the click is outside exportOptions
+                if (!exportOptions2.getBoundsInParent().contains(e.getX(), e.getY()) &&
+                    !exportButton.getBoundsInParent().contains(e.getX(), e.getY())) {
+                    exportOptions2.setVisible(false);
+                }
+            }
+        });
+
+        basedOnDateRange.setOnMouseClicked(e -> {
+            exportOptions2.setVisible(true); 
+            exportOptions.setVisible(false); 
         });
        
 
@@ -130,6 +188,8 @@ public class HistoryPageController {
         Pane pane = new Pane();
         pane.setPrefSize(190.0, 65.0);
         pane.setStyle("-fx-background-color: #F1F1F1;");
+
+        
 
         // Image
         ImageView imageView = new ImageView(
@@ -203,6 +263,17 @@ public class HistoryPageController {
             // Perform the view action here (e.g., navigate to view page or view
             // item)
             handleView(); // Custom method to handle restoration
+        });
+
+        // Here used to handle entries selection when user want to export into PDF
+        pane.setOnMouseClicked(e -> {
+            if (pane.getStyle().contains("-fx-border-color: #6A669D;")) {
+                // Unselect
+                pane.setStyle("-fx-background-color: #F1F1F1; -fx-border-color: transparent;");
+            } else {
+                // Select
+                pane.setStyle("-fx-background-color: #F1F1F1; -fx-border-color: #6A669D; -fx-border-width: 2px;");
+            }
         });
 
         return pane;
