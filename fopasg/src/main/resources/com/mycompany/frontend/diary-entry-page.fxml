@@ -11,8 +11,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<VBox alignment="TOP_CENTER" fillWidth="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="500.0" minWidth="700.0" prefHeight="500.0" prefWidth="700.0" spacing="20.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/13" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.frontend.DiaryEntryPageController">
+<VBox alignment="TOP_CENTER" fillWidth="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="500.0" minWidth="700.0" prefHeight="500.0" prefWidth="700.0" spacing="20.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.frontend.DiaryEntryPageController">
    <children>
       <Pane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="500.0" minWidth="700.0" stylesheets="@css/style.css">
          <children>
@@ -36,6 +37,7 @@
                   <Font name="Roboto Bold" size="12.0" />
                </font>
             </Label>
+            <!-- Add styleClass="error" to have the red border effect -->
             <TextField layoutX="34.0" layoutY="124.0" prefHeight="40.0" prefWidth="627.0" promptText="Click here to enter the title" style="-fx-background-color: #F1F1F1; -fx-background-radius: 0px;">
                <font>
                   <Font name="Roboto Bold" size="15.0" />
@@ -44,11 +46,27 @@
                   <Insets left="20.0" />
                </padding>
             </TextField>
+            
+            <!-- Below is the error message. Uncomment it to use. -->
+            <!-- <Text fill="#ff9696" layoutX="36.0" layoutY="420.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Title cannot be empty." wrappingWidth="118.26585388183594">
+               <font>
+                  <Font name="Roboto Black" size="10.0" />
+               </font>
+            </Text> -->
+
+            <!-- Add styleClass="error" to have the red border effect -->
             <TextArea id="padding-top" depthTest="DISABLE" layoutX="34.0" layoutY="186.0" prefHeight="217.0" prefWidth="627.0" promptText="Click here to write your content">
                <font>
                   <Font name="Roboto" size="12.0" />
                </font>
             </TextArea>
+            <!-- Below is the error message. Uncomment it to use. -->
+            <!-- <Text fill="#ff9696" layoutX="34.0" layoutY="177.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Title cannot be empty." wrappingWidth="101.376953125">
+               <font>
+                  <Font name="Roboto Black" size="10.0" />
+               </font>
+            </Text> -->
+            
             <Pane layoutX="104.0" layoutY="196.0" prefHeight="40.0" prefWidth="487.0" style="-fx-background-color: #F1F1F1; -fx-background-radius: 5px;">
                <children>
                   <Button alignment="CENTER" layoutX="40.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="36.0" style="-fx-background-color: #f1f1f1;" textAlignment="CENTER">
@@ -173,6 +191,7 @@
                   <Font name="Roboto" size="10.0" />
                </font>
             </TextField>
+
          </children>
       </Pane>
    </children>

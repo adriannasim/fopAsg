@@ -1,6 +1,16 @@
 .text-area {
-    -fx-background-color: #ffffff; 
-    -fx-background-radius: 14px;
+    -fx-background-radius: 14px;       
+    -fx-border-radius: 14px;         
+    -fx-border-color: transparent;     
+    -fx-border-width: 0;               
+    -fx-focus-color: transparent;     
+    -fx-faint-focus-color: transparent; 
+    -fx-background-insets: 0;         
+}
+
+.error {
+    -fx-border-color: #FF9696;     
+    -fx-border-width: 2px;          
 }
 
 .text-area .scroll-pane .viewport {
