@@ -48,6 +48,8 @@
                                alignment="TOP_LEFT" 
                                prefWidth="632.0"/>
                 </ScrollPane>
+               <!-- ScrollPane with FlowPane for Diary Items -->
+               
          </children>
       </Pane>
    </children>

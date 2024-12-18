@@ -5,17 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.scene.image.ImageView;
 
 public class RecycleBinController {
@@ -40,7 +34,6 @@ public class RecycleBinController {
 
     @FXML
     public void initialize() {
-
         // Sample data for diary items
         List<DiaryItem> diaryItems = new ArrayList<>();
         diaryItems.add(new DiaryItem("Diary 1", "1 December 2024", "29 days left"));
@@ -98,11 +91,11 @@ public class RecycleBinController {
 
         // Date Label
         Label dateLabel = new Label(item.date);
-        dateLabel.setLayoutX(135.0);
+        dateLabel.setLayoutX(120.0);
         dateLabel.setLayoutY(10.0);
         dateLabel.setStyle("-fx-background-color: #F1F1F1;");
         dateLabel.setTextFill(javafx.scene.paint.Color.web("#8f8f8f"));
-        dateLabel.setFont(javafx.scene.text.Font.font("Roboto Bold", 6));
+        dateLabel.setFont(javafx.scene.text.Font.font("Roboto Bold", 8));
 
         // Hover Pane (Initially Hidden)
         Pane hoverPane = new Pane();
@@ -144,22 +137,20 @@ public class RecycleBinController {
 
         // Event handler for restore icon
         restoreIcon.setOnMouseClicked(e -> {
-            // Perform the restore action here (e.g., navigate to restore page or restore
-            // item)
-            handleRestore(); // Custom method to handle restoration
+            // Perform the restore action here 
+            handleRestore();
         });
 
         // Event handler for delete icon
         deleteIcon.setOnMouseClicked(e -> {
-            // Perform the delete action here (e.g., navigate to delete page or delete item)
-            handleDelete(); // Custom method to handle deletion
+            // Perform the delete action here
+            handleDelete();
         });
 
         // Event handler for view icon
         viewIcon.setOnMouseClicked(e -> {
-            // Perform the view action here (e.g., navigate to view page or view
-            // item)
-            handleView(); // Custom method to handle restoration
+            // Perform the view action here 
+            handleView(); 
         });
 
 

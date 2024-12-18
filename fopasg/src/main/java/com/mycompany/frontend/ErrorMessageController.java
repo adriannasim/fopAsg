@@ -19,13 +19,12 @@ public class ErrorMessageController {
 
     // Method to close the window
     private void closeMessageWindow() {
-        // Get the current stage (window) and close it
         Stage stage = (Stage) crossIcon.getScene().getWindow();
         stage.close();
     }
 
     // Method to update the text dynamically
     public void setMessageText(String newText) {
-        messageText.setText(newText); // Set the new text dynamically
+        messageText.setText(newText); 
     }
 }

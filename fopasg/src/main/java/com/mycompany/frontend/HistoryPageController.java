@@ -7,9 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -17,9 +14,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import java.util.Arrays;
 
 public class HistoryPageController {
@@ -28,7 +22,7 @@ public class HistoryPageController {
     private Pane historyPane;
 
     @FXML
-    private VBox diaryItemsVBox; // Reference to the VBox in diary-history-page.fxml
+    private VBox diaryItemsVBox;
 
     @FXML
     private Button backButton;
@@ -56,7 +50,6 @@ public class HistoryPageController {
 
     @FXML
     private Button basedOnMonth;
-
 
     // A class representing a diary item (Can Change Later)
     static class DiaryItem {
@@ -92,17 +85,15 @@ public class HistoryPageController {
     @FXML
     public void initialize() {
         backButton.setOnAction(e -> {
-            try{
+            try {
                 App.switchScene("diary-recycle-bin");
-            } catch (IOException ex){
+            } catch (IOException ex) {
                 ex.printStackTrace();
             }
-            
         });
 
-
         exportButton.setOnMouseClicked(e -> {
-            exportOptions.setVisible(true);  
+            exportOptions.setVisible(true);
             exportOptions2.setVisible(false);
         });
 
@@ -110,7 +101,7 @@ public class HistoryPageController {
             if (exportOptions.isVisible()) {
                 // Check if the click is outside exportOptions
                 if (!exportOptions.getBoundsInParent().contains(e.getX(), e.getY()) &&
-                    !exportButton.getBoundsInParent().contains(e.getX(), e.getY())) {
+                        !exportButton.getBoundsInParent().contains(e.getX(), e.getY())) {
                     exportOptions.setVisible(false);
                 }
             }
@@ -118,17 +109,16 @@ public class HistoryPageController {
             if (exportOptions2.isVisible()) {
                 // Check if the click is outside exportOptions
                 if (!exportOptions2.getBoundsInParent().contains(e.getX(), e.getY()) &&
-                    !exportButton.getBoundsInParent().contains(e.getX(), e.getY())) {
+                        !exportButton.getBoundsInParent().contains(e.getX(), e.getY())) {
                     exportOptions2.setVisible(false);
                 }
             }
         });
 
         basedOnDateRange.setOnMouseClicked(e -> {
-            exportOptions2.setVisible(true); 
-            exportOptions.setVisible(false); 
+            exportOptions2.setVisible(true);
+            exportOptions.setVisible(false);
         });
-       
 
         // Sample data for diary items
         List<DiaryGroup> groupedDiaryItems = new ArrayList<>();
@@ -154,7 +144,7 @@ public class HistoryPageController {
 
             // Create a VBox for the group
             VBox groupBox = new VBox();
-            groupBox.setSpacing(10); // Add spacing between the elements
+            groupBox.setSpacing(10);
             groupBox.setStyle("-fx-background-color: #ffffff; -fx-padding: 10;");
 
             // Add a label for the date
@@ -162,11 +152,11 @@ public class HistoryPageController {
             dateLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #8F8F8F;");
             dateLabel.setLayoutX(33.0);
             dateLabel.setLayoutY(107.0);
-            groupBox.getChildren().add(dateLabel); // Add the date label to the VBox
+            groupBox.getChildren().add(dateLabel);
 
             FlowPane diaryItemsFlowPane = new FlowPane();
-            diaryItemsFlowPane.setHgap(10); // Horizontal gap between items
-            diaryItemsFlowPane.setVgap(10); // Vertical gap between rows
+            diaryItemsFlowPane.setHgap(10);
+            diaryItemsFlowPane.setVgap(10);
             diaryItemsFlowPane.setPrefWrapLength(600);
 
             // Add diary items to the FlowPane
@@ -189,15 +179,14 @@ public class HistoryPageController {
         pane.setPrefSize(190.0, 65.0);
         pane.setStyle("-fx-background-color: #F1F1F1;");
 
-        
-
         // Image
         ImageView imageView = new ImageView(
-                new Image(getClass().getResourceAsStream("/com/mycompany/frontend/images/diary-icon.png"), 42, 35, true, true));
+                new Image(getClass().getResourceAsStream("/com/mycompany/frontend/images/diary-icon.png"), 42, 35, true,
+                        true));
         // imageView.setFitHeight(35.0);
         // imageView.setFitWidth(42.0);
-         imageView.setLayoutX(14.0);
-         imageView.setLayoutY(15.0);
+        imageView.setLayoutX(14.0);
+        imageView.setLayoutY(15.0);
 
         // Title Label
         Label titleLabel = new Label(item.name);
@@ -220,7 +209,6 @@ public class HistoryPageController {
         viewIcon.setFitHeight(14.0);
         viewIcon.setFitWidth(14.0);
         hoverPane.getChildren().add(viewIcon);
-        
 
         ImageView editIcon = new ImageView(
                 new Image(getClass().getResource("/com/mycompany/frontend/images/edit-icon.png").toString()));
@@ -248,22 +236,20 @@ public class HistoryPageController {
 
         // Event handler for restore icon
         editIcon.setOnMouseClicked(e -> {
-            // Perform the restore action here (e.g., navigate to restore page or restore
-            // item)
-            handleEdit(); // Custom method to handle restoration
+            // Perform the restore action here
+            handleEdit();
         });
 
         // Event handler for delete icon
         deleteIcon.setOnMouseClicked(e -> {
-            // Perform the delete action here (e.g., navigate to delete page or delete item)
-            handleDelete(); // Custom method to handle deletion
+            // Perform the delete action here
+            handleDelete();
         });
 
         // Event handler for view icon
         viewIcon.setOnMouseClicked(e -> {
-            // Perform the view action here (e.g., navigate to view page or view
-            // item)
-            handleView(); // Custom method to handle restoration
+            // Perform the view action here
+            handleView();
         });
 
         // Here used to handle entries selection when user want to export into PDF
@@ -282,12 +268,9 @@ public class HistoryPageController {
 
     // Method to handle the delete action
     private void handleDelete() {
-
         // Show a delete confirmation page
         try {
-            
             App.openConfirmationPopUp("Are you sure you want to delete this entry?");
-           
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -295,7 +278,6 @@ public class HistoryPageController {
 
     // Method to handle the edit action
     private void handleEdit() {
-
         // Show a edit page
         try {
             App.switchScene("diary-entry-page");
@@ -306,7 +288,6 @@ public class HistoryPageController {
 
     // Method to handle the view action
     private void handleView() {
-
         // Show a view page
         try {
             App.switchScene("diary-view-page");

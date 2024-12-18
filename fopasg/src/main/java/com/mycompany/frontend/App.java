@@ -16,13 +16,17 @@ public class App extends Application {
     private static Stack<Scene> sceneHistory = new Stack<>();
     private static Stage stage;
 
+    public static void main(String[] args) {
+        launch();
+    }
+
     @Override
     public void start(Stage stage) throws IOException {
         this.stage = stage;
-        Scene initialScene = new Scene(loadFXML("diary-history-page"));
-        stage.setScene(initialScene);
+        Scene initialScene = new Scene(loadFXML("diary-history-page")); // Landing page here
+        stage.setScene(initialScene); 
         stage.show();
-        sceneHistory.push(initialScene); // Push the initial scene to the stack
+        sceneHistory.push(initialScene); // Push the initial scene to the history stack
     }
 
     // Method to load the FXML file
@@ -31,30 +35,25 @@ public class App extends Application {
         return fxmlLoader.load();
     }
 
-    public static void main(String[] args) {
-        launch();
-    }
-
     // Method to switch between scenes
     public static void switchScene(String fxml) throws IOException {
-        Scene newScene = new Scene(loadFXML(fxml));
-        stage.setScene(newScene);
+        Scene newScene = new Scene(loadFXML(fxml)); // Create a new scene
+        stage.setScene(newScene); // Set the new scene into current stage
         stage.show();
-        sceneHistory.push(newScene); // Push the new scene onto the stack
+        sceneHistory.push(newScene); // Push the new scene to the histpry stack
     }
 
     // Method to go back to the previous scene
     public static void goBackToPreviousScene() {
-        if (sceneHistory.size() > 1) {
+        if (sceneHistory.size() > 1) { // If got previous scene
             sceneHistory.pop(); // Remove the current scene
             Scene previousScene = sceneHistory.peek(); // Get the previous scene
-            stage.setScene(previousScene);
+            stage.setScene(previousScene); // Show the previous scene
             stage.show();
-
         }
     }
 
-    // Example method for a confirmation pop-up
+    // Method to show a confirmation pop-up
     public static void openConfirmationPopUp(String confirmationText) throws IOException {
         FXMLLoader loader = new FXMLLoader(App.class.getResource("pop-up-box.fxml"));
         Parent root = loader.load();
