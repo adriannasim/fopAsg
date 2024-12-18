@@ -193,11 +193,11 @@ public class HistoryPageController {
 
         // Image
         ImageView imageView = new ImageView(
-                new Image(getClass().getResourceAsStream("/com/mycompany/frontend/images/diary-icon.png")));
-        imageView.setFitHeight(35.0);
-        imageView.setFitWidth(42.0);
-        imageView.setLayoutX(14.0);
-        imageView.setLayoutY(15.0);
+                new Image(getClass().getResourceAsStream("/com/mycompany/frontend/images/diary-icon.png"), 42, 35, true, true));
+        // imageView.setFitHeight(35.0);
+        // imageView.setFitWidth(42.0);
+         imageView.setLayoutX(14.0);
+         imageView.setLayoutY(15.0);
 
         // Title Label
         Label titleLabel = new Label(item.name);
@@ -215,15 +215,16 @@ public class HistoryPageController {
         // Hover Icons
         ImageView viewIcon = new ImageView(
                 new Image(getClass().getResource("/com/mycompany/frontend/images/view-icon.png").toString()));
-        viewIcon.setLayoutX(173.0);
+        viewIcon.setLayoutX(170.0);
         viewIcon.setLayoutY(7.0);
         viewIcon.setFitHeight(14.0);
         viewIcon.setFitWidth(14.0);
         hoverPane.getChildren().add(viewIcon);
+        
 
         ImageView editIcon = new ImageView(
                 new Image(getClass().getResource("/com/mycompany/frontend/images/edit-icon.png").toString()));
-        editIcon.setLayoutX(173.0);
+        editIcon.setLayoutX(170.0);
         editIcon.setLayoutY(25.0);
         editIcon.setFitHeight(14.0);
         editIcon.setFitWidth(14.0);
@@ -231,7 +232,7 @@ public class HistoryPageController {
 
         ImageView deleteIcon = new ImageView(
                 new Image(getClass().getResource("/com/mycompany/frontend/images/delete-icon.png").toString()));
-        deleteIcon.setLayoutX(173.0);
+        deleteIcon.setLayoutX(170.0);
         deleteIcon.setLayoutY(43.0);
         deleteIcon.setFitHeight(14.0);
         deleteIcon.setFitWidth(14.0);

@@ -50,8 +50,8 @@ public class App extends Application {
             Scene previousScene = sceneHistory.peek(); // Get the previous scene
             stage.setScene(previousScene);
             stage.show();
-            
-        } 
+
+        }
     }
 
     // Example method for a confirmation pop-up
@@ -66,6 +66,23 @@ public class App extends Application {
         popupStage.initModality(Modality.APPLICATION_MODAL);
         Scene scene = new Scene(root);
         popupStage.setScene(scene);
+
+        // Get the dimensions of the parent stage and screen
+        double stageX = stage.getX();
+        double stageY = stage.getY();
+        double stageWidth = stage.getWidth();
+        double stageHeight = stage.getHeight();
+
+        // Calculate the center position
+        double popupWidth = root.prefWidth(-1);
+        double popupHeight = root.prefHeight(-1);
+        double centerX = stageX + (stageWidth - popupWidth) / 2;
+        double centerY = stageY + (stageHeight - popupHeight) / 2;
+
+        // Set the position of the pop-up
+        popupStage.setX(centerX);
+        popupStage.setY(centerY);
+
         popupStage.showAndWait();
     }
 }
