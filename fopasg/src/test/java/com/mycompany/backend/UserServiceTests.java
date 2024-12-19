@@ -1,8 +1,6 @@
-package com.mycompany.fopasg;
+package com.mycompany.backend;
 
-import com.mycompany.fopasg.backend.UserService;
-import com.mycompany.fopasg.backend.FileIO;
-import com.mycompany.fopasg.backend.User;
+import org.junit.*;
 
 public class UserServiceTests 
 {
@@ -10,7 +8,8 @@ public class UserServiceTests
     UserService userService = new UserService("TestUsers.txt");
     FileIO fileIO = new FileIO();
          
-    public static void main(String[] args) 
+    @Test
+    public void main() 
     {
         //Tests output----------------------------------------------------------------------------------------------------------------------------------------
         //Sign Up Tests

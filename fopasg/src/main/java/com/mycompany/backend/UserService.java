@@ -1,4 +1,4 @@
-package com.mycompany.fopasg.backend;
+package com.mycompany.backend;
 
 import java.io.IOException;
 import java.net.URISyntaxException;

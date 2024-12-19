@@ -1,4 +1,4 @@
-package com.mycompany.fopasg.backend;
+package com.mycompany.backend;
 
 import java.io.*;
 import java.net.URISyntaxException;
@@ -13,11 +13,11 @@ public class FileIO
         File file;
         if (filename.toLowerCase().contains("test"))
         {
-            file = new File("fopasg/src/test/resources/" + filename);
+            file = new File("src/test/resources/" + filename);
         }
         else
         {
-            file = new File("fopasg/src/main/resources/" + filename);
+            file = new File("src/main/resources/" + filename);
         }
         return file;
 
