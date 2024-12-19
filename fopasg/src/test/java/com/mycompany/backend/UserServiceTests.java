@@ -1,139 +1,117 @@
 package com.mycompany.backend;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.*;
 
 public class UserServiceTests 
 {
-    static UserServiceTests test = new UserServiceTests();
-    UserService userService = new UserService("TestUsers.txt");
+    String filename = "TestUsers.txt";
+    UserService userService = new UserService(filename);
     FileIO fileIO = new FileIO();
-         
-    @Test
-    public void main() 
+        
+    @Before
+    public void setup()
     {
-        //Tests output----------------------------------------------------------------------------------------------------------------------------------------
-        //Sign Up Tests
-        System.out.println("1. Test Sign Up: " + (test.testUserSignUp() ? "Passed" : "Failed"));
-        System.out.println("2. Test Sign Up with Incomplete Info: " + (test.testUserSignUpWithIncompleteInfo() ? "Passed" : "Failed"));
-        System.out.println("3. Test Sign Up with Existing User info: " + (test.testUserSignUpWithExistingUserInfo() ? "Passed" : "Failed"));
-        //Login Tests
-        System.out.println("4. Test Login with Username: " + (test.testUserLoginWithUsername() ? "Passed" : "Failed"));
-        System.out.println("5. Test Login with Email: " + (test.testUserLoginWithEmail() ? "Passed" : "Failed"));
-        System.out.println("6. Test Login with Username and Wrong Password: " + (test.testUserLoginWithUsernameAndWrongPassword() ? "Passed" : "Failed"));
-        System.out.println("7. Test Login with Email and Wrong Password: " + (test.testUserLoginWithEmailAndWrongPassword() ? "Passed" : "Failed"));
-        //Edit Tests
-        System.out.println("8. Test Edit User: " + (test.testEditUserInfo() ? "Passed" : "Failed"));
-        System.out.println("9. Test Edit User with Incomplete Info: " + (test.testEditUserWithIncompleteInfo() ? "Passed" : "Failed"));
-        //Delete Tests
-        System.out.println("10. Test Delete User: " + (test.testDeleteUser() ? "Passed" : "Failed"));
+        //create users for test
+        userService.userSignUp("TestUsername", "test@gmail.com", "test123");
+        userService.userSignUp("TestEdit", "testEdit@gmail.com", "test123");
+        userService.userSignUp("TestDelete", "testDelete@gmail.com", "test123");
+    }
+
+    @After
+    public void cleanUp()
+    {
+        //clear entire file
+        fileIO.purgeTxt(filename);
     }
 
     //Sign Up tests---------------------------------------------------------------------------------------------------------------------------------
-    public boolean testUserSignUp()
-    {
-        boolean doneSignUp = userService.userSignUp("TestUsername", "test@gmail.com", "test123");
+    @Test 
+    public void testUserSignUp()
+    {        
+        //assert that this will return true (if false means test failed)
+        assertTrue(userService.userSignUp("TestUsername1", "test1@gmail.com", "test123"));
 
-        if (doneSignUp)
-        {
-            User user = userService.getUserByUsername("TestUsername");
-            if (user != null)
-            {
-                if (user.getEmail().equals("test@gmail.com") && user.getPassword().equals("test123"))
-                {
-                    return true;
-                }
-            }
-        }
-        //anything fails
-        return false;
+        User user = userService.getUserByUsername("TestUsername1");
+        
+        //check if the returned user from the txt file is the same as the one we signed up
+        assertEquals("test1@gmail.com", user.getEmail());
+        assertEquals("test123", user.getPassword());
     }
 
-    public boolean testUserSignUpWithIncompleteInfo()
+    @Test
+    public void testUserSignUpWithIncompleteInfo()
     {
-        //return true if this fails
-        return !userService.userSignUp("TestUsername1", "test1@gmail.com", null);
+        //this statement should fail so we assert it will return false
+        assertFalse(userService.userSignUp("TestUsername1", "test1@gmail.com", null));
     }
 
-    public boolean testUserSignUpWithExistingUserInfo()
+    @Test
+    public void testUserSignUpWithExistingUserInfo()
     {
-        //try exisitng username
-        boolean doneSignUp = userService.userSignUp("TestUsername", "test1@gmail.com", "test123");
-
-        //if cannot sign up with exisitng username
-        if (!doneSignUp)
-        {
-            //try exisitng email
-            boolean doneSignUp1 = userService.userSignUp("TestUsername1", "test@gmail.com", "test123");
-            
-            //if cannot sign up with existing email
-            if (!doneSignUp1)
-            {
-                return true;
-            }
-        }
-        //anything fails
-        return false;
+        assertFalse(userService.userSignUp("TestUsername", "test@gmail.com", "test123"));
     }
 
     //Login tests---------------------------------------------------------------------------------------------------------------------------------
-    public boolean testUserLoginWithUsername()
+    @Test
+    public void testUserLoginWithUsername()
     {
-        return userService.userLogin("TestUsername", "test123");
+        assertTrue(userService.userLogin("TestUsername", "test123")); 
     }
 
-    public boolean testUserLoginWithEmail()
+    @Test
+    public void testUserLoginWithEmail()
     {
-        return userService.userLogin("test@gmail.com", "test123");
+        assertTrue(userService.userLogin("test@gmail.com", "test123"));
     }
 
-    public boolean testUserLoginWithUsernameAndWrongPassword()
+    @Test
+    public void testUserLoginWithUsernameAndWrongPassword()
     {
-        //opposite of result (means if its a fail, return true since we are making sure that wrong password = fail)
-        return !userService.userLogin("TestUsername", "test124");
+        assertFalse(userService.userLogin("TestUsername", "test124"));
     }
 
-    public boolean testUserLoginWithEmailAndWrongPassword()
+    @Test
+    public void testUserLoginWithEmailAndWrongPassword()
     {
-        return !userService.userLogin("test@gmail.com", "test124");
+        assertFalse(userService.userLogin("test@gmail.com", "test124"));
     }
 
     //User Edit---------------------------------------------------------------------------------------------------------------------------------
-    public boolean testEditUserInfo()
+    @Test
+    public void testEditUserInfo()
     {
-        //create a new user to test the edit
-        boolean doneSignUp = userService.userSignUp("TestUsername1", "test1@gmail.com", "test123");
+        //edit email and password (username probably we keep it as our primary key so we will try to prohibit user from editing it)
+        assertTrue(userService.userEdit("TestEdit", "edited@gmail.com", "test345"));
 
-        if (doneSignUp)
-        {
-            //edit email and password (username probably we keep it as our primary key so we will try to prohibit user from editing it)
-            boolean doneEdit = userService.userEdit("TestUsername1", "edited@gmail.com", "test345");
+        User user = userService.getUserByUsername("TestEdit");
 
-            if (doneEdit)
-            {
-                User user = userService.getUserByUsername("TestUsername1");
-                if (user != null)
-                {
-                    if (user.getEmail().equals("edited@gmail.com") && user.getPassword().equals("test345"))
-                    {
-                        return true;
-                    }
-                }
-            }
-        }
-
-        //anything fails
-        return false;
+        assertEquals("edited@gmail.com", user.getEmail());
+        assertEquals("test345", user.getPassword());
     }
 
-    public boolean testEditUserWithIncompleteInfo()
+    @Test
+    public void testEditUserWithIncompleteInfo()
     {
-        return !userService.userEdit("TestUsername1", "edited@gmail.com", null);
+        assertFalse(userService.userEdit("TestUsername1", "edited@gmail.com", null));
     }
 
     //User Delete---------------------------------------------------------------------------------------------------------------------------------
-    public boolean testDeleteUser() 
+    @Test
+    public void testDeleteUser() 
     {
-        //delete all created test users
-        return userService.userDelete("TestUsername") && userService.userDelete("TestUsername1");
+        //make sure this user exists first
+        assertNotNull(userService.getUserByUsername("TestDelete"));
+
+        //then delete
+        assertTrue(userService.userDelete("TestDelete"));
+
+        //then check if it's still thr
+        assertNull(userService.getUserByUsername("TestDelete"));
     }
 }

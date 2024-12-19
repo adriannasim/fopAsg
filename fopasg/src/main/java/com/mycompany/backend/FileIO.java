@@ -132,6 +132,21 @@ public class FileIO
         writeTxt(filename, lines); //rewrite entire thing back to the txt file
     }
 
+    //Purge entire file content
+    public void purgeTxt(String filename)
+    {
+        try {
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(loadFile(filename)))) 
+            {
+                bw.write("");
+            }
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
     //CSV file manipulation methods
     //Write
     public void writeCsv(String fileName, List<String[]> data) 
