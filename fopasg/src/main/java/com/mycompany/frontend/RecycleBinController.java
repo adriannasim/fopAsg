@@ -153,7 +153,6 @@ public class RecycleBinController {
             handleView(); 
         });
 
-
         return pane;
     }
 

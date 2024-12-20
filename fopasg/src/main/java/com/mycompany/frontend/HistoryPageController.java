@@ -64,6 +64,7 @@ public class HistoryPageController {
         }
     }
 
+    // A class representing a diary group by date (Can Change Later)
     class DiaryGroup {
         private LocalDate date;
         private List<DiaryItem> diaryItems;
@@ -84,14 +85,12 @@ public class HistoryPageController {
 
     @FXML
     public void initialize() {
+        // Back button click action
         backButton.setOnAction(e -> {
-            try {
-                App.switchScene("diary-recycle-bin");
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+            App.goBackToPreviousScene();
         });
 
+        // Export button click action
         exportButton.setOnMouseClicked(e -> {
             exportOptions.setVisible(true);
             exportOptions2.setVisible(false);
@@ -170,7 +169,6 @@ public class HistoryPageController {
 
             // Add the VBox to the main FlowPane
             diaryItemsVBox.getChildren().add(groupBox);
-
         }
     }
 
@@ -181,10 +179,9 @@ public class HistoryPageController {
 
         // Image
         ImageView imageView = new ImageView(
-                new Image(getClass().getResourceAsStream("/com/mycompany/frontend/images/diary-icon.png"), 42, 35, true,
-                        true));
-        // imageView.setFitHeight(35.0);
-        // imageView.setFitWidth(42.0);
+                new Image(getClass().getResourceAsStream("/com/mycompany/frontend/images/diary-icon.png")));
+        imageView.setFitHeight(35.0);
+        imageView.setFitWidth(42.0);
         imageView.setLayoutX(14.0);
         imageView.setLayoutY(15.0);
 

@@ -40,7 +40,7 @@ public class App extends Application {
         Scene newScene = new Scene(loadFXML(fxml)); // Create a new scene
         stage.setScene(newScene); // Set the new scene into current stage
         stage.show();
-        sceneHistory.push(newScene); // Push the new scene to the histpry stack
+        sceneHistory.push(newScene); // Push the new scene to the history stack
     }
 
     // Method to go back to the previous scene
