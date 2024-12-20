@@ -54,34 +54,34 @@ public class App extends Application {
     }
 
     // Method to show a confirmation pop-up
-    public static void openConfirmationPopUp(String confirmationText) throws IOException {
-        FXMLLoader loader = new FXMLLoader(App.class.getResource("pop-up-box.fxml"));
-        Parent root = loader.load();
-        PopUpBoxController controller = loader.getController();
-        controller.setConfirmationText(confirmationText);
+    // public static void openConfirmationPopUp(String confirmationText) throws IOException {
+    //     FXMLLoader loader = new FXMLLoader(App.class.getResource("pop-up-box.fxml"));
+    //     Parent root = loader.load();
+    //     PopUpBoxController controller = loader.getController();
+    //     controller.setConfirmationText(confirmationText);
 
-        Stage popupStage = new Stage();
-        popupStage.initStyle(StageStyle.UNDECORATED);
-        popupStage.initModality(Modality.APPLICATION_MODAL);
-        Scene scene = new Scene(root);
-        popupStage.setScene(scene);
+    //     Stage popupStage = new Stage();
+    //     popupStage.initStyle(StageStyle.UNDECORATED);
+    //     popupStage.initModality(Modality.APPLICATION_MODAL);
+    //     Scene scene = new Scene(root);
+    //     popupStage.setScene(scene);
 
-        // Get the dimensions of the parent stage and screen
-        double stageX = stage.getX();
-        double stageY = stage.getY();
-        double stageWidth = stage.getWidth();
-        double stageHeight = stage.getHeight();
+    //     // Get the dimensions of the parent stage and screen
+    //     double stageX = stage.getX();
+    //     double stageY = stage.getY();
+    //     double stageWidth = stage.getWidth();
+    //     double stageHeight = stage.getHeight();
 
-        // Calculate the center position
-        double popupWidth = root.prefWidth(-1);
-        double popupHeight = root.prefHeight(-1);
-        double centerX = stageX + (stageWidth - popupWidth) / 2;
-        double centerY = stageY + (stageHeight - popupHeight) / 2;
+    //     // Calculate the center position
+    //     double popupWidth = root.prefWidth(-1);
+    //     double popupHeight = root.prefHeight(-1);
+    //     double centerX = stageX + (stageWidth - popupWidth) / 2;
+    //     double centerY = stageY + (stageHeight - popupHeight) / 2;
 
-        // Set the position of the pop-up
-        popupStage.setX(centerX);
-        popupStage.setY(centerY);
+    //     // Set the position of the pop-up
+    //     popupStage.setX(centerX);
+    //     popupStage.setY(centerY);
 
-        popupStage.showAndWait();
-    }
+    //     popupStage.showAndWait();
+    // }
 }
