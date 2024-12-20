@@ -20,6 +20,7 @@ public class PopUpBoxController {
 
     @FXML
     public void initialize() {
+        
         // Handle the 'Yes' button click
         yesButton.setOnAction(event -> {
             // Close the pop-up
@@ -46,7 +47,7 @@ public class PopUpBoxController {
                 // Calculate position
                 double popupWidth = root.prefWidth(-1);
                 double centerX = stageX + (stageWidth - popupWidth) / 2;
-                double higherY = stageY - 120; 
+                double higherY = stageY - 130; 
 
                 messageBoxStage.setX(centerX);
                 messageBoxStage.setY(higherY);

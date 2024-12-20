@@ -12,11 +12,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.frontend.MainMenuController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.frontend.MainMenuController">
    <children>
       <Pane prefHeight="79.0" prefWidth="600.0" style="-fx-background-color: F6F6F6;">
          <children>
-            <TextField layoutX="290.0" layoutY="26.0" prefHeight="26.0" prefWidth="260.0" style="-fx-background-color: E5E3D4;" text="⌕ Search past diaries..." />
+            <TextField layoutX="290.0" layoutY="26.0" prefHeight="26.0" prefWidth="260.0" promptText="⌕ Search past diaries..." style="-fx-background-color: E5E3D4;" />
             <Group layoutX="38.0" layoutY="14.0">
                <children>
                   <Label layoutX="29.0" text="D" textFill="#1c325b">
@@ -43,11 +43,11 @@
             </Group>
          </children>
       </Pane>
-      <SplitPane dividerPositions="0.2276069518716577" prefHeight="321.0" prefWidth="600.0">
+      <SplitPane dividerPositions="0.20430906389301637" prefHeight="482.0" prefWidth="800.0">
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
-                  <Button alignment="CENTER" contentDisplay="CENTER" layoutX="11.0" layoutY="14.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="110.0" style="-fx-background-color: #1c325b; -fx-background-radius: 5px;" text="📑 New Diary" textFill="WHITE">
+                  <Button fx:id="newDiaryBtn" alignment="CENTER" contentDisplay="CENTER" layoutX="34.0" layoutY="28.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="110.0" style="-fx-background-color: #1c325b; -fx-background-radius: 5px;" text="📑 New Diary" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
@@ -55,7 +55,7 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </Button>
-                  <Button alignment="CENTER" contentDisplay="CENTER" layoutX="11.0" layoutY="122.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="110.0" style="-fx-background-color: #E5E3D4; -fx-background-radius: 0px;" text="Recycle Bin" textFill="#1c325b">
+                  <Button fx:id="recycleBinBtn" alignment="CENTER" contentDisplay="CENTER" layoutX="34.0" layoutY="123.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="110.0" style="-fx-background-color: #E5E3D4; -fx-background-radius: 0px;" text="Recycle Bin" textFill="#1c325b">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
@@ -63,7 +63,7 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </Button>
-                  <Button alignment="CENTER" contentDisplay="CENTER" layoutX="11.0" layoutY="83.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="110.0" style="-fx-background-color: #E5E3D4; -fx-background-radius: 0px;" text="Past Diaries" textFill="#1c325b">
+                  <Button fx:id="historyBtn" alignment="CENTER" contentDisplay="CENTER" layoutX="34.0" layoutY="84.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="110.0" style="-fx-background-color: #E5E3D4; -fx-background-radius: 0px;" text="Past Diaries" textFill="#1c325b">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
@@ -71,25 +71,25 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </Button>
-                  <Button alignment="CENTER" contentDisplay="CENTER" layoutX="11.0" layoutY="161.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="110.0" style="-fx-background-color: #E5E3D4; -fx-background-radius: 0px;" text="Mood Tracker" textFill="#1c325b">
+                  <Button fx:id="moodTrackerBtn" alignment="CENTER" contentDisplay="CENTER" layoutX="34.0" layoutY="162.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="110.0" style="-fx-background-color: #E5E3D4; -fx-background-radius: 0px;" text="Mood Tracker" textFill="#1c325b">
                      <font>
-                        <Font name="System Bold" size="12.0" />
+                        <Font name="Roboto Bold" size="12.0" />
                      </font>
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </Button>
-                  <Button alignment="CENTER" contentDisplay="CENTER" layoutX="11.0" layoutY="247.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="110.0" style="-fx-background-color: #ffffff; -fx-background-radius: 0px;" text="⚙ Settings" textFill="#1c325b">
+                  <Button alignment="CENTER" contentDisplay="CENTER" layoutX="34.0" layoutY="391.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="110.0" style="-fx-background-color: #ffffff; -fx-background-radius: 0px;" text="⚙ Settings" textFill="#1c325b">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor></Button>
-                  <Button alignment="CENTER" contentDisplay="CENTER" layoutX="11.0" layoutY="277.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="110.0" style="-fx-background-color: #ffffff; -fx-background-radius: 0px;" text="✖ Log Out" textFill="#1c325b">
+                  <Button alignment="CENTER" contentDisplay="CENTER" layoutX="34.0" layoutY="421.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="110.0" style="-fx-background-color: #ffffff; -fx-background-radius: 0px;" text="✖ Log Out" textFill="#1c325b">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor></Button>
                </children>
             </AnchorPane>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="406.0" prefWidth="556.0">
+          <AnchorPane fx:id="rootPane" minHeight="0.0" minWidth="0.0" prefHeight="411.0" prefWidth="613.0">
                <children>
                   <Label layoutX="28.0" layoutY="87.0" text="👋 Welcome back," textFill="#1c325b">
                      <font>

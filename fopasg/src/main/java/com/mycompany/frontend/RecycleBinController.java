@@ -19,6 +19,13 @@ public class RecycleBinController {
     @FXML
     private Button backButton;
 
+    private MainMenuController mainMenuController;
+
+    // Setter method to allow MainMenuController reference injection
+    public void setMainMenuController(MainMenuController mainMenuController) {
+        this.mainMenuController = mainMenuController;
+    }
+
     // A class representing a diary item (Can Change Later)
     static class DiaryItem {
         String title;
@@ -34,6 +41,14 @@ public class RecycleBinController {
 
     @FXML
     public void initialize() {
+
+        backButton.setOnMouseClicked(e -> {
+            if (mainMenuController != null) {
+               mainMenuController.goBackToPreviousAnchorPane();
+           }
+       });
+
+
         // Sample data for diary items
         List<DiaryItem> diaryItems = new ArrayList<>();
         diaryItems.add(new DiaryItem("Diary 1", "1 December 2024", "29 days left"));
@@ -109,6 +124,7 @@ public class RecycleBinController {
         viewIcon.setLayoutY(7.0);
         viewIcon.setFitHeight(14.0);
         viewIcon.setFitWidth(14.0);
+        viewIcon.setStyle("-fx-cursor:HAND");
         hoverPane.getChildren().add(viewIcon);
 
         ImageView restoreIcon = new ImageView(
@@ -117,6 +133,7 @@ public class RecycleBinController {
         restoreIcon.setLayoutY(25.0);
         restoreIcon.setFitHeight(14.0);
         restoreIcon.setFitWidth(14.0);
+        restoreIcon.setStyle("-fx-cursor:HAND");
         hoverPane.getChildren().add(restoreIcon);
 
         ImageView deleteIcon = new ImageView(
@@ -125,6 +142,7 @@ public class RecycleBinController {
         deleteIcon.setLayoutY(43.0);
         deleteIcon.setFitHeight(14.0);
         deleteIcon.setFitWidth(14.0);
+        deleteIcon.setStyle("-fx-cursor:HAND");
         hoverPane.getChildren().add(deleteIcon);
 
         // Add components to the pane
@@ -182,11 +200,7 @@ public class RecycleBinController {
     private void handleView() {
 
         // Show a view page
-        try {
-            App.switchScene("diary-view-page");
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        mainMenuController.loadNewContent("diary-view-page.fxml");
     }
 
 }

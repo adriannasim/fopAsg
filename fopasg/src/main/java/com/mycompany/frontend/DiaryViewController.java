@@ -3,9 +3,9 @@ package com.mycompany.frontend;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 
-public class DiaryEntryPageController {
+public class DiaryViewController {
     @FXML
-    private Button backButton; // This will reference the "Back" button from diary-entry-page.fxml
+    private Button backButton;
 
     private MainMenuController mainMenuController;
 

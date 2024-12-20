@@ -23,8 +23,9 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         this.stage = stage;
-        Scene initialScene = new Scene(loadFXML("diary-history-page")); // Landing page here
+        Scene initialScene = new Scene(loadFXML("main-menu"),900,600); // Landing page here
         stage.setScene(initialScene); 
+        stage.setTitle("Digital Diary");
         stage.show();
         sceneHistory.push(initialScene); // Push the initial scene to the history stack
     }
@@ -59,6 +60,36 @@ public class App extends Application {
         Parent root = loader.load();
         PopUpBoxController controller = loader.getController();
         controller.setConfirmationText(confirmationText);
+
+        Stage popupStage = new Stage();
+        popupStage.initStyle(StageStyle.UNDECORATED);
+        popupStage.initModality(Modality.APPLICATION_MODAL);
+        Scene scene = new Scene(root);
+        popupStage.setScene(scene);
+
+        // Get the dimensions of the parent stage and screen
+        double stageX = stage.getX();
+        double stageY = stage.getY();
+        double stageWidth = stage.getWidth();
+        double stageHeight = stage.getHeight();
+
+        // Calculate the center position
+        double popupWidth = root.prefWidth(-1);
+        double popupHeight = root.prefHeight(-1);
+        double centerX = stageX + (stageWidth - popupWidth) / 2;
+        double centerY = stageY + (stageHeight - popupHeight) / 2;
+
+        // Set the position of the pop-up
+        popupStage.setX(centerX);
+        popupStage.setY(centerY);
+
+        popupStage.showAndWait();
+    }
+
+    // Method to show a mood indicator pop-up
+    public static void openPopUp(String filename) throws IOException {
+        FXMLLoader loader = new FXMLLoader(App.class.getResource(filename));
+        Parent root = loader.load();
 
         Stage popupStage = new Stage();
         popupStage.initStyle(StageStyle.UNDECORATED);

@@ -51,6 +51,15 @@ public class HistoryPageController {
     @FXML
     private Button basedOnMonth;
 
+    private MainMenuController mainMenuController;
+
+    // Setter method to allow MainMenuController reference injection
+    public void setMainMenuController(MainMenuController mainMenuController) {
+        this.mainMenuController = mainMenuController;
+    }
+
+    
+
     // A class representing a diary item (Can Change Later)
     static class DiaryItem {
         private String name;
@@ -85,6 +94,12 @@ public class HistoryPageController {
 
     @FXML
     public void initialize() {
+        backButton.setOnMouseClicked(e -> {
+            if (mainMenuController != null) {
+               mainMenuController.goBackToPreviousAnchorPane();
+           }
+       });
+
         // Back button click action
         backButton.setOnAction(e -> {
             App.goBackToPreviousScene();
@@ -114,9 +129,28 @@ public class HistoryPageController {
             }
         });
 
+        basedOnPickedEntries.setOnMouseClicked(e->{
+            exportOptions.setVisible(false);
+        });
+
         basedOnDateRange.setOnMouseClicked(e -> {
             exportOptions2.setVisible(true);
             exportOptions.setVisible(false);
+        });
+
+        basedOnDay.setOnMouseClicked(e->{
+            mainMenuController.loadNewContent("export-by-day.fxml");
+            exportOptions2.setVisible(false);
+        });
+
+        basedOnWeek.setOnMouseClicked(e->{
+            mainMenuController.loadNewContent("export-by-week.fxml");
+            exportOptions2.setVisible(false);
+        });
+
+        basedOnMonth.setOnMouseClicked(e->{
+            mainMenuController.loadNewContent("export-by-month.fxml");
+            exportOptions2.setVisible(false);
         });
 
         // Sample data for diary items
@@ -143,12 +177,12 @@ public class HistoryPageController {
 
             // Create a VBox for the group
             VBox groupBox = new VBox();
-            groupBox.setSpacing(10);
+            groupBox.setSpacing(5);
             groupBox.setStyle("-fx-background-color: #ffffff; -fx-padding: 10;");
 
             // Add a label for the date
             Label dateLabel = new Label(group.getDate().format(formatter)); // Format the date
-            dateLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #8F8F8F;");
+            dateLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #8F8F8F;");
             dateLabel.setLayoutX(33.0);
             dateLabel.setLayoutY(107.0);
             groupBox.getChildren().add(dateLabel);
@@ -205,6 +239,7 @@ public class HistoryPageController {
         viewIcon.setLayoutY(7.0);
         viewIcon.setFitHeight(14.0);
         viewIcon.setFitWidth(14.0);
+        viewIcon.setStyle("-fx-cursor:HAND");
         hoverPane.getChildren().add(viewIcon);
 
         ImageView editIcon = new ImageView(
@@ -213,6 +248,7 @@ public class HistoryPageController {
         editIcon.setLayoutY(25.0);
         editIcon.setFitHeight(14.0);
         editIcon.setFitWidth(14.0);
+        editIcon.setStyle("-fx-cursor:HAND");
         hoverPane.getChildren().add(editIcon);
 
         ImageView deleteIcon = new ImageView(
@@ -221,6 +257,7 @@ public class HistoryPageController {
         deleteIcon.setLayoutY(43.0);
         deleteIcon.setFitHeight(14.0);
         deleteIcon.setFitWidth(14.0);
+        deleteIcon.setStyle("-fx-cursor:HAND");
         hoverPane.getChildren().add(deleteIcon);
 
         // Add components to the pane
@@ -276,21 +313,13 @@ public class HistoryPageController {
     // Method to handle the edit action
     private void handleEdit() {
         // Show a edit page
-        try {
-            App.switchScene("diary-entry-page");
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        mainMenuController.loadNewContent("diary-entry-page.fxml");
     }
 
     // Method to handle the view action
     private void handleView() {
         // Show a view page
-        try {
-            App.switchScene("diary-view-page");
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        mainMenuController.loadNewContent("diary-view-page.fxml");
     }
 
 }
