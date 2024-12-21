@@ -15,9 +15,21 @@ public class App extends Application {
 
     private static Scene scene;
 
+    static void goBackToPreviousScene() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    static void goBackToPreviousScene() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    static void goBackToPreviousScene() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("diary-entry-page"));
+        scene = new Scene(loadFXML("sign-up"));
         stage.sizeToScene();
         //stage.setResizable(false);
         scene.getStylesheets().add(App.class.getResource("/com/mycompany/frontend/css/style.css").toExternalForm());
