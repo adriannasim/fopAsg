@@ -31,6 +31,9 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
     @FXML
     private FlowPane images;
 
+    @FXML
+    private Button uploadImageBtn;
+
     /***
      * VARIABLES.
      * 
@@ -44,7 +47,7 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
     public void initialize() {
 
         super.initialize();
-        
+
         // Add on key press event to the textarea named 'contents'
         contents.setOnKeyTyped(event -> {
             // If there is some contents
@@ -63,8 +66,10 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
 
         });
 
-        // Use to display the images
-        displayImages();
+        uploadImageBtn.setOnMouseClicked(event -> {
+            // Use to display the images
+            displayImages();
+        });
 
     }
 
@@ -94,7 +99,6 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
         }
     }
 
-
     /***
      * METHOD TO DISPLAY THE IMAGES IN UI.
      * 
@@ -106,8 +110,6 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
         imagePaths.add(getClass().getResource("/com/mycompany/frontend/images/test-img.jpg").toString());
         imagePaths.add(getClass().getResource("/com/mycompany/frontend/images/test-img.jpg").toString());
 
-
-
         // Clear existing children
         images.getChildren().clear();
 
@@ -115,15 +117,15 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
         for (String path : imagePaths) {
             // Create an Image object from the path
             Image image = new Image(path);
-            
+
             // Create an ImageView for the image
             ImageView imageView = new ImageView(image);
-            
+
             // Optionally set properties like fit width/height
-            imageView.setFitWidth(100);  // Example width
+            imageView.setFitWidth(100); // Example width
             imageView.setFitHeight(100); // Example height
-            imageView.setPreserveRatio(true);  // Maintain aspect ratio
-            
+            imageView.setPreserveRatio(true); // Maintain aspect ratio
+
             // Add ImageView to FlowPane
             images.getChildren().add(imageView);
         }

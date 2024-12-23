@@ -227,7 +227,7 @@
                      </cursor>
                   </Button>
                   <Line endX="12.0" layoutX="395.0" layoutY="20.0" rotate="90.0" startX="-10.0" stroke="#8f8f8f" strokeWidth="0.5" />
-                  <Button alignment="CENTER" layoutX="410.0" layoutY="3.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="36.0" style="-fx-background-color: #f1f1f1;" textAlignment="CENTER">
+                  <Button fx:id="uploadImageBtn" alignment="CENTER" layoutX="410.0" layoutY="3.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="36.0" style="-fx-background-color: #f1f1f1;" textAlignment="CENTER">
                      <graphic>
                         <ImageView fitHeight="11.0" fitWidth="11.0" pickOnBounds="true" preserveRatio="true">
                            <image>
