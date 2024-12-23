@@ -304,7 +304,7 @@ public class HistoryPageController {
     private void handleDelete() {
         // Show a delete confirmation page
         try {
-            App.openConfirmationPopUp("Are you sure you want to delete this entry?");
+            App.openConfirmationPopUp("Are you sure you want to delete this entry?", "Entry has been deleted.", "Entry failed to delete.");
         } catch (IOException ex) {
             ex.printStackTrace();
         }

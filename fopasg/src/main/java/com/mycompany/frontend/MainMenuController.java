@@ -44,7 +44,7 @@ public class MainMenuController {
 
         Platform.runLater(() -> {
         try {
-            App.openPopUp("mood-indicator.fxml"); // Call this after the main UI is set up
+            App.openPopUp("mood-indicator"); // Call this after the main UI is set up
         } catch (IOException ex) {
             ex.printStackTrace();
         }

@@ -27,7 +27,7 @@ public class MoodIndicatorController {
 
             Platform.runLater(() -> {
                 try {
-                    App.openPopUp("motivational-quotes.fxml"); // Call this after the main UI is set up
+                    App.openPopUp("motivational-quotes"); // Call this after the main UI is set up
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
@@ -42,7 +42,7 @@ public class MoodIndicatorController {
             stage.close();
             Platform.runLater(() -> {
                 try {
-                    App.openPopUp("motivational-quotes.fxml"); // Call this after the main UI is set up
+                    App.openPopUp("motivational-quotes"); // Call this after the main UI is set up
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
@@ -56,7 +56,7 @@ public class MoodIndicatorController {
             stage.close();
             Platform.runLater(() -> {
                 try {
-                    App.openPopUp("motivational-quotes.fxml"); // Call this after the main UI is set up
+                    App.openPopUp("motivational-quotes"); // Call this after the main UI is set up
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }

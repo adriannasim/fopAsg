@@ -179,7 +179,7 @@ public class RecycleBinController {
 
         // Show a delete confirmation page
         try {
-            App.openConfirmationPopUp("Are you sure you want to permanently delete this entry?");
+            App.openConfirmationPopUp("Are you sure you want to permanently delete this entry?", "Entry has been deleted permanently.", "Entry failed to delete.");
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -190,7 +190,7 @@ public class RecycleBinController {
 
         // Show a restore confirmation page
         try {
-            App.openConfirmationPopUp("Do you confirm to restore this entry?");
+            App.openConfirmationPopUp("Do you confirm to restore this entry?", "Entry has been restored.", "Entry failed to restore.");
         } catch (IOException ex) {
             ex.printStackTrace();
         }
