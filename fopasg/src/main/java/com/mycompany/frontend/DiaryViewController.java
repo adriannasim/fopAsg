@@ -1,8 +1,14 @@
 package com.mycompany.frontend;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.FlowPane;
 
 /***
  * THIS CONTROLLER CLASS IS USED FOR diary-view-page.fxml
@@ -23,6 +29,9 @@ public class DiaryViewController extends SharedPaneCharacteristics {
 
     @FXML
     private TextField charCount;
+
+    @FXML
+    private FlowPane images;
 
     /***
      * VARIABLES.
@@ -50,6 +59,9 @@ public class DiaryViewController extends SharedPaneCharacteristics {
             charCount.setText(String.valueOf(0));
         }
 
+        // Use to display the images
+        displayImages();
+
     }
 
     /***
@@ -68,6 +80,40 @@ public class DiaryViewController extends SharedPaneCharacteristics {
     private void countCharacter(StringBuilder str) {
         str = new StringBuilder(str.toString().replaceAll(" ", "").trim());
         charCount.setText(String.valueOf(str.length()));
+    }
+
+    /***
+     * METHOD TO DISPLAY THE IMAGES IN UI.
+     * 
+     ***/
+    public void displayImages() {
+
+        // Sample for illustration purpose (MUST CHANGES !!!!!!!!!!!!!!)
+        List<String> imagePaths = new ArrayList<>();
+        imagePaths.add(getClass().getResource("/com/mycompany/frontend/images/test-img.jpg").toString());
+        imagePaths.add(getClass().getResource("/com/mycompany/frontend/images/italic-icon.png").toString());
+
+
+
+        // Clear existing children
+        images.getChildren().clear();
+
+        // Iterate over each image path
+        for (String path : imagePaths) {
+            // Create an Image object from the path
+            Image image = new Image(path);
+            
+            // Create an ImageView for the image
+            ImageView imageView = new ImageView(image);
+            
+            // Optionally set properties like fit width/height
+            imageView.setFitWidth(100);  // Example width
+            imageView.setFitHeight(100); // Example height
+            imageView.setPreserveRatio(true);  // Maintain aspect ratio
+            
+            // Add ImageView to FlowPane
+            images.getChildren().add(imageView);
+        }
     }
 
 }
