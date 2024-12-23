@@ -46,14 +46,14 @@
                   <Insets left="20.0" />
                </padding>
             </TextField>
-            <TextArea depthTest="DISABLE" editable="false" layoutX="37.0" layoutY="197.0" prefHeight="217.0" prefWidth="627.0" promptText="Click here to write your content" text="Some contents here">
+            <TextArea fx:id="contents" depthTest="DISABLE" editable="false" layoutX="37.0" layoutY="197.0" prefHeight="217.0" prefWidth="627.0" promptText="Click here to write your content" text="Some contents here">
                <font>
                   <Font name="Roboto" size="12.0" />
                </font>
             </TextArea>
             <FlowPane hgap="5.0" layoutX="51.0" layoutY="428.0" prefHeight="23.0" prefWidth="212.0">
                <children>
-                  <TextField alignment="CENTER_RIGHT" disable="true" prefHeight="19.0" prefWidth="33.0" promptText="0" style="-fx-background-color: #ffffff;">
+                  <TextField fx:id="wordCount" alignment="CENTER_RIGHT" disable="true" prefHeight="19.0" prefWidth="33.0" promptText="0" style="-fx-background-color: #ffffff;">
                      <font>
                         <Font name="Roboto" size="10.0" />
                      </font>
@@ -63,7 +63,7 @@
                         <Font size="10.0" />
                      </font>
                   </Label>
-                  <TextField alignment="CENTER_RIGHT" disable="true" prefHeight="16.0" prefWidth="36.0" promptText="0" style="-fx-background-color: #ffffff;">
+                  <TextField fx:id="charCount" alignment="CENTER_RIGHT" disable="true" prefHeight="16.0" prefWidth="36.0" promptText="0" style="-fx-background-color: #ffffff;">
                      <font>
                         <Font name="Roboto" size="10.0" />
                      </font>

@@ -59,7 +59,7 @@
             </Text> -->
 
             <!-- Add styleClass="error" to have the red border effect -->
-            <TextArea id="padding-top" depthTest="DISABLE" layoutX="37.0" layoutY="197.0" prefHeight="217.0" prefWidth="638.0" promptText="Click here to write your content">
+            <TextArea fx:id="contents" id="padding-top" depthTest="DISABLE" layoutX="37.0" layoutY="197.0" prefHeight="217.0" prefWidth="638.0" promptText="Click here to write your content">
                <font>
                   <Font name="Roboto" size="12.0" />
                </font>
@@ -210,7 +210,7 @@
             </Button>
             <FlowPane hgap="5.0" layoutX="51.0" layoutY="428.0" prefHeight="23.0" prefWidth="212.0">
                <children>
-                  <TextField alignment="CENTER_RIGHT" disable="true" prefHeight="19.0" prefWidth="33.0" promptText="0" style="-fx-background-color: #ffffff;">
+                  <TextField fx:id="wordCount" alignment="CENTER_RIGHT" disable="true" prefHeight="19.0" prefWidth="33.0" promptText="0" style="-fx-background-color: #ffffff;">
                      <font>
                         <Font name="Roboto" size="10.0" />
                      </font>
@@ -220,7 +220,7 @@
                         <Font size="10.0" />
                      </font>
                   </Label>
-                  <TextField alignment="CENTER_RIGHT" disable="true" prefHeight="16.0" prefWidth="36.0" promptText="0" style="-fx-background-color: #ffffff;">
+                  <TextField fx:id="charCount" alignment="CENTER_RIGHT" disable="true" prefHeight="16.0" prefWidth="36.0" promptText="0" style="-fx-background-color: #ffffff;">
                      <font>
                         <Font name="Roboto" size="10.0" />
                      </font>
