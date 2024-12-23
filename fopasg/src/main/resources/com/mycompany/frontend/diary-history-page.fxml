@@ -28,7 +28,7 @@
                </font>
             </Label>
             <!-- ScrollPane with AnchorPane for Diary Items -->
-            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" layoutX="34.0" layoutY="120.0" prefHeight="344.0" prefWidth="648.0" vbarPolicy="AS_NEEDED">
+            <ScrollPane  layoutX="34.0" layoutY="120.0" prefHeight="344.0" prefWidth="648.0" vbarPolicy="AS_NEEDED">
                <VBox fx:id="diaryItemsVBox" alignment="TOP_LEFT" prefWidth="632.0" />
             </ScrollPane>
             <Button fx:id="exportButton" contentDisplay="CENTER" layoutX="541.0" layoutY="75.0" mnemonicParsing="false" style="-fx-background-color: #1C325B; -fx-background-radius: 20px;" text="Export into PDF" textFill="WHITE">

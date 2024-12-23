@@ -21,6 +21,7 @@ public abstract class SharedPaneCharacteristics {
         backButton.setOnMouseClicked(e -> {
              if (mainMenuController != null) {
                 mainMenuController.goBackToPreviousAnchorPane();
+                System.out.println("BACK NOW!!!!!!!!!!");
             }
         });
     }

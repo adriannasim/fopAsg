@@ -35,6 +35,8 @@ public class DiaryViewController extends SharedPaneCharacteristics {
      * 
      ***/
     public void initialize() {
+        
+        super.initialize();
 
         // If there is some contents
         if (!contents.getText().isEmpty()) {
