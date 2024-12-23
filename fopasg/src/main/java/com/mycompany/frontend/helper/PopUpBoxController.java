@@ -3,13 +3,9 @@ package com.mycompany.frontend.helper;
 import java.io.IOException;
 import com.mycompany.frontend.App;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 /***
  * THIS CONTROLLER CLASS IS USED FOR pop-up-box.fxml
@@ -108,11 +104,11 @@ public class PopUpBoxController {
             message = failedMessage;
         }
 
+        // Display the message box to users
         try {
             App.openPopUpAtTop(filename, message);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        
     }
 }

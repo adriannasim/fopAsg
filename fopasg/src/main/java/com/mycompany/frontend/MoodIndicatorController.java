@@ -1,13 +1,22 @@
 package com.mycompany.frontend;
 
 import java.io.IOException;
-
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
+/***
+ * THIS CONTROLLER CLASS IS USED FOR mood-indicator.fxml
+ * 
+ ***/
+
 public class MoodIndicatorController {
+
+    /***
+     * ELEMENTS WITH FX:ID
+     * 
+     ***/
     @FXML
     private Button happyBtn;
 
@@ -17,6 +26,10 @@ public class MoodIndicatorController {
     @FXML
     private Button sadBtn;
 
+    /***
+     * INITILIZATION OF THE CONTROLLER
+     * 
+     ***/
     @FXML
     public void initialize() {
         // Handle the 'Happy' button click
@@ -24,10 +37,10 @@ public class MoodIndicatorController {
             // Close the pop-up
             Stage stage = (Stage) happyBtn.getScene().getWindow();
             stage.close();
-
+            // Display a motivational quote
             Platform.runLater(() -> {
                 try {
-                    App.openPopUp("motivational-quotes"); // Call this after the main UI is set up
+                    App.openPopUp("motivational-quotes");
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
@@ -40,9 +53,10 @@ public class MoodIndicatorController {
             // Close the pop-up
             Stage stage = (Stage) normalBtn.getScene().getWindow();
             stage.close();
+            // Display a motivational quote
             Platform.runLater(() -> {
                 try {
-                    App.openPopUp("motivational-quotes"); // Call this after the main UI is set up
+                    App.openPopUp("motivational-quotes");
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
@@ -54,9 +68,10 @@ public class MoodIndicatorController {
             // Close the pop-up
             Stage stage = (Stage) sadBtn.getScene().getWindow();
             stage.close();
+            // Display a motivational quote
             Platform.runLater(() -> {
                 try {
-                    App.openPopUp("motivational-quotes"); // Call this after the main UI is set up
+                    App.openPopUp("motivational-quotes");
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }

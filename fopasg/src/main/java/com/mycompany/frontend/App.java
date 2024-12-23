@@ -23,10 +23,12 @@ public class App extends Application {
      * STATIC VARIABLES DECLARATION.
      * 
      ***/
-    private static Stack<Scene> sceneHistory = new Stack<>(); // This is used to keep track the previous scene (But it
-                                                              // not used for now).
-    private static Stage stage; // This is used to refer to the main stage with the same reference, which used
-                                // throughout the App.
+    // This is used to keep track the previous scene (But it is not used for now).
+    private static Stack<Scene> sceneHistory = new Stack<>(); 
+
+    // This is used to refer to the main stage with the same reference, which used throughout the App.
+    private static Stage stage; 
+
 
     /***
      * MAIN METHOD TO START.
@@ -43,12 +45,13 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         this.stage = stage;
-        Scene initialScene = new Scene(loadFXML("main-menu").getRoot(), 900, 600); // Landing page here.
+        // Landing page here
+        Scene initialScene = new Scene(loadFXML("main-menu").getRoot(), 900, 600);
         stage.setScene(initialScene);
         stage.setTitle("Digital Diary");
         stage.show();
-        sceneHistory.push(initialScene); // Push the initial scene to the history stack to enable scene navigation
-                                         // later.
+        // Push the initial scene to the history stack
+        sceneHistory.push(initialScene); 
     }
 
     /***
@@ -69,21 +72,23 @@ public class App extends Application {
             throws IOException {
         FXMLLoader loader = loadFXML("pop-up-box");
         Parent root = loader.getRoot();
-        PopUpBoxController controller = loader.getController(); // Get the PopUpBoxController.
-        controller.setConfirmationText(confirmationText); // Use the controller to set the confirmation text that
-                                                          // displayed to users.
-        controller.setSuccessMessageText(successMessage); // Use the controller to set the success message that
-                                                          // displayed to the users when user wanted action performed
-                                                          // correctly.
-        controller.setFailedMessageText(failedMessage); // Use the controller to set the failed message that displayed
-                                                        // to the users when user wanted action performed wrongly.
+        // Get the PopUpBoxController.
+        PopUpBoxController controller = loader.getController(); 
+        // Use the controller to set the confirmation text that displayed to users.
+        controller.setConfirmationText(confirmationText); 
+        // Use the controller to set the success message that displayed to the users 
+        // when user wanted action performed correctly.
+        controller.setSuccessMessageText(successMessage);
+         // Use the controller to set the failed message that displayed to the users 
+         // when user wanted action performed wrongly. 
+        controller.setFailedMessageText(failedMessage);
 
         Stage popupStage = new Stage();
-        popupStage.initStyle(StageStyle.UNDECORATED); // Remove the default window decorations (title bar, close,
-                                                      // minimize, and maximize buttons).
-        popupStage.initModality(Modality.APPLICATION_MODAL);// Set the modality of the pop-up to APPLICATION_MODAL,
-                                                            // making it block interactions with other application
-                                                            // windows until the pop-up is closed.
+        // Remove the default window decorations (title bar, close, minimize, and maximize buttons).
+        popupStage.initStyle(StageStyle.UNDECORATED); 
+        // Set the modality of the pop-up to APPLICATION_MODAL, making it block interactions 
+        // with other application windows until the pop-up is closed.
+        popupStage.initModality(Modality.APPLICATION_MODAL);
         Scene scene = new Scene(root);
         popupStage.setScene(scene);
 
@@ -103,8 +108,8 @@ public class App extends Application {
         popupStage.setX(centerX);
         popupStage.setY(centerY);
 
-        popupStage.showAndWait(); // Display the pop-up window and block further code execution until the pop-up
-                                  // is closed.
+        // Display the pop-up window and block further code execution until the pop-up is closed.
+        popupStage.showAndWait(); 
     }
 
     /***
@@ -114,11 +119,11 @@ public class App extends Application {
     public static void openPopUp(String filename) throws IOException {
         Parent root = loadFXML(filename).getRoot();
         Stage popupStage = new Stage();
-        popupStage.initStyle(StageStyle.UNDECORATED); // Remove the default window decorations (title bar, close,
-                                                      // minimize, and maximize buttons).
-        popupStage.initModality(Modality.APPLICATION_MODAL); // Set the modality of the pop-up to APPLICATION_MODAL,
-                                                             // making it block interactions with other application
-                                                             // windows until the pop-up is closed.
+        // Remove the default window decorations (title bar, close, minimize, and maximize buttons).
+        popupStage.initStyle(StageStyle.UNDECORATED); 
+        // Set the modality of the pop-up to APPLICATION_MODAL, making it block interactions 
+        // with other application windows until the pop-up is closed.
+        popupStage.initModality(Modality.APPLICATION_MODAL); 
         Scene scene = new Scene(root);
         popupStage.setScene(scene);
 
@@ -138,8 +143,8 @@ public class App extends Application {
         popupStage.setX(centerX);
         popupStage.setY(centerY);
 
-        popupStage.showAndWait(); // Display the pop-up window and block further code execution until the pop-up
-                                  // is closed.
+        // Display the pop-up window and block further code execution until the pop-up is closed.
+        popupStage.showAndWait(); 
     }
 
     /***

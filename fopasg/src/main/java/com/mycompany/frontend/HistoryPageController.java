@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -16,51 +15,51 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import java.util.Arrays;
 
-public class HistoryPageController {
+/*** 
+ * THIS CONTROLLER CLASS IS USED FOR diary-history-page.fxml 
+ * 
+ ***/
+
+public class HistoryPageController extends SharedPaneCharacteristics{
+
+    /*** ELEMENTS WITH FX:ID  
+     * 
+     * ***/
+    @FXML
+    private Pane historyPane; // Largest Pane (Cover everything)
 
     @FXML
-    private Pane historyPane;
+    private VBox diaryItemsVBox; // Each diary item VBox
 
     @FXML
-    private VBox diaryItemsVBox;
+    private Button exportButton; // Export button
 
     @FXML
-    private Button backButton;
+    private Pane exportOptions; // Export option menu 1
 
     @FXML
-    private Button exportButton;
+    private Button basedOnDateRange; // Export option menu 1 item 1
 
     @FXML
-    private Pane exportOptions;
+    private Button basedOnPickedEntries; // Export option menu 1 item 2
 
     @FXML
-    private Pane exportOptions2;
+    private Pane exportOptions2; // Export option menu 2 under date range
 
     @FXML
-    private Button basedOnDateRange;
+    private Button basedOnDay; // Export option menu 2 item 1
 
     @FXML
-    private Button basedOnPickedEntries;
+    private Button basedOnWeek; // Export option menu 2 item 2
 
     @FXML
-    private Button basedOnDay;
-
-    @FXML
-    private Button basedOnWeek;
-
-    @FXML
-    private Button basedOnMonth;
-
-    private MainMenuController mainMenuController;
-
-    // Setter method to allow MainMenuController reference injection
-    public void setMainMenuController(MainMenuController mainMenuController) {
-        this.mainMenuController = mainMenuController;
-    }
+    private Button basedOnMonth; // Export option menu 2 item 3
 
     
+    
 
-    // A class representing a diary item (Can Change Later)
+    /*** Below two classes are used  as sample for illustration purpose. MUST CHANGE accrodingly. */
+    // A class representing a diary item (CHANGE LATER!!!!!!!!!!!!!!!!!!!!!)
     static class DiaryItem {
         private String name;
 
@@ -73,7 +72,7 @@ public class HistoryPageController {
         }
     }
 
-    // A class representing a diary group by date (Can Change Later)
+    // A class representing a diary group by date (CHANGE LATER!!!!!!!!!!!!!!!!!!!!!)
     class DiaryGroup {
         private LocalDate date;
         private List<DiaryItem> diaryItems;
@@ -92,36 +91,31 @@ public class HistoryPageController {
         }
     }
 
+    /*** INITILIZATION OF THE CONTROLLER
+     * 
+     * ***/
     @FXML
     public void initialize() {
-        backButton.setOnMouseClicked(e -> {
-            if (mainMenuController != null) {
-               mainMenuController.goBackToPreviousAnchorPane();
-           }
-       });
+        // Inherit Super Class's initialization
+        super.initialize(); 
 
-        // Back button click action
-        backButton.setOnAction(e -> {
-            App.goBackToPreviousScene();
-        });
-
-        // Export button click action
+        /*** Export button click action
+        * 
+        * ***/
         exportButton.setOnMouseClicked(e -> {
-            exportOptions.setVisible(true);
+            exportOptions.setVisible(true); 
             exportOptions2.setVisible(false);
         });
 
+        // If user click outside and not export options, close the export options menus
         historyPane.setOnMouseClicked(e -> {
             if (exportOptions.isVisible()) {
-                // Check if the click is outside exportOptions
                 if (!exportOptions.getBoundsInParent().contains(e.getX(), e.getY()) &&
                         !exportButton.getBoundsInParent().contains(e.getX(), e.getY())) {
                     exportOptions.setVisible(false);
                 }
             }
-
             if (exportOptions2.isVisible()) {
-                // Check if the click is outside exportOptions
                 if (!exportOptions2.getBoundsInParent().contains(e.getX(), e.getY()) &&
                         !exportButton.getBoundsInParent().contains(e.getX(), e.getY())) {
                     exportOptions2.setVisible(false);
@@ -129,31 +123,38 @@ public class HistoryPageController {
             }
         });
 
+        // When user chosen to pick entries
         basedOnPickedEntries.setOnMouseClicked(e->{
             exportOptions.setVisible(false);
+            // Operation here
         });
 
+        // When user chosen to pick by date range
         basedOnDateRange.setOnMouseClicked(e -> {
             exportOptions2.setVisible(true);
             exportOptions.setVisible(false);
+            // Operation here
         });
 
+        // When user want export by day
         basedOnDay.setOnMouseClicked(e->{
             mainMenuController.loadNewContent("export-by-day.fxml");
             exportOptions2.setVisible(false);
         });
 
+        // When user want export by week
         basedOnWeek.setOnMouseClicked(e->{
             mainMenuController.loadNewContent("export-by-week.fxml");
             exportOptions2.setVisible(false);
         });
 
+        // When user want export by month
         basedOnMonth.setOnMouseClicked(e->{
             mainMenuController.loadNewContent("export-by-month.fxml");
             exportOptions2.setVisible(false);
         });
 
-        // Sample data for diary items
+        // Sample data for diary items used for illustration purpose only (MUST CHANGE!!!!!!!!!!!!!!!!!!!)
         List<DiaryGroup> groupedDiaryItems = new ArrayList<>();
         groupedDiaryItems.add(
                 new DiaryGroup(LocalDate.of(2024, 6, 10),
@@ -170,12 +171,16 @@ public class HistoryPageController {
                         Arrays.asList(new DiaryItem("Diary 3"), new DiaryItem("Diary 3"), new DiaryItem("Diary 3"),
                                 new DiaryItem("Diary 3"))));
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM yyyy");
+        // Date Format                        
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMM yyyy");
 
         // Iterate through groups and add diary items
+        // 1. 'Group' means the entries grouped by date, eg. 1 Dec 2024 got 2 entries written, 
+        //     thus, the two entries are grouped together under the same date.
+        // 2. 'Diary Item' means the box for each entry.
         for (DiaryGroup group : groupedDiaryItems) {
 
-            // Create a VBox for the group
+            // Create a VBox for the Group
             VBox groupBox = new VBox();
             groupBox.setSpacing(5);
             groupBox.setStyle("-fx-background-color: #ffffff; -fx-padding: 10;");
@@ -206,12 +211,16 @@ public class HistoryPageController {
         }
     }
 
+
+    /*** METHOD TO CREATE DIARYITEMPANE FOR EACH OF THE ENTRIES
+     * 
+     * ***/
     private Pane createDiaryItemPane(DiaryItem item) {
         Pane pane = new Pane();
         pane.setPrefSize(190.0, 65.0);
         pane.setStyle("-fx-background-color: #F1F1F1;");
 
-        // Image
+        // Image Icon
         ImageView imageView = new ImageView(
                 new Image(getClass().getResourceAsStream("/com/mycompany/frontend/images/diary-icon.png")));
         imageView.setFitHeight(35.0);
@@ -220,7 +229,7 @@ public class HistoryPageController {
         imageView.setLayoutY(15.0);
 
         // Title Label
-        Label titleLabel = new Label(item.name);
+        Label titleLabel = new Label(item.name); // Name put here
         titleLabel.setLayoutX(74.0);
         titleLabel.setLayoutY(23.0);
         titleLabel.setStyle("-fx-background-color: #F1F1F1;");
@@ -268,9 +277,9 @@ public class HistoryPageController {
                 e -> hoverPane.setStyle("-fx-background-color: rgba(30,30,30,0.7); visibility: visible;"));
         pane.setOnMouseExited(e -> hoverPane.setStyle("-fx-background-color: rgba(30,30,30,0.7); visibility: hidden;"));
 
-        // Event handler for restore icon
+        // Event handler for edit icon
         editIcon.setOnMouseClicked(e -> {
-            // Perform the restore action here
+            // Perform the edit action here
             handleEdit();
         });
 
@@ -291,9 +300,11 @@ public class HistoryPageController {
             if (pane.getStyle().contains("-fx-border-color: #6A669D;")) {
                 // Unselect
                 pane.setStyle("-fx-background-color: #F1F1F1; -fx-border-color: transparent;");
+                // Add logic here...
             } else {
                 // Select
                 pane.setStyle("-fx-background-color: #F1F1F1; -fx-border-color: #6A669D; -fx-border-width: 2px;");
+                // Add logic here...
             }
         });
 

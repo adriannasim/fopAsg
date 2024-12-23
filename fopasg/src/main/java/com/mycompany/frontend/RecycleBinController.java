@@ -3,30 +3,30 @@ package com.mycompany.frontend;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.image.ImageView;
 
-public class RecycleBinController {
+/*** 
+ * THIS CONTROLLER CLASS IS USED FOR diary-recycle-bin.fxml 
+ * 
+ ***/
+
+public class RecycleBinController extends SharedPaneCharacteristics{
+
+    /*** ELEMENTS WITH FX:ID  
+     * 
+     * ***/
     @FXML
     private FlowPane diaryItemsFlowPane;; // Reference to the FlowPane in diary-recycle-bin.fxml
 
-    @FXML
-    private Button backButton;
 
-    private MainMenuController mainMenuController;
 
-    // Setter method to allow MainMenuController reference injection
-    public void setMainMenuController(MainMenuController mainMenuController) {
-        this.mainMenuController = mainMenuController;
-    }
-
-    // A class representing a diary item (Can Change Later)
+    // Just for illustration purpose (MUST CHANGE!!!!!!!!!!!!!!!!!!)
+    // A class representing a diary item
     static class DiaryItem {
         String title;
         String date;
@@ -39,16 +39,16 @@ public class RecycleBinController {
         }
     }
 
+
+    /*** INITILIZATION OF THE CONTROLLER
+     * 
+     * ***/
     @FXML
     public void initialize() {
-
-        backButton.setOnMouseClicked(e -> {
-            if (mainMenuController != null) {
-               mainMenuController.goBackToPreviousAnchorPane();
-           }
-       });
-
-
+        // Inherit Super Class's initialize()
+        super.initialize(); 
+        
+        // Just for illustration purpose (MUST CHANGE!!!!!!!!!!!!!!!!!!!!!)
         // Sample data for diary items
         List<DiaryItem> diaryItems = new ArrayList<>();
         diaryItems.add(new DiaryItem("Diary 1", "1 December 2024", "29 days left"));
@@ -75,6 +75,9 @@ public class RecycleBinController {
         }
     }
 
+    /*** METHOD TO CREATE DIARYITEMPANE FOR EACH OF THE ENTRIES
+     * 
+     * ***/
     private Pane createDiaryItemPane(DiaryItem item) {
         Pane pane = new Pane();
         pane.setPrefSize(195.0, 65.0);
