@@ -1,34 +1,36 @@
 .text-area {
-    -fx-background-radius: 14px;       
+    -fx-background-radius: 14px;  
+    -fx-background-color: #E5E3D4;       
     -fx-border-radius: 14px;         
     -fx-border-color: transparent;     
     -fx-border-width: 0;               
     -fx-focus-color: transparent;     
     -fx-faint-focus-color: transparent; 
-    -fx-background-insets: 0;         
+    -fx-background-insets: 0;   
+    -fx-padding: 70px 20px 20px 20px;          
 }
+
+.rich-text-area {
+    -fx-control-inner-background: #E5E3D4;
+    -fx-background: #E5E3D4;
+}
+
+.rich-text-area .content {
+    -fx-background: #E5E3D4;
+    -fx-control-inner-background: #E5E3D4;
+}
+
+.rich-text-area > .viewport {
+    -fx-background: #E5E3D4;
+    -fx-control-inner-background: #E5E3D4;
+}
+
 
 .error {
     -fx-border-color: #FF9696;     
     -fx-border-width: 2px;          
 }
 
-.text-area .scroll-pane .viewport {
-    -fx-background-color: #E5E3D4; 
-    -fx-background-radius: 14px; 
-}
-
-.text-area#padding-top .content {
-    -fx-background-color: #E5E3D4;  
-    -fx-background-radius: 14px; 
-    -fx-padding: 70px 20px 70px 20px;    
-}
-
-.text-area .content {
-    -fx-background-color: #E5E3D4;  
-    -fx-background-radius: 14px; 
-    -fx-padding: 20px 20px 70px 20px;    
-}
 
 /* Initially hide the hoverPane */
 #hoverPane {
