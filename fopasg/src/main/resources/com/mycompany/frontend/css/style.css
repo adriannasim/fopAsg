@@ -1,4 +1,4 @@
-.text-area {
+.rich-text-area {
     -fx-background-radius: 14px;  
     -fx-background-color: #E5E3D4;       
     -fx-border-radius: 14px;         
@@ -10,20 +10,31 @@
     -fx-padding: 70px 20px 20px 20px;          
 }
 
-.rich-text-area {
-    -fx-control-inner-background: #E5E3D4;
+.rich-text-area .paragraph-list-view {
+    -fx-background-color: #E5E3D4;
+}
+
+.rich-text-area .paragraph-tile {
+    -fx-background-color: #E5E3D4;
+}
+
+.rich-text-area .paragraph-tile > .content-area {
+    -fx-background-color: #E5E3D4;
+}
+
+.rich-text-area .paragraph-tile > .graphic-box {
+    -fx-background-color: #E5E3D4;
+}
+
+
+.rich-text-area .list-cell {
     -fx-background: #E5E3D4;
 }
 
-.rich-text-area .content {
-    -fx-background: #E5E3D4;
-    -fx-control-inner-background: #E5E3D4;
-}
 
-.rich-text-area > .viewport {
-    -fx-background: #E5E3D4;
-    -fx-control-inner-background: #E5E3D4;
-}
+
+
+
 
 
 .error {
@@ -98,4 +109,8 @@
 }
 
 
-
+.combo-box .arrow-button,
+.color-picker .arrow-button{
+    -fx-background-color: transparent;
+    -fx-padding: 4;
+}

@@ -1,90 +1,36 @@
 package com.mycompany.frontend;
 
-import org.fxmisc.richtext.StyleClassedTextArea;
-
 import javafx.fxml.FXML;
+
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.control.ColorPicker;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.paint.Color;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
-import com.gluonhq.emoji.Emoji;
-import com.gluonhq.emoji.EmojiData;
+import javafx.application.Platform;
+import javafx.beans.property.ObjectProperty;
+import javafx.event.ActionEvent;
+import javafx.util.StringConverter;
+
 import com.gluonhq.richtextarea.RichTextArea;
-import com.gluonhq.richtextarea.Selection;
-import com.gluonhq.richtextarea.Tools;
-import com.gluonhq.richtextarea.action.Action;
 import com.gluonhq.richtextarea.action.DecorateAction;
 import com.gluonhq.richtextarea.action.ParagraphDecorateAction;
 import com.gluonhq.richtextarea.action.TextDecorateAction;
-import com.gluonhq.richtextarea.model.Decoration;
 import com.gluonhq.richtextarea.model.DecorationModel;
 import com.gluonhq.richtextarea.model.Document;
-import com.gluonhq.richtextarea.model.ImageDecoration;
 import com.gluonhq.richtextarea.model.ParagraphDecoration;
-import com.gluonhq.richtextarea.model.TableDecoration;
 import com.gluonhq.richtextarea.model.TextDecoration;
-import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
-import javafx.beans.property.ObjectProperty;
-import javafx.event.ActionEvent;
-import javafx.geometry.Insets;
-import javafx.geometry.Orientation;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar.ButtonData;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.CheckMenuItem;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.Label;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.Separator;
-import javafx.scene.control.SeparatorMenuItem;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.control.ToolBar;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.TextAlignment;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-import javafx.util.StringConverter;
-import org.kordamp.ikonli.Ikon;
-import org.kordamp.ikonli.javafx.FontIcon;
-import org.kordamp.ikonli.lineawesome.LineAwesomeSolid;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.function.BiConsumer;
 import java.util.function.Function;
-import java.util.logging.Level;
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -95,51 +41,113 @@ import static javafx.scene.text.FontPosture.ITALIC;
 import static javafx.scene.text.FontPosture.REGULAR;
 import static javafx.scene.text.FontWeight.BOLD;
 import static javafx.scene.text.FontWeight.NORMAL;
-import javafx.scene.text.FontWeight;
+
+/***
+ * THIS CONTROLLER CLASS IS USED FOR diary-entry-page.fxml
+ * 
+ ***/
 
 public class DiaryEntryPageController extends SharedPaneCharacteristics {
 
+        /***
+         * ELEMENTS WITH FX:ID.
+         * 
+         ***/
         @FXML
-        private Pane textarea;
+        private Pane textarea; // Used to hold the rich text area
+
+        @FXML
+        private ComboBox<Double> fontSizeComboBox; // Used to change font size of the content
+
+        @FXML
+        private ColorPicker textForeground; // Used to change font color of the content
+
+        @FXML
+        private ColorPicker textBackground; // Used to change highlight color of the content
+
+        @FXML
+        private Button textBold; // Used to bold the content
+
+        @FXML
+        private Button textItalic; // Used to italize the content
+
+        @FXML
+        private Button textUnderline; // Used to underline the content
+
+        @FXML
+        private Button textStrikethrough; // Used to strikethrough the content
+
+        @FXML
+        private Button bulletList; // Used to set bullet list in the content
+
+        @FXML
+        private Button numberList; // Used to set number list in the content
+
+        @FXML
+        private TextField wordCount; // Used to display the word count of the content
+
+        @FXML
+        private TextField charCount; // Used to display the character count of the content
+
+        @FXML
+        private FlowPane images; // Used to display the images uploaded by users
+
+        @FXML
+        private Button uploadImageBtn; // Used to upload images
+
+        @FXML
+        private Button submitBtn; // used to save the diary
+
+        /***
+         * VARIABLES.
+         * 
+         ***/
+
+        // Initialize the text contents with empty string
+        String text = "";
+
+        // Initialize the place user enter and edit their diary contents
         private final RichTextArea editor = new RichTextArea();
 
-        @FXML
-        private ComboBox<Double> fontSizeComboBox; // Changed to Double type
+        // Initial text decoration settings
+        TextDecoration textDecoration = TextDecoration.builder().presets()
+                        .fontFamily("Arial")
+                        .fontSize(14)
+                        .foreground("black")
+                        .build();
 
-        @FXML
-        private ColorPicker textForeground; // Add these FXML components
+        // Initial paragraph decoration settings
+        ParagraphDecoration paragraphDecoration = ParagraphDecoration.builder().presets().build();
 
-        @FXML
-        private ColorPicker textBackground;
+        // Initial decoration model (with the initial value of text decoration &
+        // paragraph decoration)
+        DecorationModel decorationModel = new DecorationModel(0, text.length(), textDecoration,
+                        paragraphDecoration);
 
-        @FXML
-        private Button textBold;
+        // Initialize the document that will linked with the rich text area (editor)
+        // later
+        Document document = new Document(text, List.of(decorationModel), text.length());
 
-        @FXML
-        private Button textItalic;
-
-        @FXML
-        private Button textUnderline;
-
-        @FXML
-        private Button textStrikethrough;
-
-        @FXML
-        private Button bulletList;
-
-        @FXML
-        private Button numberList;
-
-        private static final String MARKER_BOLD = "*", MARKER_ITALIC = "_", MARKER_MONO = "`";
-
+        /***
+         * INITILIZATION OF THE CONTROLLER.
+         * 
+         ***/
         public void initialize() {
-                super.initialize();
-                textarea.getChildren().add(editor);
 
-                editor.getStyleClass().add("text-area");
+                super.initialize();
+
+                // Place the editor (rich text area) into Pane textarea
+                textarea.getChildren().add(editor);
+                // Set the editor same width and height with the textarea container
                 editor.prefWidthProperty().bind(textarea.widthProperty());
                 editor.prefHeightProperty().bind(textarea.heightProperty());
+                // Link the document to the editor
+                editor.getActionFactory().open(document).execute(new ActionEvent());
+                // Make sure the document is updated whenever user has entered something
+                editor.autoSaveProperty().set(true);
 
+                /*** STEPS TO HANDLE CONTENTS FORMATTING ***/
+                // Steps to handle the font size change
                 fontSizeComboBox.setEditable(true);
                 fontSizeComboBox.getItems().addAll(IntStream.range(8, 102)
                                 .filter(i -> i % 2 == 0 || i < 18)
@@ -157,43 +165,32 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
                                 return Double.parseDouble(s);
                         }
                 });
-                fontSizeComboBox.setValue(14.0);
+                fontSizeComboBox.setValue(14.0); // Default font size set as 14
 
-                // Set up text color action
-                // new TextDecorateAction<>(editor, textForeground.valueProperty(),
-                // td -> Color.web(td.getForeground()),
-                // (builder, color) -> builder.foreground(toHexString(color)).build());
-
+                // Steps to handle the font color change
                 new TextDecorateAction<>(editor, textForeground.valueProperty(), td -> Color.web(td.getForeground()),
                                 (builder, color) -> builder.foreground(toHexString(color)).build());
-                textForeground.setValue(Color.BLACK);
+                textForeground.setValue(Color.BLACK); // Default font color set to BLACK
 
-                // // Set up background color action
-                // new TextDecorateAction<>(editor, textBackground.valueProperty(),
-                // td -> Color.web(td.getBackground()),
-                // (builder, color) -> builder.background(toHexString(color)).build());
-
-                // setupTextFormatting();
-
-                textBackground.getStyleClass().add("background");
+                // Steps to handle the text highlight color change
                 new TextDecorateAction<>(editor, textBackground.valueProperty(), td -> Color.web(td.getBackground()),
                                 (builder, color) -> builder.background(toHexString(color)).build());
-                textBackground.setValue(Color.TRANSPARENT);
+                textBackground.setValue(Color.TRANSPARENT); // Default text highlight color set to TRANSPARENT
 
+                // Steps to handle the bold text change
                 ImageView boldIcon = new ImageView(
                                 new Image(getClass()
                                                 .getResourceAsStream("/com/mycompany/frontend/images/bold-icon.png")));
-
                 textBold.setGraphic(createToggleButton(boldIcon, property -> new TextDecorateAction<>(editor, property,
                                 d -> d.getFontWeight() == BOLD,
                                 (builder, a) -> builder.fontWeight(a ? BOLD : NORMAL).build())));
                 textBold.getGraphic().setStyle(
                                 "-fx-background-color: #f1f1f1 !important; -fx-background-radius: 0; -fx-border-color: transparent;");
 
+                // Steps to handle the italic text change
                 ImageView italicIcon = new ImageView(
                                 new Image(getClass().getResourceAsStream(
                                                 "/com/mycompany/frontend/images/italic-icon.png")));
-
                 textItalic.setGraphic(createToggleButton(italicIcon,
                                 property -> new TextDecorateAction<>(editor, property,
                                                 d -> d.getFontPosture() == ITALIC,
@@ -201,25 +198,19 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
                 textItalic.getGraphic().setStyle(
                                 "-fx-background-color: #f1f1f1 !important; -fx-background-radius: 0; -fx-border-color: transparent;");
 
-                textBold.setGraphic(createToggleButton(boldIcon, property -> new TextDecorateAction<>(editor, property,
-                                d -> d.getFontWeight() == BOLD,
-                                (builder, a) -> builder.fontWeight(a ? BOLD : NORMAL).build())));
-                textBold.getGraphic().setStyle(
-                                "-fx-background-color: #f1f1f1 !important; -fx-background-radius: 0; -fx-border-color: transparent;");
-
+                // Steps to handle the underline text change
                 ImageView underlineIcon = new ImageView(
                                 new Image(getClass().getResourceAsStream(
                                                 "/com/mycompany/frontend/images/underline-icon.png")));
-
                 textUnderline.setGraphic(createToggleButton(underlineIcon, property -> new TextDecorateAction<>(editor,
                                 property, TextDecoration::isUnderline, (builder, a) -> builder.underline(a).build())));
                 textUnderline.getGraphic().setStyle(
                                 "-fx-background-color: #f1f1f1 !important; -fx-background-radius: 0; -fx-border-color: transparent;");
 
+                // Steps to handle the strikethrough text change
                 ImageView strikethroughIcon = new ImageView(
                                 new Image(getClass().getResourceAsStream(
                                                 "/com/mycompany/frontend/images/strikethrough-icon.png")));
-
                 textStrikethrough.setGraphic(createToggleButton(strikethroughIcon,
                                 property -> new TextDecorateAction<>(editor,
                                                 property, TextDecoration::isStrikethrough,
@@ -227,6 +218,7 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
                 textStrikethrough.getGraphic().setStyle(
                                 "-fx-background-color: #f1f1f1 !important; -fx-background-radius: 0; -fx-border-color: transparent;");
 
+                // Steps to handle the bullet list change
                 ImageView bulletListIcon = new ImageView(
                                 new Image(getClass().getResourceAsStream(
                                                 "/com/mycompany/frontend/images/bullet-list-icon.png")));
@@ -238,6 +230,7 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
                 bulletList.getGraphic().setStyle(
                                 "-fx-background-color: #f1f1f1 !important; -fx-background-radius: 0; -fx-border-color: transparent;");
 
+                // Steps to handle the numbered list change
                 ImageView numberListIcon = new ImageView(
                                 new Image(getClass().getResourceAsStream(
                                                 "/com/mycompany/frontend/images/number-list-icon.png")));
@@ -248,58 +241,67 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
                                                                 .build())));
                 numberList.getGraphic().setStyle(
                                 "-fx-background-color: #f1f1f1 !important; -fx-background-radius: 0; -fx-border-color: transparent;");
+
+                // Listen to any changes on the editor contents (user add, modify or delete the
+                // contents in the rich text area)
+                editor.textLengthProperty().addListener((o, ov, nv) -> {
+                        // Update character count
+                        charCount.setText(String.valueOf(nv));
+
+                        // Make sure the word count is initiated when the document is exists only
+                        Platform.runLater(() -> {
+                                Document linkedDocument = editor.getDocument();
+                                if (linkedDocument != null) {
+                                        // Update word count
+                                        countWords();
+                                }
+                        });
+                });
+
+                // When user want to save the diary content
+                submitBtn.setOnMouseClicked(e -> {
+                        Platform.runLater(() -> {
+                                // Check if the document exists
+                                Document linkedDocument = editor.getDocument();
+                                if (linkedDocument != null) {
+                                        // Method below is provided at the end of the page (CAN MODIFY OR CHANGE)
+                                        saveDocument(linkedDocument);
+                                } else {
+                                        // Error handling here...
+                                }
+                        });
+                });
+
+                // When user want to add image, then will display the images
+                uploadImageBtn.setOnMouseClicked(event -> {
+                        // Use to display the images
+                        displayImages();
+                });
         }
 
+        /***
+         * HELPER METHOD TO CREATE TOGGLE BUTTON.
+         * 
+         ***/
         private ToggleButton createToggleButton(ImageView icon,
                         Function<ObjectProperty<Boolean>, DecorateAction<Boolean>> function) {
                 final ToggleButton toggleButton = new ToggleButton();
+
+                // Set icon
                 icon.setFitWidth(11);
                 icon.setFitHeight(11);
-
                 toggleButton.setGraphic(icon);
+
+                // Add function
                 function.apply(toggleButton.selectedProperty().asObject());
+
                 return toggleButton;
         }
 
-        // private void setupTextFormatting() {
-        // // Example of handling bold text
-        // boldButton.setOnAction(e -> {
-        // editor.getActionFactory()
-        // .decorate(TextDecoration.builder()
-        // .fontWeight(boldButton.isSelected() ? BOLD : NORMAL)
-        // .build())
-        // .execute(e);
-        // });
-
-        // // Example of handling italic text
-        // italicButton.setOnAction(e -> {
-        // editor.getActionFactory()
-        // .decorate(TextDecoration.builder()
-        // .fontPosture(italicButton.isSelected() ? ITALIC : REGULAR)
-        // .build())
-        // .execute(e);
-        // });
-
-        // // Example of handling underline
-        // underlineButton.setOnAction(e -> {
-        // editor.getActionFactory()
-        // .decorate(TextDecoration.builder()
-        // .underline(underlineButton.isSelected())
-        // .build())
-        // .execute(e);
-        // });
-
-        // // Example of handling bullet list
-        // bulletListButton.setOnAction(e -> {
-        // editor.getActionFactory()
-        // .decorate(ParagraphDecoration.builder()
-        // .graphicType(bulletListButton.isSelected() ? BULLETED_LIST : NONE)
-        // .build())
-        // .execute(e);
-        // });
-        // }
-
-        // Helper method for converting Color to hex string
+        /***
+         * HELPER METHOD FOR CONVERTING COLOR TO HEX STRING.
+         * 
+         ***/
         private String toHexString(Color value) {
                 return String.format("#%02X%02X%02X%02X",
                                 (int) Math.round(value.getRed() * 255),
@@ -308,19 +310,61 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
                                 (int) Math.round(value.getOpacity() * 255));
         }
 
-        // Example of image insertion method
-        @FXML
-        private void handleImageInsertion() {
-                FileChooser fileChooser = new FileChooser();
-                fileChooser.getExtensionFilters().add(
-                                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
+        /***
+         * METHOD TO COUNT THE WORDS AND UPDATE THE VALUE OF WORDCOUNT IN UI.
+         * 
+         ***/
+        private void countWords() {
+                Document document = editor.getDocument();
+                if (document != null) {
+                        String text = document.getText();
+                        if (text != null && text.length() > 0) {
+                                String[] words = text.toString().split("([\\W\\s]+)");
+                                wordCount.setText(String.valueOf(words.length));
+                        } else {
+                                wordCount.setText("0");
+                        }
+                }
+        }
 
-                File file = fileChooser.showOpenDialog(textarea.getScene().getWindow());
-                if (file != null) {
-                        String url = file.toURI().toString();
-                        editor.getActionFactory()
-                                        .decorate(new ImageDecoration(url))
-                                        .execute(new ActionEvent());
+        /***
+         * METHOD TO DISPLAY THE IMAGES IN UI.
+         * 
+         ***/
+        public void displayImages() {
+
+                // Sample for illustration purpose (MUST CHANGES !!!!!!!!!!!!!!)
+                List<String> imagePaths = new ArrayList<>();
+                imagePaths.add(getClass().getResource("/com/mycompany/frontend/images/test-img.jpg").toString());
+                imagePaths.add(getClass().getResource("/com/mycompany/frontend/images/italic-icon.png").toString());
+
+                // Clear existing children
+                images.getChildren().clear();
+
+                // Iterate over each image path
+                for (String path : imagePaths) {
+                        // Create an ImageView from the path
+                        ImageView imageView = new ImageView(new Image(path));
+
+                        // Image settings
+                        imageView.setFitWidth(100);
+                        imageView.setFitHeight(100);
+                        imageView.setPreserveRatio(true);
+
+                        // Add ImageView to the container
+                        images.getChildren().add(imageView);
+                }
+        }
+
+        /***
+         * METHOD TO SAVE DOCUMENT. (CAN CHANGE OR MODIFY)
+         * 
+         ***/
+        private void saveDocument(Document document) {
+                try {
+                        RichTextCSVExporter.exportToCSV(editor, "data.csv"); // Filename can change also
+                } catch (IOException e) {
+                        e.printStackTrace();
                 }
         }
 

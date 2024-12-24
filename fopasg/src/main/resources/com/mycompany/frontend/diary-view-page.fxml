@@ -54,11 +54,8 @@
                <content>
                   <VBox>
                      <children>
-                        <TextArea fx:id="contents" depthTest="DISABLE" editable="false" prefHeight="217.0" prefWidth="627.0" promptText="Click here to write your content" text="Some contents here">
-                           <font>
-                              <Font name="Roboto" size="12.0" />
-                           </font>
-                        </TextArea>
+                        <Pane fx:id="textarea" prefHeight="300.0" prefWidth="627.0">
+                        </Pane>
                         <FlowPane fx:id="images" hgap="5.0">
                            <children>
                            </children>

@@ -55,7 +55,7 @@
             </TextField>
             <ScrollPane fitToWidth="true" hbarPolicy="NEVER" layoutX="37.0" layoutY="190.0" prefHeight="223.0" prefWidth="638.0">
                <content>
-                  <VBox alignment="CENTER" prefHeight="215.0" prefWidth="636.0" spacing="5.0">
+                  <VBox alignment="CENTER" spacing="5.0">
                      <children>
                         
                                                                                                       <!-- Below is the error message. Uncomment it to use. -->
@@ -66,7 +66,7 @@
                                                                                                       </Text> -->
             
                                                                                                       <!-- Add styleClass="error" to have the red border effect -->
-                        <Pane fx:id="textarea" prefHeight="217.0" prefWidth="627.0">
+                        <Pane fx:id="textarea" prefHeight="300.0" prefWidth="638.0">
                            
                         </Pane>
                         <FlowPane fx:id="images" hgap="5.0">
@@ -77,7 +77,7 @@
                   </VBox>
                </content>
             </ScrollPane>
-            <Button layoutX="566.0" layoutY="423.0" mnemonicParsing="false" style="-fx-background-color: #9ABF80; -fx-background-radius: 20px;" text="Save" textFill="WHITE">
+            <Button fx:id="submitBtn" layoutX="566.0" layoutY="423.0" mnemonicParsing="false" style="-fx-background-color: #9ABF80; -fx-background-radius: 20px;" text="Save" textFill="WHITE">
                <font>
                   <Font name="Roboto Bold" size="15.0" />
                </font>
