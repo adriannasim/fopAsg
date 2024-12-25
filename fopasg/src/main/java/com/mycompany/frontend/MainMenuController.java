@@ -2,14 +2,18 @@ package com.mycompany.frontend;
 
 import java.io.IOException;
 import java.util.Stack;
+import javafx.util.Duration;
+
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 
-
-/*** 
+/***
  * THIS CONTROLLER CLASS IS USED FOR main-menu.fxml
  * 
  ***/
@@ -38,6 +42,9 @@ public class MainMenuController {
 
     @FXML
     private Button moodTrackerBtn; // Button to open mood-tracer.fxml
+
+    @FXML
+    private TextField searchBar; // TextField to enter search queries
 
     /***
      * INITILIZATION OF THE CONTROLLER
@@ -77,6 +84,29 @@ public class MainMenuController {
         // When user click on moodTrackerBtn, navigate to mood-tracker
         moodTrackerBtn.setOnMouseClicked(e -> {
             loadNewContent("mood-tracker.fxml");
+        });
+
+        // When user type on searchbar, display search result
+        Timeline debounceTimer = new Timeline(); 
+        debounceTimer.setCycleCount(1);
+
+        searchBar.setOnKeyReleased(e -> {
+            String query = searchBar.getText();
+            if (query != null && !query.isEmpty()) {
+                // Reset and schedule the debounce timer
+                debounceTimer.stop(); // Stop ongoing timer
+                debounceTimer.getKeyFrames().clear(); // Clear existing keyframes
+
+                // Add a new delayed task
+                debounceTimer.getKeyFrames().add(new KeyFrame(Duration.millis(500), event -> {
+                    loadNewContent("diary-search-result.fxml");
+                }));
+
+                debounceTimer.play(); // Start the timer
+            } else {
+                debounceTimer.stop(); // Stop  
+                goBackToPreviousAnchorPane();
+            }
         });
     }
 

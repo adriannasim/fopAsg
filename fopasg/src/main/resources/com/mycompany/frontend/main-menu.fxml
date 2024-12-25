@@ -16,7 +16,7 @@
    <children>
       <Pane prefHeight="79.0" prefWidth="600.0" style="-fx-background-color: F6F6F6;">
          <children>
-            <TextField layoutX="290.0" layoutY="26.0" prefHeight="26.0" prefWidth="260.0" promptText="⌕ Search past diaries..." style="-fx-background-color: E5E3D4;" />
+            <TextField fx:id="searchBar" layoutX="290.0" layoutY="26.0" prefHeight="26.0" prefWidth="260.0" promptText="⌕ Search past diaries..." style="-fx-background-color: E5E3D4;" />
             <Group layoutX="38.0" layoutY="14.0">
                <children>
                   <Label layoutX="29.0" text="D" textFill="#1c325b">
