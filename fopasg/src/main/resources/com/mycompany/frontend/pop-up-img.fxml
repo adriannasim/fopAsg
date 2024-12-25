@@ -5,8 +5,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
 
-
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.frontend.helper.PopUpImgController">
+<Pane fx:id="imgContainer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #000000;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.frontend.helper.PopUpImgController">
    <children>
       <ImageView fx:id="img" fitHeight="400.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="crossIcon" fitHeight="13.0" fitWidth="11.0" layoutX="568.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
