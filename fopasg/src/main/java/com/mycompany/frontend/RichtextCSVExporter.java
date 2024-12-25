@@ -7,7 +7,6 @@ import com.gluonhq.richtextarea.model.Decoration;
 import com.gluonhq.richtextarea.model.TextDecoration;
 import com.gluonhq.richtextarea.model.ParagraphDecoration.GraphicType;
 import com.gluonhq.richtextarea.model.ParagraphDecoration;
-import com.gluonhq.richtextarea.model.TableDecoration;
 
 import java.io.IOException;
 import java.io.BufferedWriter;

@@ -16,6 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="472.0" minWidth="700.0" prefHeight="490.0" prefWidth="720.0" style="-fx-background-color: # #ffffff;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.frontend.DiaryEntryPageController">
    <children>
@@ -53,22 +54,25 @@
                   <Insets left="20.0" />
                </padding>
             </TextField>
-            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" layoutX="37.0" layoutY="190.0" prefHeight="223.0" prefWidth="638.0">
+            <!-- Below is the error message. Uncomment it to use. -->
+            <!-- <Text fill="#ff9696" layoutX="34.0" layoutY="188.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Title cannot be empty." wrappingWidth="101.376953125">
+               <font>
+                  <Font name="Roboto Black" size="10.0" />
+               </font>
+            </Text> -->
+            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" layoutX="37.0" layoutY="192.0" prefHeight="223.0" prefWidth="638.0">
                <content>
-                  <VBox alignment="CENTER" spacing="5.0">
+                  <VBox alignment="CENTER_LEFT" spacing="5.0">
                      <children>
-                        
-                                                                                                      <!-- Below is the error message. Uncomment it to use. -->
-                        <!-- <Text fill="#ff9696" layoutX="36.0" layoutY="420.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Title cannot be empty." wrappingWidth="118.26585388183594">
-                           <font>
-                                                                                                            <Font name="Roboto Black" size="10.0" />
-                                                                                                         </font>
-                                                                                                      </Text> -->
-            
-                                                                                                      <!-- Add styleClass="error" to have the red border effect -->
-                        <Pane id="pt" fx:id="textarea" prefHeight="300.0" prefWidth="638.0">
-                           
+                        <!-- Add styleClass="error" to have the red border effect -->
+                        <Pane id="pt" fx:id="textarea" prefHeight="300.0" prefWidth="638.0">  
                         </Pane>
+                        <!-- Below is the error message. Uncomment it to use. -->
+                        <!-- <Text fill="#ff9696" strokeType="OUTSIDE" strokeWidth="0.0" text="Content cannot be empty." wrappingWidth="118.26585388183594">
+                           <font>
+                              <Font name="Roboto Black" size="10.0" />
+                           </font>
+                        </Text> -->
                         <FlowPane fx:id="images" hgap="5.0">
                            <children>
                            </children>
@@ -112,14 +116,7 @@
                   </Label>
                </children>
             </FlowPane>
-            <!-- Below is the error message. Uncomment it to use. -->
-            <!-- <Text fill="#ff9696" layoutX="34.0" layoutY="177.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Title cannot be empty." wrappingWidth="101.376953125">
-               <font>
-                                                                                                                                                      <Font name="Roboto Black" size="10.0" />
-                                                                                                                                                   </font>
-                                                                                                                                                </Text> -->
-            
-                                                                  <Pane layoutX="68.0" layoutY="201.0" prefHeight="40.0" prefWidth="565.0" style="-fx-background-color: #F1F1F1; -fx-background-radius: 5px;">
+            <Pane layoutX="68.0" layoutY="203.0" prefHeight="40.0" prefWidth="565.0" style="-fx-background-color: #F1F1F1; -fx-background-radius: 5px;">
                <children>
                   <ComboBox fx:id="fontFamilyComboBox" layoutX="20.0" layoutY="7.0" prefHeight="25.0" prefWidth="99.0" style="-fx-background-color: #f1f1f1;">
                      <cursor>
@@ -156,18 +153,6 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </ColorPicker>
-                  <!-- <Button alignment="CENTER" contentDisplay="CENTER" layoutX="256.0" layoutY="3.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="36.0" style="-fx-background-color: #f1f1f1;" textAlignment="CENTER">
-                     <graphic>
-                                                                              <ImageView fitHeight="11.0" fitWidth="11.0" pickOnBounds="true" preserveRatio="true">
-                                                                                 <image>
-                                                                                    <Image url="@images/highlight-colour-icon.png" />
-                                                                                 </image>
-                                                                              </ImageView>
-                                                                           </graphic>
-                                                                           <cursor>
-                                                                              <Cursor fx:constant="HAND" />
-                                                                           </cursor>
-                                                                        </Button> -->
                   <ColorPicker fx:id="textBackground" layoutX="380.0" layoutY="3.0" prefHeight="34.0" prefWidth="36.0" style="-fx-background-color: #f1f1f1;">
                      <cursor>
                         <Cursor fx:constant="HAND" />

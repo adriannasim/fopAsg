@@ -124,6 +124,17 @@ public class DiaryViewController extends SharedPaneCharacteristics {
             imageView.setFitWidth(100);
             imageView.setFitHeight(100);
             imageView.setPreserveRatio(true);
+            imageView.setStyle("-fx-cursor: HAND;");
+
+            // Open image pop up view
+            imageView.setOnMouseClicked(e -> {
+                try{
+                    App.openPopUpImg("pop-up-img", new Image(path));
+                } catch (IOException ex){
+                    ex.printStackTrace();
+                }
+            });
+            
 
             // Add ImageView to the container
             images.getChildren().add(imageView);

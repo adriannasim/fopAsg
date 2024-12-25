@@ -177,7 +177,9 @@ public class RecycleBinController extends SharedPaneCharacteristics{
         return pane;
     }
 
-    // Method to handle the delete action
+    /*** METHOD TO HANDLE THE DELETE ACTION
+     * 
+     * ***/
     private void handleDelete() {
 
         // Show a delete confirmation page
@@ -188,7 +190,9 @@ public class RecycleBinController extends SharedPaneCharacteristics{
         }
     }
 
-    // Method to handle the restore action
+    /*** METHOD TO HANDLE THE RESTORE ACTION
+     * 
+     * ***/
     private void handleRestore() {
 
         // Show a restore confirmation page
@@ -199,7 +203,9 @@ public class RecycleBinController extends SharedPaneCharacteristics{
         }
     }
 
-    // Method to handle the view action
+    /*** METHOD TO HANDLE THE VIEW ACTION
+     * 
+     * ***/
     private void handleView() {
 
         // Show a view page

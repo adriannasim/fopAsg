@@ -9,6 +9,7 @@ module com.mycompany.frontend {
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.ikonli.core;
     requires java.logging;
+    requires transitive javafx.graphics;
 
 
     opens com.mycompany.frontend to javafx.fxml;

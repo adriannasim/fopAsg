@@ -1,3 +1,4 @@
+/* Rich Text Area styling ***/
 .rich-text-area {
     -fx-background-radius: 14px;  
     -fx-background-color: #E5E3D4;       
@@ -35,13 +36,12 @@
     -fx-background: #E5E3D4;
 }
 
+.error .rich-text-area {
+    -fx-border-color: #FF9696;     
+    -fx-border-width: 2px;          
+}
 
-
-
-
-
-
-.error {
+.text-field.error {
     -fx-border-color: #FF9696;     
     -fx-border-width: 2px;          
 }
@@ -60,7 +60,7 @@
     opacity: 1;
 }
 
-/* Styles for Recycle Bin */
+/* Recycle Bin styling */
 .diary-item-pane {
     -fx-background-color: #F1F1F1;
     -fx-cursor: hand;
@@ -112,7 +112,7 @@
     -fx-background-radius: 5px;
 }
 
-
+/* Combo Box and Color Picker styling */
 .combo-box .arrow-button,
 .color-picker .arrow-button{
     -fx-background-color: transparent;

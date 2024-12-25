@@ -20,8 +20,10 @@ public class PopUpBoxController {
      ***/
     @FXML
     private Text confirmationText;
+
     @FXML
     private Button yesButton;
+
     @FXML
     private Button noButton;
 
@@ -30,7 +32,9 @@ public class PopUpBoxController {
      * 
      ***/
     private String filename;
+
     private String successMessage;
+    
     private String failedMessage;
 
     /***

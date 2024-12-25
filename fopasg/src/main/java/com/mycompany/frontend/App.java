@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -11,6 +12,7 @@ import java.io.IOException;
 import java.util.Stack;
 import com.mycompany.frontend.helper.MessageController;
 import com.mycompany.frontend.helper.PopUpBoxController;
+import com.mycompany.frontend.helper.PopUpImgController;
 
 /***
  * THIS APP CLASS IS SERVED AS THE ***ENTRY POINT*** OF THE ENTIRE APPLICATION.
@@ -148,12 +150,49 @@ public class App extends Application {
     }
 
     /***
+     * METHOD TO SHOW A POP UP IMAGE AT CENTER.
+     * 
+     ***/
+    public static void openPopUpImg(String filename, Image img) throws IOException {
+        FXMLLoader loader = loadFXML(filename);
+        Parent root = loader.getRoot();
+        // Get controller to set the image
+        PopUpImgController controller = loader.getController(); 
+        controller.setImage(img); 
+
+        Stage popupStage = new Stage();
+        popupStage.initStyle(StageStyle.UNDECORATED); 
+        Scene scene = new Scene(root);
+        popupStage.setScene(scene);
+
+        // Get the dimensions of the parent stage and screen
+        double stageX = stage.getX();
+        double stageY = stage.getY();
+        double stageWidth = stage.getWidth();
+        double stageHeight = stage.getHeight();
+
+        // Calculate the center position
+        double popupWidth = root.prefWidth(-1);
+        double popupHeight = root.prefHeight(-1);
+        double centerX = stageX + (stageWidth - popupWidth) / 2;
+        double centerY = stageY + (stageHeight - popupHeight) / 2;
+
+        // Set the position of the pop-up
+        popupStage.setX(centerX);
+        popupStage.setY(centerY);
+
+        // Display the pop-up window and block further code execution until the pop-up is closed.
+        popupStage.show(); 
+    }
+
+    /***
      * METHOD TO SHOW A POP UP AT TOP.
      * 
      ***/
     public static void openPopUpAtTop(String filename, String message) throws IOException {
         FXMLLoader loader = loadFXML(filename);
         Parent root = loader.getRoot();
+        // Get the controller to set the message text
         MessageController controller = loader.getController(); 
         controller.setMessageText(message); 
 

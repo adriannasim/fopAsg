@@ -91,6 +91,9 @@ public class HistoryPageController extends SharedPaneCharacteristics{
         }
     }
 
+
+
+
     /*** INITILIZATION OF THE CONTROLLER
      * 
      * ***/
@@ -123,13 +126,13 @@ public class HistoryPageController extends SharedPaneCharacteristics{
             }
         });
 
-        // When user chosen to pick entries
+        // When user chosen to pick entries to export
         basedOnPickedEntries.setOnMouseClicked(e->{
             exportOptions.setVisible(false);
             // Operation here
         });
 
-        // When user chosen to pick by date range
+        // When user chosen to pick by date range to export
         basedOnDateRange.setOnMouseClicked(e -> {
             exportOptions2.setVisible(true);
             exportOptions.setVisible(false);
@@ -154,6 +157,8 @@ public class HistoryPageController extends SharedPaneCharacteristics{
             exportOptions2.setVisible(false);
         });
 
+
+
         // Sample data for diary items used for illustration purpose only (MUST CHANGE!!!!!!!!!!!!!!!!!!!)
         List<DiaryGroup> groupedDiaryItems = new ArrayList<>();
         groupedDiaryItems.add(
@@ -171,6 +176,8 @@ public class HistoryPageController extends SharedPaneCharacteristics{
                         Arrays.asList(new DiaryItem("Diary 3"), new DiaryItem("Diary 3"), new DiaryItem("Diary 3"),
                                 new DiaryItem("Diary 3"))));
 
+
+                                
         // Date Format                        
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMM yyyy");
 
@@ -244,7 +251,7 @@ public class HistoryPageController extends SharedPaneCharacteristics{
         // Hover Icons
         ImageView viewIcon = new ImageView(
                 new Image(getClass().getResource("/com/mycompany/frontend/images/view-icon.png").toString()));
-        viewIcon.setLayoutX(170.0);
+        viewIcon.setLayoutX(168.0);
         viewIcon.setLayoutY(7.0);
         viewIcon.setFitHeight(14.0);
         viewIcon.setFitWidth(14.0);
@@ -253,7 +260,7 @@ public class HistoryPageController extends SharedPaneCharacteristics{
 
         ImageView editIcon = new ImageView(
                 new Image(getClass().getResource("/com/mycompany/frontend/images/edit-icon.png").toString()));
-        editIcon.setLayoutX(170.0);
+        editIcon.setLayoutX(168.0);
         editIcon.setLayoutY(25.0);
         editIcon.setFitHeight(14.0);
         editIcon.setFitWidth(14.0);
@@ -262,7 +269,7 @@ public class HistoryPageController extends SharedPaneCharacteristics{
 
         ImageView deleteIcon = new ImageView(
                 new Image(getClass().getResource("/com/mycompany/frontend/images/delete-icon.png").toString()));
-        deleteIcon.setLayoutX(170.0);
+        deleteIcon.setLayoutX(168.0);
         deleteIcon.setLayoutY(43.0);
         deleteIcon.setFitHeight(14.0);
         deleteIcon.setFitWidth(14.0);
@@ -311,7 +318,9 @@ public class HistoryPageController extends SharedPaneCharacteristics{
         return pane;
     }
 
-    // Method to handle the delete action
+    /*** METHOD TO HANDLE THE DELETE ACTION
+     * 
+     * ***/
     private void handleDelete() {
         // Show a delete confirmation page
         try {
@@ -321,13 +330,17 @@ public class HistoryPageController extends SharedPaneCharacteristics{
         }
     }
 
-    // Method to handle the edit action
+    /*** METHOD TO HANDLE THE EDIT ACTION
+     * 
+     * ***/
     private void handleEdit() {
         // Show a edit page
         mainMenuController.loadNewContent("diary-entry-page.fxml");
     }
 
-    // Method to handle the view action
+    /*** METHOD TO HANDLE THE VIEW ACTION
+     * 
+     * ***/
     private void handleView() {
         // Show a view page
         mainMenuController.loadNewContent("diary-view-page.fxml");

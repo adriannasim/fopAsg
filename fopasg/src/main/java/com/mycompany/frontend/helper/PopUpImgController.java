@@ -1,23 +1,17 @@
 package com.mycompany.frontend.helper;
 
 import javafx.fxml.FXML;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-/*** 
- * THIS CONTROLLER CLASS IS USED FOR 
- * success-message.fxml AND error-message.fxml 
- * 
- ***/
-
-public class MessageController {
+public class PopUpImgController {
 
     /*** ELEMENTS WITH FX:ID.  
      * 
      * ***/
     @FXML
-    private Text messageText; 
+    private ImageView img;
     
     @FXML
     private ImageView crossIcon;
@@ -31,7 +25,7 @@ public class MessageController {
         crossIcon.setOnMouseClicked(event -> closeMessageWindow());
     }
 
-    /*** METHOD TO CLOSE THE ERROR MESSAGE WINDOW.
+    /*** METHOD TO CLOSE THE IMAGE WINDOW.
      * 
      * ***/
     private void closeMessageWindow() {
@@ -39,10 +33,10 @@ public class MessageController {
         stage.close();
     }
 
-    /*** METHOD TO SET THE MESSAGE TEXT.
+    /*** METHOD TO SET THE IMAGE.
      * 
      * ***/
-    public void setMessageText(String newText) {
-        messageText.setText(newText); 
+    public void setImage(Image img) {
+        this.img.setImage(img); 
     }
 }
