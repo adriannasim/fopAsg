@@ -44,6 +44,9 @@ public class MainMenuController {
     private Button moodTrackerBtn; // Button to open mood-tracer.fxml
 
     @FXML
+    private Button settingsBtn; // Button to open profile
+
+    @FXML
     private TextField searchBar; // TextField to enter search queries
 
     /***
@@ -84,6 +87,11 @@ public class MainMenuController {
         // When user click on moodTrackerBtn, navigate to mood-tracker
         moodTrackerBtn.setOnMouseClicked(e -> {
             loadNewContent("mood-tracker.fxml");
+        });
+
+        // When user click on settingsBtn, navigate to profile
+        settingsBtn.setOnMouseClicked(e -> {
+            loadNewContent("profile-page.fxml");
         });
 
         // When user type on searchbar, display search result

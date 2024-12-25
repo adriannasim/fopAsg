@@ -55,7 +55,7 @@ public class PopUpBoxController {
             // Simply close the pop-up, no further action.
             Stage stage = (Stage) noButton.getScene().getWindow();
             stage.close();
-            System.out.println(failedMessage);
+            
         });
     }
 
