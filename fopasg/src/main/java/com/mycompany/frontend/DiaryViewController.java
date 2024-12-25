@@ -8,7 +8,6 @@ import com.gluonhq.richtextarea.RichTextArea;
 import com.gluonhq.richtextarea.model.Document;
 
 import javafx.fxml.FXML;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -61,24 +60,24 @@ public class DiaryViewController extends SharedPaneCharacteristics {
         viewer.prefHeightProperty().bind(textarea.heightProperty());
         // Set viewer view-only
         viewer.setEditable(false);
+        // Make sure the document is updated whenever user has entered something
+        viewer.autoSaveProperty().set(true);
 
         // Import the content from CSV file (CAN CHANGE OR MODIFY)
         try {
             viewer.getActionFactory().open(RichTextCSVExporter.importFromCSV("data.csv")).execute(new ActionEvent());
-            ;
         } catch (IOException ex) {
             ex.printStackTrace();
         }
 
-        // Set character count
-        charCount.setText(String.valueOf(viewer.getTextLength()));
-
-        // Make sure the word count is initiated when the document is exists only
-        Platform.runLater(() -> {
-            Document linkedDocument = viewer.getDocument();
-            if (linkedDocument != null) {
-                // Update word count
-                countWords();
+        // Listen to the document change event for viewer
+        viewer.documentProperty().addListener((o, ov, nv) -> {
+            // If there is a document for viewer
+            if (nv != null) {
+                // Set character count
+                charCount.setText(String.valueOf(viewer.getTextLength()));
+                // Set word count
+                countWords(viewer.getDocument());
             }
         });
 
@@ -90,8 +89,7 @@ public class DiaryViewController extends SharedPaneCharacteristics {
      * METHOD TO COUNT THE WORDS AND UPDATE THE VALUE OF WORDCOUNT IN UI.
      * 
      ***/
-    private void countWords() {
-        Document document = viewer.getDocument();
+    private void countWords(Document document) {
         if (document != null) {
             String text = document.getText();
             if (text != null && text.length() > 0) {

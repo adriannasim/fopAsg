@@ -258,7 +258,7 @@ class RichTextCSVExporter {
 
         TextDecoration.Builder builder = TextDecoration.builder();
 
-        String content = encoded.substring(FORMAT_PREFIX.length(), encoded.length() - FORMAT_SUFFIX.length());
+        String content = encoded.substring(FORMAT_PREFIX.length() + 1, encoded.length() - FORMAT_SUFFIX.length() - 1);
         String[] parts = content.split(Pattern.quote(DECORATION_DELIMITER));
 
         for (String part : parts) {
@@ -321,24 +321,19 @@ class RichTextCSVExporter {
         }
 
         ParagraphDecoration.Builder builder = ParagraphDecoration.builder();
-        System.out.println("Encoded: [" + encoded + "]");
 
         String content = encoded.substring(FORMAT_PREFIX.length() + 1, encoded.length() - FORMAT_SUFFIX.length() - 1);
-        System.out.println("Content: [" + content + "]");
         String[] parts = content.split(Pattern.quote(DECORATION_DELIMITER));
 
         for (String part : parts) {
-            System.out.println(part);
             // Retrieve the list style
             if (part.startsWith("listStyle:")) {
-                System.out.println("inside:" + part);
-                String listStyleValue = part.substring(10).trim().toUpperCase();
-                System.out.println("Parsed listStyle: " + listStyleValue);
-                if (part.substring(10).equals("BULLETED_LIST")) {
+                String extracted = part.substring(10).trim();
+                if (extracted.equals("BULLETED_LIST")) {
                     builder.graphicType(GraphicType.BULLETED_LIST);
-                } else if (part.substring(10).equals("NUMBERED_LIST")) {
+                } else if (extracted.equals("NUMBERED_LIST")) {
                     builder.graphicType(GraphicType.NUMBERED_LIST);
-                }else {
+                } else {
                     builder.graphicType(GraphicType.NONE);
                 }
             }
@@ -350,8 +345,6 @@ class RichTextCSVExporter {
             builder.rightInset(0.0);
             builder.bottomInset(0.0);
             builder.leftInset(0.0);
-            builder.indentationLevel(0);
-            builder.tableDecoration(new TableDecoration());
         }
 
         return builder.build();

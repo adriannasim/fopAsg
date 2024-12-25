@@ -10,6 +10,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -55,6 +56,9 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
          ***/
         @FXML
         private Pane textarea; // Used to hold the rich text area
+
+        @FXML
+        private ComboBox<String> fontFamilyComboBox; // Used to change font family
 
         @FXML
         private ComboBox<Double> fontSizeComboBox; // Used to change font size of the content
@@ -111,7 +115,7 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
 
         // Initial text decoration settings
         TextDecoration textDecoration = TextDecoration.builder().presets()
-                        .fontFamily("Arial")
+                        .fontFamily("Roboto")
                         .fontSize(14)
                         .foreground("black")
                         .build();
@@ -147,6 +151,13 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
                 editor.autoSaveProperty().set(true);
 
                 /*** STEPS TO HANDLE CONTENTS FORMATTING ***/
+                // Steps to handle font family change
+                fontFamilyComboBox.setEditable(true);
+                fontFamilyComboBox.getItems().setAll(Font.getFamilies());
+                fontFamilyComboBox.setValue("Roboto");
+                new TextDecorateAction<>(editor, fontFamilyComboBox.valueProperty(), TextDecoration::getFontFamily,
+                                (builder, a) -> builder.fontFamily(a).build());
+
                 // Steps to handle the font size change
                 fontSizeComboBox.setEditable(true);
                 fontSizeComboBox.getItems().addAll(IntStream.range(8, 102)
