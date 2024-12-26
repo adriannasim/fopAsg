@@ -141,19 +141,19 @@ public class HistoryPageController extends SharedPaneCharacteristics{
 
         // When user want export by day
         basedOnDay.setOnMouseClicked(e->{
-            mainMenuController.loadNewContent("export-by-day.fxml");
+            mainMenuController.loadNewContent("export-by-day");
             exportOptions2.setVisible(false);
         });
 
         // When user want export by week
         basedOnWeek.setOnMouseClicked(e->{
-            mainMenuController.loadNewContent("export-by-week.fxml");
+            mainMenuController.loadNewContent("export-by-week");
             exportOptions2.setVisible(false);
         });
 
         // When user want export by month
         basedOnMonth.setOnMouseClicked(e->{
-            mainMenuController.loadNewContent("export-by-month.fxml");
+            mainMenuController.loadNewContent("export-by-month");
             exportOptions2.setVisible(false);
         });
 
@@ -335,7 +335,7 @@ public class HistoryPageController extends SharedPaneCharacteristics{
      * ***/
     private void handleEdit() {
         // Show a edit page
-        mainMenuController.loadNewContent("diary-entry-page.fxml");
+        mainMenuController.loadNewContent("diary-entry-page");
     }
 
     /*** METHOD TO HANDLE THE VIEW ACTION
@@ -343,7 +343,7 @@ public class HistoryPageController extends SharedPaneCharacteristics{
      * ***/
     private void handleView() {
         // Show a view page
-        mainMenuController.loadNewContent("diary-view-page.fxml");
+        mainMenuController.loadNewContent("diary-view-page");
     }
 
 }

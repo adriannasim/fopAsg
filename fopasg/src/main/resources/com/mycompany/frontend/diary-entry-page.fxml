@@ -54,12 +54,12 @@
                   <Insets left="20.0" />
                </padding>
             </TextField>
-            <!-- Below is the error message. Uncomment it to use. -->
-            <!-- <Text fill="#ff9696" layoutX="34.0" layoutY="188.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Title cannot be empty." wrappingWidth="101.376953125">
+            <!-- Below is the error message. -->
+            <Text fx:id="titleMsg" styleClass="errorMsg" layoutX="36.0" layoutY="188.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="101.376953125">
                <font>
                   <Font name="Roboto Black" size="10.0" />
                </font>
-            </Text> -->
+            </Text>
             <ScrollPane fitToWidth="true" hbarPolicy="NEVER" layoutX="37.0" layoutY="192.0" prefHeight="223.0" prefWidth="638.0">
                <content>
                   <VBox alignment="CENTER_LEFT" spacing="5.0">
@@ -67,12 +67,12 @@
                         <!-- Add styleClass="error" to have the red border effect -->
                         <Pane id="pt" fx:id="textarea" prefHeight="300.0" prefWidth="638.0">  
                         </Pane>
-                        <!-- Below is the error message. Uncomment it to use. -->
-                        <!-- <Text fill="#ff9696" strokeType="OUTSIDE" strokeWidth="0.0" text="Content cannot be empty." wrappingWidth="118.26585388183594">
+                        <!-- Below is the error message. -->
+                        <Text fx:id="contentMsg" styleClass="errorMsg" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="118.26585388183594">
                            <font>
                               <Font name="Roboto Black" size="10.0" />
                            </font>
-                        </Text> -->
+                        </Text>
                         <FlowPane fx:id="images" hgap="5.0">
                            <children>
                            </children>

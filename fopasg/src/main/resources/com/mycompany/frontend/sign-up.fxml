@@ -25,7 +25,7 @@
                   <Font name="Roboto Bold" size="10.0" />
                </font>
             </Text>
-            <PasswordField layoutX="40.0" layoutY="305.0" prefHeight="26.0" prefWidth="219.0" style="-fx-background-color: #D9D9D9;" />
+            <PasswordField fx:id="confirmPassword" layoutX="40.0" layoutY="305.0" prefHeight="26.0" prefWidth="219.0" style="-fx-background-color: #D9D9D9;" />
             <Text styleClass="errorMsg" fx:id="confirmPasswordMsg" layoutX="47.0" layoutY="343.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-background-color: #ffffff;" wrappingWidth="208.0">
                <font>
                   <Font name="Roboto Bold" size="10.0" />
@@ -41,7 +41,7 @@
                   <Font name="System Bold" size="11.0" />
                </font>
             </Label>
-            <TextField layoutX="40.0" layoutY="183.0" prefHeight="27.0" prefWidth="219.0" style="-fx-background-color: #D9D9D9;" />
+            <TextField fx:id="email" layoutX="40.0" layoutY="183.0" prefHeight="27.0" prefWidth="219.0" style="-fx-background-color: #D9D9D9;" />
             <Text styleClass="errorMsg" fx:id="emailMsg" layoutX="47.0" layoutY="221.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-background-color: #ffffff;" wrappingWidth="208.0">
                <font>
                   <Font name="Roboto Bold" size="10.0" />
@@ -52,7 +52,7 @@
                   <Font name="System Bold" size="11.0" />
                </font>
             </Label>
-            <TextField layoutX="40.0" layoutY="126.0" prefHeight="27.0" prefWidth="219.0" style="-fx-background-color: #D9D9D9;" />
+            <TextField fx:id="username" layoutX="40.0" layoutY="126.0" prefHeight="27.0" prefWidth="219.0" style="-fx-background-color: #D9D9D9;" />
             <Text styleClass="errorMsg" fx:id="usernameMsg" layoutX="47.0" layoutY="162.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-background-color: #ffffff;" wrappingWidth="208.0">
                <font>
                   <Font name="Roboto Bold" size="10.0" />

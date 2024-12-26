@@ -32,6 +32,9 @@ public class MainMenuController {
     private AnchorPane rootPane; // This is where the page content will change, other will be fixed
 
     @FXML
+    private TextField searchBar; // TextField to enter search queries, use serachBar.getText() to get the query
+
+    @FXML
     private Button newDiaryBtn; // Button to open diary-entry-page.fxml
 
     @FXML
@@ -47,9 +50,6 @@ public class MainMenuController {
     private Button settingsBtn; // Button to open profile
 
     @FXML
-    private TextField searchBar; // TextField to enter search queries
-
-    @FXML
     private Button logoutBtn; // button to logout
 
     /***
@@ -59,11 +59,10 @@ public class MainMenuController {
     @FXML
     public void initialize() {
         // Initial page
-        loadNewContent("main-root-pane.fxml");
+        loadNewContent("main-root-pane");
 
-        // Open the mood indicator page when user enter (Call this after the main UI is
-        // set up)
-        // Can add the logic of when it should display here...
+        // Open the mood indicator page when user enter (Call this after enter main menu)
+        // CAN ADD LOGIC of when it should display here...
         Platform.runLater(() -> {
             try {
                 App.openPopUp("mood-indicator");
@@ -74,32 +73,33 @@ public class MainMenuController {
 
         // When user click on newDiaryBtn, navigate to diary-entry-page
         newDiaryBtn.setOnMouseClicked(e -> {
-            loadNewContent("diary-entry-page.fxml");
+            loadNewContent("diary-entry-page");
         });
 
         // When user click on recycleBinBtn, navigate to diary-recycle-bin
         recycleBinBtn.setOnMouseClicked(e -> {
-            loadNewContent("diary-recycle-bin.fxml");
+            loadNewContent("diary-recycle-bin");
         });
 
         // When user click on historyBtn, navigate to diary-history-page
         historyBtn.setOnMouseClicked(e -> {
-            loadNewContent("diary-history-page.fxml");
+            loadNewContent("diary-history-page");
         });
 
         // When user click on moodTrackerBtn, navigate to mood-tracker
         moodTrackerBtn.setOnMouseClicked(e -> {
-            loadNewContent("mood-tracker.fxml");
+            loadNewContent("mood-tracker");
         });
 
         // When user click on settingsBtn, navigate to profile
         settingsBtn.setOnMouseClicked(e -> {
-            loadNewContent("profile-page.fxml");
+            loadNewContent("profile-page");
         });
 
         // When user click on logoutBtn, navigate to login
         logoutBtn.setOnMouseClicked(e->{
             try{
+                // LOGOUT OPERATION HERE...
                 App.switchScene("login-page");
             } catch (IOException ex){
                 ex.printStackTrace();
@@ -110,6 +110,7 @@ public class MainMenuController {
         Timeline debounceTimer = new Timeline(); 
         debounceTimer.setCycleCount(1);
 
+        // This is used to ensure we only execute the search task when user stop typing for 500ms
         searchBar.setOnKeyReleased(e -> {
             String query = searchBar.getText();
             if (query != null && !query.isEmpty()) {
@@ -119,7 +120,9 @@ public class MainMenuController {
 
                 // Add a new delayed task
                 debounceTimer.getKeyFrames().add(new KeyFrame(Duration.millis(500), event -> {
-                    loadNewContent("diary-search-result.fxml");
+                    // SEARCH OPERATION HERE...
+                    // Show results in result page
+                    loadNewContent("diary-search-result");
                 }));
 
                 debounceTimer.play(); // Start the timer
@@ -143,7 +146,7 @@ public class MainMenuController {
             anchorPaneHistory.push(currentState);
 
             // Load the new content from the FXML file
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(filename));
+            FXMLLoader loader = new FXMLLoader(App.class.getResource(filename + ".fxml"));
             AnchorPane newContent = loader.load();
 
             // Get the controller of the loaded FXML

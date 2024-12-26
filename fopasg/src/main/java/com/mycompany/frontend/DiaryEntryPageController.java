@@ -11,6 +11,7 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -101,6 +102,12 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
 
         @FXML
         private Button submitBtn; // used to save the diary
+
+        @FXML
+        private Text titleMsg; // Used to store the title error message, use titleMsg.setText() to set message
+
+        @FXML
+        private Text contentMsg; // Used to store the content error message, use contentMsg.setText() to set message
 
         /***
          * VARIABLES.

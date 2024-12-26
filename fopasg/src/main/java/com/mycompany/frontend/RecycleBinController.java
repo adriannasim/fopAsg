@@ -209,7 +209,7 @@ public class RecycleBinController extends SharedPaneCharacteristics{
     private void handleView() {
 
         // Show a view page
-        mainMenuController.loadNewContent("diary-view-page.fxml");
+        mainMenuController.loadNewContent("diary-view-page");
     }
 
 }

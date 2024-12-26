@@ -20,25 +20,25 @@ public class ProfilePageController extends SharedPaneCharacteristics {
      * 
      * ***/
     @FXML
-    private TextField username;
+    private TextField username;  // this is ued to keep username
 
     @FXML
-    private TextField email;
+    private TextField email; // this is used to keep email
 
     @FXML
-    private PasswordField password;
+    private PasswordField password; // this is used to keep password
 
     @FXML
-    private ImageView usernameEdit;
+    private ImageView usernameEdit; // this is used to enable username edit
 
     @FXML
-    private ImageView emailEdit;
+    private ImageView emailEdit; // this is used to enable email edit
 
     @FXML
-    private ImageView passwordEdit;
+    private ImageView passwordEdit; // this is used to enable password edit
 
     @FXML
-    private Text passwordMsg;
+    private Text passwordMsg;  // this is used to display password error message
 
     @FXML
     private Button submitBtn;

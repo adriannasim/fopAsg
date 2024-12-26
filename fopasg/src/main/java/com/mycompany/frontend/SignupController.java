@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
 /***
@@ -16,23 +17,32 @@ public class SignupController {
     /*** ELEMENTS WITH FX:ID  
      * 
      * ***/
-    @FXML
-    private Button submitBtn;
+    @FXML 
+    private TextField username; // This will store the user input for username, use username.getText() to get the value
+    
+    @FXML 
+    private TextField email; // This will store the user input for email, use email.getText() to get the value
 
     @FXML 
-    private PasswordField password;
+    private PasswordField password; // This will store the user input for password, use password.getText() to get the value
+
+    @FXML 
+    private PasswordField confirmPassword; // This will store the user input for confirm password, use confirmPassword.getText() to get the value
 
     @FXML
-    private Text usernameMsg;
+    private Text usernameMsg; // This is the placeholder for username error message, use usernameMsg.setText() to set the message
 
     @FXML
-    private Text emailMsg;
+    private Text emailMsg; // This is the placeholder for email error message, use emailMsg.setText() to set the message
 
     @FXML
-    private Text passwordMsg;
+    private Text passwordMsg; // This is the placeholder for password error message, use passwordMsg.setText() to set the message
 
     @FXML
-    private Text confirmPasswordMsg;
+    private Text confirmPasswordMsg; // This is the placeholder for confirm password error message, use confirmPasswordMsg.setText() to set the message
+
+    @FXML
+    private Button submitBtn; 
 
 
     /*** INITILIZATION OF THE CONTROLLER
@@ -45,7 +55,7 @@ public class SignupController {
             // Close the pop-up
             Stage stage = (Stage) submitBtn.getScene().getWindow();
             stage.close();
-            // Operation here
+            // OPERATION HERE...
         });
 
         // Check for password strength

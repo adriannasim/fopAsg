@@ -184,7 +184,7 @@ public class SearchResultController extends SharedPaneCharacteristics{
      * ***/
     private void handleEdit() {
         // Show a edit page
-        mainMenuController.loadNewContent("diary-entry-page.fxml");
+        mainMenuController.loadNewContent("diary-entry-page");
     }
 
     /*** METHOD TO HANDLE THE VIEW ACTION
@@ -192,7 +192,7 @@ public class SearchResultController extends SharedPaneCharacteristics{
      * ***/
     private void handleView() {
         // Show a view page
-        mainMenuController.loadNewContent("diary-view-page.fxml");
+        mainMenuController.loadNewContent("diary-view-page");
     }
 
 }

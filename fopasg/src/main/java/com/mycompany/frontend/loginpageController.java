@@ -19,10 +19,10 @@ public class LoginPageController extends SharedPaneCharacteristics{
      * 
      ***/
     @FXML
-    private TextField username;
+    private TextField username;  // This will store the user input for username/email, use username.getText() to get the value
 
     @FXML
-    private PasswordField password;
+    private PasswordField password;  // This will store the user input for password, use password.getText() to get the value
 
     @FXML
     private Label usernameLabel;
@@ -64,7 +64,7 @@ public class LoginPageController extends SharedPaneCharacteristics{
             }
         });
 
-        // When user want to sign up
+        // When user want to sign up, open sign up page
         signUpBtn.setOnMouseClicked(e->{
             try{
                 App.openPopUpSignUp("sign-up");
@@ -73,18 +73,12 @@ public class LoginPageController extends SharedPaneCharacteristics{
             } 
         });
 
-        // When user want to login
-        signUpBtn.setOnMouseClicked(e->{
-            try{
-                App.openPopUpSignUp("sign-up");
-            } catch(IOException ex){
-                ex.printStackTrace();
-            } 
-        });
-
-        // When user want to login
+        // When user want to login, process the user details
         submitBtn.setOnMouseClicked(e->{
             try{
+                // PROCESSING HERE...
+
+                // If success then navigate to main menu
                 App.switchScene("main-menu");
             } catch (IOException ex){
                 ex.printStackTrace();

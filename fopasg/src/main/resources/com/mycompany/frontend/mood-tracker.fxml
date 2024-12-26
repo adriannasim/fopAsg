@@ -21,7 +21,7 @@
                   <Font name="Roboto Bold" size="20.0" />
                </font>
             </Label>
-            <DatePicker layoutX="37.0" layoutY="116.0" prefHeight="25.0" prefWidth="117.0">
+            <DatePicker fx:id="start" layoutX="37.0" layoutY="116.0" prefHeight="25.0" prefWidth="117.0">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
@@ -31,14 +31,14 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </Label>
-            <DatePicker layoutX="184.0" layoutY="116.0" prefHeight="25.0" prefWidth="117.0">
+            <DatePicker fx:id="end" layoutX="184.0" layoutY="116.0" prefHeight="25.0" prefWidth="117.0">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
             </DatePicker>
             <TilePane layoutX="79.0" layoutY="201.0" prefHeight="231.0" prefWidth="526.0">
                <children>
-                  <BarChart barGap="3.0" prefHeight="230.0" prefWidth="532.0" title="Mood Tracker">
+                  <BarChart fx:id="barChart" barGap="3.0" prefHeight="230.0" prefWidth="532.0" title="Mood Tracker">
                     <xAxis>
                       <CategoryAxis side="BOTTOM" />
                     </xAxis>
