@@ -28,7 +28,7 @@ public class UserService
         //add all users to the arraylist to be returned
         try
         {
-            List<String> users = fileIO.readTxt(filename);
+            List<String> users = fileIO.readFile(filename);
             for (String user : users)
             {
                 String[] data = user.split(",");
@@ -65,37 +65,37 @@ public class UserService
     }
 
     //login
-    public boolean userLogin(String username, String password)
+    public String userLogin(String loginInfo, String password)
     {
         //read user class frm json file
         try 
         {
-            List<String> userList = fileIO.readTxt(filename);
+            List<String> userList = fileIO.readFile(filename);
 
             //loop through the list
             for (String userLine : userList)
             {
                 String[] userInfo = userLine.split(",");
                 //check if the given username/email exists in the list
-                if (userInfo[0].equals(username) || userInfo[1].equals(username))
+                if (userInfo[0].equals(loginInfo) || userInfo[1].equals(loginInfo))
                 {
                     //then check password
                     if (userInfo[2].equals(password))
                     {
                         //login successful
-                        return true;
+                        return userInfo[0];
                     }
                     //wrong password
                     else
                     {
                         System.err.println("Incorrect Password.");
-                        return false;
+                        return null;
                     }
                 }
             }
             //login unsuccessful
             System.err.println("User not found.");
-            return false;
+            return null;
         }
         catch (IOException e)
         {
@@ -120,7 +120,7 @@ public class UserService
             try 
             {
                 //get all user to check if user already exists
-                List<String> users = fileIO.readTxt(filename);
+                List<String> users = fileIO.readFile(filename);
     
                 for (String userLine : users)
                 {
@@ -134,7 +134,7 @@ public class UserService
                 
                 //if no matching existing users, then we can create an account
                 User newUser = new User(username, email, password);
-                fileIO.appendTxt(filename, newUser);
+                fileIO.appendFile(filename, newUser);
                 return true;
             }
             catch (IOException e)
@@ -161,7 +161,7 @@ public class UserService
             User updatedUser = new User(username, email, password);
             try 
             {
-                fileIO.editTxt(filename, updatedUser, username);
+                fileIO.editFile(filename, updatedUser, username);
             }
             catch (IOException e)
             {
@@ -182,7 +182,7 @@ public class UserService
         //delete user
         try
         {
-            fileIO.deleteLineTxt(filename, username);
+            fileIO.deleteLineFile(filename, username);
 
             //done 
             return true;
