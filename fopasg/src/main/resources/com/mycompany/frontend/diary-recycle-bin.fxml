@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="500.0" minWidth="720.0" prefHeight="500.0" prefWidth="720.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.frontend.RecycleBinController">
+   <children>
+      <Pane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="500.0" minWidth="720.0" style="-fx-background-color: #ffffff;" stylesheets="@css/style.css">
+         <children>
+            <Button fx:id="backButton" layoutX="28.0" layoutY="30.0" mnemonicParsing="false" style="-fx-background-color: #ffffff;" text="Back" textFill="#8f8f8f">
+               <font>
+                  <Font name="Roboto" size="12.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Label layoutX="37.0" layoutY="63.0" minWidth="-Infinity" style="-fx-background-color: #ffffff;" text="Recycle Bin" textFill="#6a669d">
+               <font>
+                  <Font name="Roboto Bold" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="33.0" layoutY="107.0" prefHeight="15.0" prefWidth="632.0" style="-fx-background-color: #ffffff;" textFill="#8f8f8f" textOverrun="CLIP">
+               <font>
+                  <Font name="Roboto" size="12.0" />
+               </font>
+            </Label>
+            <Text fill="#8f8f8f" layoutX="37.0" layoutY="111.0" strokeType="OUTSIDE" strokeWidth="0.0" text="The entries listed here will remain recoverable for up to 30 days. If no further action is taken, they will be permanently removed after this period." wrappingWidth="638.6666259765625">
+               <font>
+                  <Font name="Roboto" size="10.0" />
+               </font>
+            </Text>
+
+            <!-- ScrollPane with FlowPane for Diary Items -->
+                <ScrollPane fitToWidth="true" hbarPolicy="NEVER" layoutX="34.0" layoutY="142.0" prefHeight="300.0" prefWidth="645.0" vbarPolicy="AS_NEEDED">
+                    <FlowPane fx:id="diaryItemsFlowPane" alignment="TOP_LEFT" hgap="15.0" prefWidth="632.0" vgap="20.0" />
+                </ScrollPane>
+               <!-- ScrollPane with FlowPane for Diary Items -->
+               
+         </children>
+      </Pane>
+   </children>
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+</AnchorPane>
