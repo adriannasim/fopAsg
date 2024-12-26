@@ -1,11 +1,6 @@
 package com.mycompany.backend;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
+import static org.junit.Assert.*;
 import org.junit.*;
 
 public class UserServiceTests 
@@ -27,7 +22,7 @@ public class UserServiceTests
     public void cleanUp()
     {
         //clear entire file
-        fileIO.purgeTxt(filename);
+        fileIO.purgeFile(filename);
     }
 
     //Sign Up tests---------------------------------------------------------------------------------------------------------------------------------
@@ -61,25 +56,29 @@ public class UserServiceTests
     @Test
     public void testUserLoginWithUsername()
     {
-        assertTrue(userService.userLogin("TestUsername", "test123")); 
+        String returnValue = userService.userLogin("TestUsername", "test123");
+        assertEquals(returnValue, "TestUsername");
     }
 
     @Test
     public void testUserLoginWithEmail()
     {
-        assertTrue(userService.userLogin("test@gmail.com", "test123"));
+        String returnValue = userService.userLogin("test@gmail.com", "test123");
+        assertEquals(returnValue, "TestUsername");
     }
 
     @Test
     public void testUserLoginWithUsernameAndWrongPassword()
     {
-        assertFalse(userService.userLogin("TestUsername", "test124"));
+        String returnValue = userService.userLogin("TestUsername", "test124");
+        assertEquals(returnValue, null);
     }
 
     @Test
     public void testUserLoginWithEmailAndWrongPassword()
     {
-        assertFalse(userService.userLogin("test@gmail.com", "test124"));
+        String returnValue = userService.userLogin("test@gmail.com", "test124");
+        assertEquals(returnValue, null);
     }
 
     //User Edit---------------------------------------------------------------------------------------------------------------------------------

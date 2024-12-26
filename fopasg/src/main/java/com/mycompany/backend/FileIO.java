@@ -7,10 +7,20 @@ import java.util.List;
 
 public class FileIO 
 {
-    //Create file TODO
-    public void createFile(String filename)
+    //Create file
+    public void createFile(String filename) throws IOException
     {
-
+        File file;
+        if (filename.toLowerCase().contains("test"))
+        {
+            file = new File("src/test/resources/" + filename);
+        }
+        else
+        {
+            file = new File("src/main/resources/" + filename);
+        }
+        
+        file.createNewFile();
     }
 
     //Load file
