@@ -1,4 +1,5 @@
-module com.mycompany.frontend {
+module com.mycompany {
+    //javafx
     requires javafx.controls;
     requires javafx.fxml;
     requires java.base;
@@ -12,8 +13,14 @@ module com.mycompany.frontend {
     requires transitive javafx.graphics;
 
 
+    //gson
+    requires com.google.gson;
+
     opens com.mycompany.frontend to javafx.fxml;
     opens com.mycompany.frontend.helper to javafx.fxml;
     opens com.mycompany.frontend.exportOptions to javafx.fxml;
+    opens com.mycompany.backend to com.google.gson, com.google.guava;
+
     exports com.mycompany.frontend;
+    exports com.mycompany.backend;
 }
