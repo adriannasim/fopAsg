@@ -49,6 +49,9 @@ public class MainMenuController {
     @FXML
     private TextField searchBar; // TextField to enter search queries
 
+    @FXML
+    private Button logoutBtn; // button to logout
+
     /***
      * INITILIZATION OF THE CONTROLLER
      * 
@@ -92,6 +95,15 @@ public class MainMenuController {
         // When user click on settingsBtn, navigate to profile
         settingsBtn.setOnMouseClicked(e -> {
             loadNewContent("profile-page.fxml");
+        });
+
+        // When user click on logoutBtn, navigate to login
+        logoutBtn.setOnMouseClicked(e->{
+            try{
+                App.switchScene("login-page");
+            } catch (IOException ex){
+                ex.printStackTrace();
+            }
         });
 
         // When user type on searchbar, display search result

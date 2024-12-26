@@ -48,7 +48,7 @@ public class App extends Application {
     public void start(Stage stage) throws IOException {
         this.stage = stage;
         // Landing page here
-        Scene initialScene = new Scene(loadFXML("main-menu").getRoot(), 900, 600);
+        Scene initialScene = new Scene(loadFXML("login-page").getRoot(), 900, 600);
         stage.setScene(initialScene);
         stage.setTitle("Digital Diary");
         stage.show();
@@ -139,6 +139,38 @@ public class App extends Application {
         double popupWidth = root.prefWidth(-1);
         double popupHeight = root.prefHeight(-1);
         double centerX = (stageX + 100) + (stageWidth - popupWidth) / 2;
+        double centerY = stageY + (stageHeight - popupHeight) / 2;
+
+        // Set the position of the pop-up
+        popupStage.setX(centerX);
+        popupStage.setY(centerY);
+
+        // Display the pop-up window and block further code execution until the pop-up is closed.
+        popupStage.showAndWait(); 
+    }
+
+    /***
+     * METHOD TO SHOW A POP UP SIGN UP AT CENTER.
+     * 
+     ***/
+    public static void openPopUpSignUp(String filename) throws IOException {
+        Parent root = loadFXML(filename).getRoot();
+        Stage popupStage = new Stage();
+        // Remove the default window decorations (title bar, close, minimize, and maximize buttons).
+        popupStage.initStyle(StageStyle.UNDECORATED); 
+        Scene scene = new Scene(root);
+        popupStage.setScene(scene);
+
+        // Get the dimensions of the parent stage and screen
+        double stageX = stage.getX();
+        double stageY = stage.getY();
+        double stageWidth = stage.getWidth();
+        double stageHeight = stage.getHeight();
+
+        // Calculate the center position
+        double popupWidth = root.prefWidth(-1);
+        double popupHeight = root.prefHeight(-1);
+        double centerX = stageX + (stageWidth - popupWidth) / 2;
         double centerY = stageY + (stageHeight - popupHeight) / 2;
 
         // Set the position of the pop-up
