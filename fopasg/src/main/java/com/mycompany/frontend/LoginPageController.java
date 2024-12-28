@@ -8,11 +8,15 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
+import com.mycompany.backend.UserService;
+
 /***
  * THIS CONTROLLER CLASS IS USED FOR login-page.fxml
  * 
  ***/
 public class LoginPageController extends SharedPaneCharacteristics{
+
+    private UserService userService = new UserService();
 
     /***
      * ELEMENTS WITH FX:ID
@@ -75,11 +79,21 @@ public class LoginPageController extends SharedPaneCharacteristics{
 
         // When user want to login, process the user details
         submitBtn.setOnMouseClicked(e->{
-            try{
-                // PROCESSING HERE...
+            try
+            {
+                //pass the username and password input by user to the service
+                String loggedInUser = userService.userLogin(username.getText(), password.getText());
 
-                // If success then navigate to main menu
-                App.switchScene("main-menu");
+                //If successfully logged in
+                if (loggedInUser != null) 
+                {
+                    App.switchScene("main-menu");
+                } 
+                else 
+                {
+                    //pop up fail?? (TODO)
+
+                }
             } catch (IOException ex){
                 ex.printStackTrace();
             }

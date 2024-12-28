@@ -1,5 +1,9 @@
 package com.mycompany.frontend;
 
+import java.io.IOException;
+
+import com.mycompany.backend.UserService;
+
 import javafx.fxml.FXML;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
@@ -7,12 +11,16 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
+import com.mycompany.backend.UserService;
+
 /***
  * THIS CONTROLLER CLASS IS USED FOR sign-up.fxml
  * 
  ***/
 
 public class SignupController {
+
+    private UserService userService = new UserService();
 
     /*** ELEMENTS WITH FX:ID  
      * 
@@ -56,6 +64,26 @@ public class SignupController {
             Stage stage = (Stage) submitBtn.getScene().getWindow();
             stage.close();
             // OPERATION HERE...
+            boolean success = userService.userSignUp(username.getText(), email.getText(), password.getText());
+            
+            if (success)
+            {
+                //Pop up sign up successful (TODO)
+
+                //then switch to login
+                try
+                {
+                    App.switchScene("login-page");
+                }
+                catch (IOException ex)
+                {
+                    ex.printStackTrace();
+                }
+            }
+            else
+            {
+                // Display error message (TODO)
+            }
         });
 
         // Check for password strength
