@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 import com.mycompany.backend.UserService;
+import com.mycompany.backend.UserSession;
 
 /***
  * THIS CONTROLLER CLASS IS USED FOR login-page.fxml
@@ -82,11 +83,12 @@ public class LoginPageController extends SharedPaneCharacteristics{
             try
             {
                 //pass the username and password input by user to the service
-                String loggedInUser = userService.userLogin(username.getText(), password.getText());
+                String user = userService.userLogin(username.getText(), password.getText());
 
                 //If successfully logged in
-                if (loggedInUser != null) 
+                if (user != null) 
                 {
+                    UserSession.getSession().setUsername(user);
                     App.switchScene("main-menu");
                 } 
                 else 
