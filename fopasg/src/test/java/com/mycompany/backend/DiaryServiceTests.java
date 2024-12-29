@@ -32,8 +32,8 @@ public class DiaryServiceTests
     public void testNewDiaryEntry()
     {        
         //login
-        String loginUser = userService.userLogin("TestUser1", "test123");
-        DiaryService diaryService = new DiaryService(loginUser);
+        ServiceResult result = userService.userLogin("TestUser1", "test123");
+        DiaryService diaryService = new DiaryService((String) result.getReturnObject());
 
         assertTrue(diaryService.newDiaryEntry("Test Diary Title", LocalDateTime.now(), "Today I am Happy."));
         

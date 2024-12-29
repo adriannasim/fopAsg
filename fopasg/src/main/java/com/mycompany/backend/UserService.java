@@ -167,7 +167,7 @@ public class UserService
                 throw new RuntimeException(e);
             }
     
-            return new ServiceResult(false, "Your changes has been saved.");
+            return new ServiceResult(true, "Your changes has been saved.");
         }
     }
 
