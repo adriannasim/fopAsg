@@ -118,10 +118,9 @@ public class ProfilePageController extends SharedPaneCharacteristics {
         submitBtn.setOnMouseClicked(e->{
             try{
                 // Pop up a confimation message
-                App.openConfirmationPopUp("Do you confirm to change your details?", "Your changes has been saved.", "Failed to save the details.");
-                
-                //where to call the service to save user info? (TODO)
-                
+                App.openConfirmationPopUp("Do you confirm to change your details?",
+                    () -> userService.userEdit(username.getText(), email.getText(), password.getText())
+                );  
             } catch (IOException ex){
                 ex.printStackTrace();
             }

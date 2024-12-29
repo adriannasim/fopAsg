@@ -145,12 +145,11 @@ public class UserService
     }
 
     //edit profile
-    public boolean userEdit(String username, String email, String password)
+    public ServiceResult userEdit(String username, String email, String password)
     {
         if (username == null || email == null || password == null)
         {
-            System.err.println("Info incomplete.");
-            return false;
+            return new ServiceResult(false, "Info incomplete. Please fill in all of your info.");
         }
         else
         {
@@ -168,7 +167,7 @@ public class UserService
                 throw new RuntimeException(e);
             }
     
-            return true;
+            return new ServiceResult(false, "Your changes has been saved.");
         }
     }
 
