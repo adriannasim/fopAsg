@@ -8,6 +8,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
+import com.mycompany.backend.ServiceResult;
 import com.mycompany.backend.UserService;
 import com.mycompany.backend.UserSession;
 
@@ -83,18 +84,19 @@ public class LoginPageController extends SharedPaneCharacteristics{
             try
             {
                 //pass the username and password input by user to the service
-                String user = userService.userLogin(username.getText(), password.getText());
+                ServiceResult result = userService.userLogin(username.getText(), password.getText());
 
                 //If successfully logged in
-                if (user != null) 
+                if (result.getReturnObject() != null) 
                 {
-                    UserSession.getSession().setUsername(user);
+                    App.openPopUpAtTop("success-message", result.getReturnMessage());
+                    UserSession.getSession().setUsername(username.getText());
                     App.switchScene("main-menu");
                 } 
                 else 
                 {
-                    //pop up fail?? (TODO)
-
+                    //pop up fail msg
+                    App.openPopUpAtTop("error-message", result.getReturnMessage());
                 }
             } catch (IOException ex){
                 ex.printStackTrace();

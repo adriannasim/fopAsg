@@ -2,6 +2,7 @@ package com.mycompany.frontend;
 
 import java.io.IOException;
 
+import com.mycompany.backend.ServiceResult;
 import com.mycompany.backend.UserService;
 
 import javafx.fxml.FXML;
@@ -64,25 +65,26 @@ public class SignupController {
             Stage stage = (Stage) submitBtn.getScene().getWindow();
             stage.close();
             // OPERATION HERE...
-            boolean success = userService.userSignUp(username.getText(), email.getText(), password.getText());
+            ServiceResult result = userService.userSignUp(username.getText(), email.getText(), password.getText());
             
-            if (success)
+            try 
             {
-                //Pop up sign up successful (TODO)
-
-                //then switch to login
-                try
+                if ((boolean) result.getReturnObject() == true)
                 {
+                    //Pop up sign up successful
+                    App.openPopUpAtTop("success-message", result.getReturnMessage());
+                    //then switch to login
                     App.switchScene("login-page");
                 }
-                catch (IOException ex)
+                else
                 {
-                    ex.printStackTrace();
+                    // Display error message
+                    App.openPopUpAtTop("error-message", result.getReturnMessage());
                 }
             }
-            else
+            catch (IOException ex)
             {
-                // Display error message (TODO)
+                ex.printStackTrace();
             }
         });
 

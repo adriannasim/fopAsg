@@ -65,7 +65,7 @@ public class UserService
     }
 
     //login
-    public String userLogin(String loginInfo, String password)
+    public ServiceResult userLogin(String loginInfo, String password)
     {
         //read user class frm json file
         try 
@@ -83,19 +83,17 @@ public class UserService
                     if (userInfo[2].equals(password))
                     {
                         //login successful
-                        return userInfo[0];
+                        return new ServiceResult(userInfo[0], "Logged in successfully. Welcome " + userInfo[0] + ".");
                     }
                     //wrong password
                     else
                     {
-                        System.err.println("Incorrect Password.");
-                        return null;
+                        return new ServiceResult(null, "Incorrect Password.");
                     }
                 }
             }
             //login unsuccessful
-            System.err.println("User not found.");
-            return null;
+            return new ServiceResult(null, "User not found. Please sign up as a new user.");
         }
         catch (IOException e)
         {
@@ -108,12 +106,11 @@ public class UserService
     }
 
     //sign up
-    public boolean userSignUp(String username, String email, String password)
+    public ServiceResult userSignUp(String username, String email, String password)
     {
         if (username == null || email == null || password == null)
         {
-            System.err.println("Info incomplete.");
-            return false;
+            return new ServiceResult(false, "Info incomplete. Please fill in all of your info.");
         }
         else
         {
@@ -127,15 +124,14 @@ public class UserService
                     String[] userInfo = userLine.split(",");
                     if (userInfo[0].equals(username) || userInfo[1].equals(email))
                     {
-                        System.err.println("Username/Email already exists.");
-                        return false;
+                        return new ServiceResult(false, "Username/Email already exists. Please try again.");
                     }
                 }
                 
                 //if no matching existing users, then we can create an account
                 User newUser = new User(username, email, password);
                 fileIO.appendFile(filename, newUser);
-                return true;
+                return new ServiceResult(true, "Account created successfully. Please login.");
             }
             catch (IOException e)
             {
