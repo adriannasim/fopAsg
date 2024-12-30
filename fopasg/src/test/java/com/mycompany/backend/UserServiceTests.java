@@ -2,6 +2,8 @@ package com.mycompany.backend;
 
 import static org.junit.Assert.*;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URISyntaxException;
 
 import org.junit.*;
@@ -27,9 +29,13 @@ public class UserServiceTests
         try 
         {
             //clear entire file
-            fileIO.purgeFile(filename);
+            fileIO.clearFile(filename);
         }
         catch (URISyntaxException e)
+        {
+            throw new RuntimeException(e);
+        }
+        catch (IOException e)
         {
             throw new RuntimeException(e);
         }
@@ -40,7 +46,7 @@ public class UserServiceTests
     public void testUserSignUp()
     {        
         //assert that this will return true (if false means test failed)
-        assertTrue((boolean) userService.userSignUp("TestUsername1", "test1@gmail.com", "test123").getReturnObject());
+        assertTrue((boolean) userService.userSignUp("TestUsername1", "test1@gmail.com", "test123").isSuccessful());
 
         User user = userService.getUserByUsername("TestUsername1");
         
@@ -53,42 +59,46 @@ public class UserServiceTests
     public void testUserSignUpWithIncompleteInfo()
     {
         //this statement should fail so we assert it will return false
-        assertFalse((boolean) userService.userSignUp("TestUsername1", "test1@gmail.com", null).getReturnObject());
+        assertFalse((boolean) userService.userSignUp("TestUsername1", "test1@gmail.com", null).isSuccessful());
     }
 
     @Test
     public void testUserSignUpWithExistingUserInfo()
     {
-        assertFalse((boolean) userService.userSignUp("TestUsername", "test@gmail.com", "test123").getReturnObject());
+        assertFalse((boolean) userService.userSignUp("TestUsername", "test@gmail.com", "test123").isSuccessful());
     }
 
     //Login tests---------------------------------------------------------------------------------------------------------------------------------
     @Test
     public void testUserLoginWithUsername()
     {
-        String returnValue = (String) userService.userLogin("TestUsername", "test123").getReturnObject();
-        assertEquals(returnValue, "TestUsername");
+        //get the result of the operation
+        ServiceResult result = userService.userLogin("TestUsername", "test123");
+        
+        //check if its successful
+        assertTrue(result.isSuccessful());
+        //check if the username matches
+        assertEquals(result.getReturnObject(), "TestUsername");
     }
 
     @Test
     public void testUserLoginWithEmail()
     {
-        String returnValue = (String) userService.userLogin("test@gmail.com", "test123").getReturnObject();
-        assertEquals(returnValue, "TestUsername");
+        ServiceResult result = userService.userLogin("test@gmail.com", "test123");
+        assertTrue(result.isSuccessful());
+        assertEquals(result.getReturnObject(), "TestUsername");
     }
 
     @Test
     public void testUserLoginWithUsernameAndWrongPassword()
     {
-        String returnValue = (String) userService.userLogin("TestUsername", "test124").getReturnObject();
-        assertEquals(returnValue, null);
+        assertFalse(userService.userLogin("TestUsername", "test124").isSuccessful());
     }
 
     @Test
     public void testUserLoginWithEmailAndWrongPassword()
     {
-        String returnValue = (String) userService.userLogin("test@gmail.com", "test124").getReturnObject();
-        assertEquals(returnValue, null);
+        assertFalse(userService.userLogin("test@gmail.com", "test124").isSuccessful());
     }
 
     //User Edit---------------------------------------------------------------------------------------------------------------------------------
@@ -96,7 +106,7 @@ public class UserServiceTests
     public void testEditUserInfo()
     {
         //edit email and password (username probably we keep it as our primary key so we will try to prohibit user from editing it)
-        assertTrue((boolean) userService.userEdit("TestEdit", "edited@gmail.com", "test345").getReturnObject());
+        assertTrue(userService.userEdit("TestEdit", "edited@gmail.com", "test345").isSuccessful());
 
         User user = userService.getUserByUsername("TestEdit");
 
@@ -107,7 +117,7 @@ public class UserServiceTests
     @Test
     public void testEditUserWithIncompleteInfo()
     {
-        assertFalse((boolean) userService.userEdit("TestUsername1", "edited@gmail.com", null).getReturnObject());
+        assertFalse(userService.userEdit("TestUsername1", "edited@gmail.com", null).isSuccessful());
     }
 
     //User Delete---------------------------------------------------------------------------------------------------------------------------------
@@ -118,7 +128,7 @@ public class UserServiceTests
         assertNotNull(userService.getUserByUsername("TestDelete"));
 
         //then delete
-        assertTrue(userService.userDelete("TestDelete"));
+        assertTrue(userService.userDelete("TestDelete").isSuccessful());
 
         //then check if it's still thr
         assertNull(userService.getUserByUsername("TestDelete"));
