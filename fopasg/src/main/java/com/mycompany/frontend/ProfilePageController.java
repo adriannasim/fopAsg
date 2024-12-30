@@ -2,6 +2,10 @@ package com.mycompany.frontend;
 
 import java.io.IOException;
 
+import com.mycompany.backend.User;
+import com.mycompany.backend.UserService;
+import com.mycompany.backend.UserSession;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -15,6 +19,8 @@ import javafx.scene.text.Text;
  ***/
 
 public class ProfilePageController extends SharedPaneCharacteristics {
+
+    private UserService userService = new UserService();
     
     /*** ELEMENTS WITH FX:ID  
      * 
@@ -52,10 +58,15 @@ public class ProfilePageController extends SharedPaneCharacteristics {
         // Inherit Super Class's initialize()
         super.initialize(); 
 
+        //get user session
+        String sessionUsername = UserSession.getSession().getUsername();
+        //get user info
+        User user = userService.getUserByUsername(sessionUsername);
+
         // Set the data
-        username.setText("test123");
-        email.setText("test@gmail.com");
-        password.setText("12345678");
+        username.setText(sessionUsername);
+        email.setText(user.getEmail());
+        password.setText(user.getPassword());
 
         // Default cannot edit
         username.setEditable(false);
@@ -107,7 +118,9 @@ public class ProfilePageController extends SharedPaneCharacteristics {
         submitBtn.setOnMouseClicked(e->{
             try{
                 // Pop up a confimation message
-                App.openConfirmationPopUp("Do you confirm to change your details?", "Your changes has been saved.", "Failed to save the details.");
+                App.openConfirmationPopUp("Confirm to change your details?",
+                    () -> userService.userEdit(username.getText(), email.getText(), password.getText())
+                );  
             } catch (IOException ex){
                 ex.printStackTrace();
             }

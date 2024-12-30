@@ -2,6 +2,7 @@ package com.mycompany.backend;
 
 import static org.junit.Assert.*;
 
+import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 
 import org.junit.*;
@@ -23,8 +24,15 @@ public class DiaryServiceTests
     public void cleanUp()
     {
         //clear entire file
-        fileIO.purgeFile(userFile);
-        fileIO.purgeFile("TestUser1.csv");
+        try 
+        {
+            fileIO.purgeFile(userFile);
+            fileIO.purgeFile("TestUser1.csv");
+        }
+        catch (URISyntaxException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 
     //New diary entry tests---------------------------------------------------------------------------------------------------------------------------------
@@ -32,8 +40,8 @@ public class DiaryServiceTests
     public void testNewDiaryEntry()
     {        
         //login
-        String loginUser = userService.userLogin("TestUser1", "test123");
-        DiaryService diaryService = new DiaryService(loginUser);
+        ServiceResult result = userService.userLogin("TestUser1", "test123");
+        DiaryService diaryService = new DiaryService((String) result.getReturnObject());
 
         assertTrue(diaryService.newDiaryEntry("Test Diary Title", LocalDateTime.now(), "Today I am Happy."));
         

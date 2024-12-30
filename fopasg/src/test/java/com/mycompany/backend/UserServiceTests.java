@@ -1,6 +1,9 @@
 package com.mycompany.backend;
 
 import static org.junit.Assert.*;
+
+import java.net.URISyntaxException;
+
 import org.junit.*;
 
 public class UserServiceTests 
@@ -21,8 +24,15 @@ public class UserServiceTests
     @After
     public void cleanUp()
     {
-        //clear entire file
-        fileIO.purgeFile(filename);
+        try 
+        {
+            //clear entire file
+            fileIO.purgeFile(filename);
+        }
+        catch (URISyntaxException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 
     //Sign Up tests---------------------------------------------------------------------------------------------------------------------------------
@@ -30,7 +40,7 @@ public class UserServiceTests
     public void testUserSignUp()
     {        
         //assert that this will return true (if false means test failed)
-        assertTrue(userService.userSignUp("TestUsername1", "test1@gmail.com", "test123"));
+        assertTrue((boolean) userService.userSignUp("TestUsername1", "test1@gmail.com", "test123").getReturnObject());
 
         User user = userService.getUserByUsername("TestUsername1");
         
@@ -43,41 +53,41 @@ public class UserServiceTests
     public void testUserSignUpWithIncompleteInfo()
     {
         //this statement should fail so we assert it will return false
-        assertFalse(userService.userSignUp("TestUsername1", "test1@gmail.com", null));
+        assertFalse((boolean) userService.userSignUp("TestUsername1", "test1@gmail.com", null).getReturnObject());
     }
 
     @Test
     public void testUserSignUpWithExistingUserInfo()
     {
-        assertFalse(userService.userSignUp("TestUsername", "test@gmail.com", "test123"));
+        assertFalse((boolean) userService.userSignUp("TestUsername", "test@gmail.com", "test123").getReturnObject());
     }
 
     //Login tests---------------------------------------------------------------------------------------------------------------------------------
     @Test
     public void testUserLoginWithUsername()
     {
-        String returnValue = userService.userLogin("TestUsername", "test123");
+        String returnValue = (String) userService.userLogin("TestUsername", "test123").getReturnObject();
         assertEquals(returnValue, "TestUsername");
     }
 
     @Test
     public void testUserLoginWithEmail()
     {
-        String returnValue = userService.userLogin("test@gmail.com", "test123");
+        String returnValue = (String) userService.userLogin("test@gmail.com", "test123").getReturnObject();
         assertEquals(returnValue, "TestUsername");
     }
 
     @Test
     public void testUserLoginWithUsernameAndWrongPassword()
     {
-        String returnValue = userService.userLogin("TestUsername", "test124");
+        String returnValue = (String) userService.userLogin("TestUsername", "test124").getReturnObject();
         assertEquals(returnValue, null);
     }
 
     @Test
     public void testUserLoginWithEmailAndWrongPassword()
     {
-        String returnValue = userService.userLogin("test@gmail.com", "test124");
+        String returnValue = (String) userService.userLogin("test@gmail.com", "test124").getReturnObject();
         assertEquals(returnValue, null);
     }
 
@@ -86,7 +96,7 @@ public class UserServiceTests
     public void testEditUserInfo()
     {
         //edit email and password (username probably we keep it as our primary key so we will try to prohibit user from editing it)
-        assertTrue(userService.userEdit("TestEdit", "edited@gmail.com", "test345"));
+        assertTrue((boolean) userService.userEdit("TestEdit", "edited@gmail.com", "test345").getReturnObject());
 
         User user = userService.getUserByUsername("TestEdit");
 
@@ -97,7 +107,7 @@ public class UserServiceTests
     @Test
     public void testEditUserWithIncompleteInfo()
     {
-        assertFalse(userService.userEdit("TestUsername1", "edited@gmail.com", null));
+        assertFalse((boolean) userService.userEdit("TestUsername1", "edited@gmail.com", null).getReturnObject());
     }
 
     //User Delete---------------------------------------------------------------------------------------------------------------------------------
