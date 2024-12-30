@@ -58,26 +58,24 @@ public class DiaryService
         else
         {
             //check if the file exists, if not, it means that its the user's first entry so create a new file for the user
-            if (!fileIO.loadFile(filename).exists())
-            {
-                try 
-                {
-                    fileIO.createFile(filename);
-                }
-                catch (IOException e)
-                {
-                    throw new RuntimeException(e);
-                }
-            }
-
             try 
             {
+                if (!fileIO.loadFile(filename).exists())
+                {
+                    fileIO.createFile(filename);   
+                }
+
+                //update file
                 fileIO.appendFile(filename, new Diary(filename, UUID.randomUUID().toString(), diaryTitle, diaryDate, diaryContent));
                 
                 //done 
                 return true;
             }
             catch (IOException e)
+            {
+                throw new RuntimeException(e);
+            }
+            catch (URISyntaxException e) 
             {
                 throw new RuntimeException(e);
             }

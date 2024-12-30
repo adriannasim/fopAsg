@@ -1,6 +1,9 @@
 package com.mycompany.backend;
 
 import static org.junit.Assert.*;
+
+import java.net.URISyntaxException;
+
 import org.junit.*;
 
 public class UserServiceTests 
@@ -21,8 +24,15 @@ public class UserServiceTests
     @After
     public void cleanUp()
     {
-        //clear entire file
-        fileIO.purgeFile(filename);
+        try 
+        {
+            //clear entire file
+            fileIO.purgeFile(filename);
+        }
+        catch (URISyntaxException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 
     //Sign Up tests---------------------------------------------------------------------------------------------------------------------------------
