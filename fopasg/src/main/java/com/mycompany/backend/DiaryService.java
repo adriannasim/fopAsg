@@ -131,5 +131,18 @@ public class DiaryService
             throw new RuntimeException(e);
         }
     }
+   public Diary SearchDiaryTitle(String diaryTitle)
+    {
+        List<Diary> diaries = getAllDiary();
 
+        for (Diary Diary : diaries)
+        {
+            if (Diary.getDiaryTitle().equals(diaryTitle))
+            {
+                return Diary;
+            }
+        }
+        //user doesnt exists
+        return null;
+    }
 }

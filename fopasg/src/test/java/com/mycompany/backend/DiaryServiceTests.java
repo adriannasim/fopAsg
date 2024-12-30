@@ -44,7 +44,7 @@ public class DiaryServiceTests
     @Test 
     public void testEditDiaryEntry()
     {        
-
+    
     }
     
     @Test
