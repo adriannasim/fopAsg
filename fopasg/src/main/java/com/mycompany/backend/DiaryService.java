@@ -48,12 +48,11 @@ public class DiaryService
     //get diary by title (Search) TODO
 
     //create diary
-    public boolean newDiaryEntry(String diaryTitle, LocalDateTime diaryDate, String diaryContent)
+    public ServiceResult newDiaryEntry(String diaryTitle, LocalDateTime diaryDate, String diaryContent)
     {
         if (diaryTitle == null || diaryDate == null || diaryContent == null)
         {
-            System.err.println("Info incomplete.");
-            return false;
+            return new ServiceResult(false, null, "Info incomplete.");
         }
         else
         {
@@ -69,7 +68,8 @@ public class DiaryService
                 fileIO.appendFile(filename, new Diary(filename, UUID.randomUUID().toString(), diaryTitle, diaryDate, diaryContent));
                 
                 //done 
-                return true;
+                return new ServiceResult(true, null, "Diary entry created.");
+
             }
             catch (IOException e)
             {
@@ -83,12 +83,11 @@ public class DiaryService
     }
 
     //edit diary
-    public boolean editDiaryEntry(String diaryId, String diaryTitle, LocalDateTime diaryDate, String diaryContent)
+    public ServiceResult editDiaryEntry(String diaryId, String diaryTitle, LocalDateTime diaryDate, String diaryContent)
     {
         if (diaryTitle == null || diaryDate == null || diaryContent == null)
         {
-            System.err.println("Info incomplete.");
-            return false;
+            return new ServiceResult(false, null, "Info incomplete.");
         }
         else
         {
@@ -96,8 +95,8 @@ public class DiaryService
             {
                 fileIO.editFile(filename, new Diary(filename, UUID.randomUUID().toString(), diaryTitle, diaryDate, diaryContent), diaryId);
                 
-                //done 
-                return true;
+                //done
+                return new ServiceResult(true, null, "Diary entry edited.");
             }
             catch (IOException e)
             {
@@ -111,14 +110,14 @@ public class DiaryService
     }
 
     //delete diary
-    public boolean deleteDiaryEntry(String diaryId)
+    public ServiceResult deleteDiaryEntry(String diaryId)
     {
         try 
         {
             fileIO.deleteLineFile(filename, diaryId);
             
             //done 
-            return true;
+            return new ServiceResult(true, null, "Diary entry deleted successfully.");
         }
         catch (IOException e)
         {

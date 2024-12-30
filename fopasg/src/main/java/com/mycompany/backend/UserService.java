@@ -83,17 +83,17 @@ public class UserService
                     if (userInfo[2].equals(password))
                     {
                         //login successful
-                        return new ServiceResult(userInfo[0], "Logged in successfully. Welcome " + userInfo[0] + ".");
+                        return new ServiceResult(true, userInfo[0], "Logged in successfully. Welcome " + userInfo[0] + ".");
                     }
                     //wrong password
                     else
                     {
-                        return new ServiceResult(null, "Incorrect Password.");
+                        return new ServiceResult(false, null, "Incorrect Password.");
                     }
                 }
             }
             //login unsuccessful
-            return new ServiceResult(null, "User not found. Please sign up as a new user.");
+            return new ServiceResult(false, null, "User not found. Please sign up as a new user.");
         }
         catch (IOException e)
         {
@@ -110,7 +110,7 @@ public class UserService
     {
         if (username == null || email == null || password == null)
         {
-            return new ServiceResult(false, "Info incomplete. Please fill in all of your info.");
+            return new ServiceResult(false, null, "Info incomplete. Please fill in all of your info.");
         }
         else
         {
@@ -124,14 +124,14 @@ public class UserService
                     String[] userInfo = userLine.split(",");
                     if (userInfo[0].equals(username) || userInfo[1].equals(email))
                     {
-                        return new ServiceResult(false, "Username/Email already exists. Please try again.");
+                        return new ServiceResult(false, null, "Username/Email already exists. Please try again.");
                     }
                 }
                 
                 //if no matching existing users, then we can create an account
                 User newUser = new User(username, email, password);
                 fileIO.appendFile(filename, newUser);
-                return new ServiceResult(true, "Account created successfully. Please login.");
+                return new ServiceResult(true, null, "Account created successfully. Please login.");
             }
             catch (IOException e)
             {
@@ -149,7 +149,7 @@ public class UserService
     {
         if (username == null || email == null || password == null)
         {
-            return new ServiceResult(false, "Info incomplete. Please fill in all of your info.");
+            return new ServiceResult(false, null, "Info incomplete. Please fill in all of your info.");
         }
         else
         {
@@ -167,20 +167,23 @@ public class UserService
                 throw new RuntimeException(e);
             }
     
-            return new ServiceResult(true, "Your changes has been saved.");
+            return new ServiceResult(true, null, "Your changes has been saved.");
         }
     }
 
     //delete user
-    public boolean userDelete(String username)
+    public ServiceResult userDelete(String username)
     {
-        //delete user
         try
         {
+            //delete user
             fileIO.deleteLineFile(filename, username);
 
+            //then delete all diary entries of the user
+            fileIO.purgeFile(username + ".csv");
+
             //done 
-            return true;
+            return new ServiceResult(true, null, "Account deleted successfully.");
         }
         catch (IOException e)
         {
@@ -190,7 +193,5 @@ public class UserService
         {
             throw new RuntimeException(e);
         }
-
-        //delete all diary entries of the user (TODO)
     }
 }

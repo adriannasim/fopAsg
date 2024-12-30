@@ -36,7 +36,6 @@ public class FileIO
         {
             file = new File((System.getProperty("user.dir").contains("fopasg") ? "" : "fopasg/") + "src/main/resources/" + filename);
         }
-        System.out.println("Attempting to load file from: " + file.getAbsolutePath());
 
         return file;
 
@@ -154,18 +153,27 @@ public class FileIO
         writeFile(filename, lines); //rewrite entire thing back to the txt file
     }
 
-    //Purge entire file content
-    public void purgeFile(String filename) throws URISyntaxException
+    //Clear entire file content
+    public void clearFile(String filename) throws URISyntaxException, IOException
     {
-        try {
-            try (BufferedWriter bw = new BufferedWriter(new FileWriter(loadFile(filename)))) 
-            {
-                bw.write("");
-            }
-        }
-        catch (IOException e)
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(loadFile(filename)))) 
         {
-            throw new RuntimeException(e);
+            bw.write("");
+        }
+    }
+
+    //Purge file
+    public void purgeFile(String filename) throws URISyntaxException, FileNotFoundException
+    {
+        File file = loadFile(filename);
+
+        if (file.delete()) 
+        {
+            System.out.println("File \"" + filename + "\" deleted successfully.");
+        } 
+        else 
+        {
+            System.out.println("Failed to delete file \""+ filename + "\". File may not exist or is in use.");
         }
     }
 }

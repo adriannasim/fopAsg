@@ -2,6 +2,8 @@ package com.mycompany.backend;
 
 import static org.junit.Assert.*;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 
@@ -12,12 +14,18 @@ public class DiaryServiceTests
     String userFile = "TestUsers.txt";
     UserService userService = new UserService(userFile);
     FileIO fileIO = new FileIO();
+    DiaryService diaryService;
         
     @Before
     public void setup()
     {
-        //create users for test
+        //create user for test
         userService.userSignUp("TestUser1", "test1@gmail.com", "test123");
+
+        //login
+        ServiceResult result = userService.userLogin("TestUser1", "test123");
+        //pass username to diary service constructor
+        diaryService = new DiaryService((String) result.getReturnObject());
     }
 
     @After
@@ -26,10 +34,20 @@ public class DiaryServiceTests
         //clear entire file
         try 
         {
-            fileIO.purgeFile(userFile);
+            //clear user file
+            fileIO.clearFile(userFile);
+            //delete the test csv file
             fileIO.purgeFile("TestUser1.csv");
         }
         catch (URISyntaxException e)
+        {
+            throw new RuntimeException(e);
+        }
+        catch (FileNotFoundException e)
+        {
+            throw new RuntimeException(e);
+        }
+        catch (IOException e)
         {
             throw new RuntimeException(e);
         }
@@ -39,11 +57,8 @@ public class DiaryServiceTests
     @Test 
     public void testNewDiaryEntry()
     {        
-        //login
-        ServiceResult result = userService.userLogin("TestUser1", "test123");
-        DiaryService diaryService = new DiaryService((String) result.getReturnObject());
-
-        assertTrue(diaryService.newDiaryEntry("Test Diary Title", LocalDateTime.now(), "Today I am Happy."));
+        //check if the result of a new diary entry returns true (means operation successful)
+        assertTrue(diaryService.newDiaryEntry("Test Diary Title", LocalDateTime.now(), "Today I am Happy.").isSuccessful());
         
         //TODO assertEquals using search 
     }
@@ -55,9 +70,20 @@ public class DiaryServiceTests
 
     }
     
+    
+    //Test Delete Diary Entry----------------------------------------------------------------------------------------------------------------
     @Test
     public void testDeleteDiaryEntry()
     {
 
+    }
+
+    @Test
+    public void testDeleteAllUserEntries()
+    {
+        //delete user first
+        assertTrue(userService.userDelete("TestUser1").isSuccessful());
+        //check if the diary file exist or not, if it does not exists means the test passed
+        assertThrows(RuntimeException.class, () -> diaryService.getAllDiary());
     }
 }
