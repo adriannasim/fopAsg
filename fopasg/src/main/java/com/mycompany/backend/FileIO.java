@@ -2,7 +2,6 @@ package com.mycompany.backend;
 
 import java.io.*;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,12 +13,13 @@ public class FileIO
         File file;
         if (filename.toLowerCase().contains("test"))
         {
-            file = new File("src/test/resources/" + filename);
+            file = new File((System.getProperty("user.dir").contains("fopasg") ? "" : "fopasg/") + "src/test/resources/" + filename);
         }
         else
         {
-            file = new File("src/main/resources/" + filename);
+            file = new File((System.getProperty("user.dir").contains("fopasg") ? "" : "fopasg/") + "src/main/resources/" + filename);
         }
+        System.out.println("Attempting to create file to: " + file.getAbsolutePath());
         
         file.createNewFile();
     }
