@@ -6,6 +6,10 @@ import java.util.List;
 
 import com.gluonhq.richtextarea.RichTextArea;
 import com.gluonhq.richtextarea.model.Document;
+import com.mycompany.backend.Diary;
+import com.mycompany.backend.DiaryService;
+import com.mycompany.backend.User;
+import com.mycompany.backend.UserSession;
 
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
@@ -26,6 +30,9 @@ public class DiaryViewController extends SharedPaneCharacteristics {
      * ELEMENTS WITH FX:ID.
      * 
      ***/
+    @FXML
+    private TextField title; // Used to display the title
+
     @FXML
     private TextField wordCount; // Used to display the word count of the content
 
@@ -63,9 +70,18 @@ public class DiaryViewController extends SharedPaneCharacteristics {
         // Make sure the document is updated whenever user has entered something
         viewer.autoSaveProperty().set(true);
 
+        // Display the images uploaded by users
+        displayImages();
+
+        // Set current diary to refer
+        Diary diary = UserSession.getSession().getCurrentDiary();
+
+        // Set title
+        title.setText(diary.getDiaryTitle());
+    
         // Import the content from CSV file (CAN CHANGE OR MODIFY)
         try {
-            viewer.getActionFactory().open(RichTextCSVExporter.importFromCSV("data.csv")).execute(new ActionEvent());
+            viewer.getActionFactory().open(RichTextCSVExporter.importFromCSV(diary.getDiaryContent())).execute(new ActionEvent());
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -80,9 +96,6 @@ public class DiaryViewController extends SharedPaneCharacteristics {
                 countWords(viewer.getDocument());
             }
         });
-
-        // Display the images uploaded by users
-        displayImages();
     }
 
     /***

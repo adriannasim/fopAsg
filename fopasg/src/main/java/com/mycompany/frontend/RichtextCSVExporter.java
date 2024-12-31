@@ -41,12 +41,12 @@ class RichTextCSVExporter {
      * METHOD TO EXPORT THE RICH TEXT AREA CONTENT INTO CSV.
      * 
      ***/
-    public static void exportToCSV(RichTextArea richTextArea, String filePath) throws IOException {
+    public static String exportToCSV(RichTextArea richTextArea) throws IOException {
         Document document = richTextArea.getDocument();
         StringBuilder csvContent = new StringBuilder();
 
-        // Add CSV headers
-        csvContent.append("Text,Decorations,ParagraphDecorations\n");
+        // // Add CSV headers
+        // csvContent.append("Text,Decorations,ParagraphDecorations\n");
 
         // Iterate through the document content
         String text = document.getText();
@@ -69,15 +69,18 @@ class RichTextCSVExporter {
             // Add to content drafted
             csvContent.append(escapedSegment).append(",")
                     .append(textDecorations).append(",")
-                    .append(paragraphDecorations).append("\n");
+                    .append(paragraphDecorations).append("###SPLIT###");
 
             currentPos += decoration.getLength();
         }
 
         // Write the drafted content to file using BufferedWriter
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-            writer.write(csvContent.toString());
-        }
+        // try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+        //     writer.write(csvContent.toString());
+        // }
+
+        // return the formatted contents
+        return csvContent.toString();
     }
 
     /***
@@ -186,18 +189,20 @@ class RichTextCSVExporter {
      * - Return the Document.
      * 
      ***/
-    public static Document importFromCSV(String filePath) throws IOException {
+    public static Document importFromCSV(String contents) throws IOException {
 
         Document document = new Document();
 
-        // Read from CSV
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+        // // Read from CSV
+        // try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
 
-            // Skip the header
-            String line = reader.readLine();
+        //     // Skip the header
+        //     String line = reader.readLine();
 
-            while ((line = reader.readLine()) != null) {
-                String[] columns = splitCSVLine(line);
+        String[] line = contents.split("###SPLIT###");
+        
+            for (int i = 0; i< line.length; i++) {
+                String[] columns = splitCSVLine(line[i]);
 
                 // Handle case where there are not enough columns (means error occurs)
                 if (columns.length < 3) {
@@ -217,7 +222,7 @@ class RichTextCSVExporter {
                 // Append the text and decorations to the RichTextArea
                 document = appendTextToDocument(document, text, textDecoration, paragraphDecoration);
             }
-        }
+        
         return document;
     }
 

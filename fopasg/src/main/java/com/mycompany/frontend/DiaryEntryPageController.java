@@ -28,6 +28,10 @@ import com.gluonhq.richtextarea.model.DecorationModel;
 import com.gluonhq.richtextarea.model.Document;
 import com.gluonhq.richtextarea.model.ParagraphDecoration;
 import com.gluonhq.richtextarea.model.TextDecoration;
+import com.mycompany.backend.Diary;
+import com.mycompany.backend.DiaryService;
+import com.mycompany.backend.ServiceResult;
+import com.mycompany.backend.UserSession;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -35,6 +39,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.time.LocalDateTime;
 
 import static com.gluonhq.richtextarea.model.ParagraphDecoration.GraphicType.BULLETED_LIST;
 import static com.gluonhq.richtextarea.model.ParagraphDecoration.GraphicType.NONE;
@@ -55,6 +60,9 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
          * ELEMENTS WITH FX:ID.
          * 
          ***/
+        @FXML
+        private TextField title; // Used to hold title
+
         @FXML
         private Pane textarea; // Used to hold the rich text area
 
@@ -107,7 +115,8 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
         private Text titleMsg; // Used to store the title error message, use titleMsg.setText() to set message
 
         @FXML
-        private Text contentMsg; // Used to store the content error message, use contentMsg.setText() to set message
+        private Text contentMsg; // Used to store the content error message, use contentMsg.setText() to set
+                                 // message
 
         /***
          * VARIABLES.
@@ -139,7 +148,6 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
         // later
         Document document = new Document(text, List.of(decorationModel), text.length());
 
-        
         /***
          * INITILIZATION OF THE CONTROLLER.
          * 
@@ -154,7 +162,23 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
                 editor.prefWidthProperty().bind(textarea.widthProperty());
                 editor.prefHeightProperty().bind(textarea.heightProperty());
                 // Link the document to the editor
-                editor.getActionFactory().open(document).execute(new ActionEvent());
+                // If there is a diary to refer to
+                Diary diary = UserSession.getSession().getCurrentDiary();
+                if (diary != null) {
+                        try {
+                                // Set title
+                                title.setText(diary.getDiaryTitle());
+                                editor.getActionFactory()
+                                                .open(RichTextCSVExporter.importFromCSV(diary.getDiaryContent()))
+                                                .execute(new ActionEvent());
+                        } catch (IOException ex) {
+                                ex.printStackTrace();
+                        }
+                }
+                // If there is no diary to refer to
+                else {
+                        editor.getActionFactory().open(document).execute(new ActionEvent());
+                }
                 // Make sure the document is updated whenever user has entered something
                 editor.autoSaveProperty().set(true);
 
@@ -283,8 +307,50 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
                                 // Check if the document exists
                                 Document linkedDocument = editor.getDocument();
                                 if (linkedDocument != null) {
-                                        // Method below is provided at the end of the page (CAN MODIFY OR CHANGE)
-                                        saveDocument(linkedDocument);
+                                        // Get username
+                                        String username = UserSession.getSession().getUsername();
+                                        if (diary == null) {
+                                                // Try insert the diary
+                                                try {
+                                                        DiaryService diaryService = new DiaryService(username);
+                                                        String diaryContent = RichTextCSVExporter.exportToCSV(editor);
+                                                        ServiceResult result = diaryService.newDiaryEntry(
+                                                                        title.getText(),
+                                                                        LocalDateTime.now(), diaryContent);
+
+                                                        if (result.isSuccessful()) {
+                                                                App.openPopUpAtTop("success-message",
+                                                                                result.getReturnMessage());
+                                                        } else {
+                                                                App.openPopUpAtTop("error-message",
+                                                                                result.getReturnMessage());
+                                                        }
+                                                } catch (IOException ex) {
+                                                        ex.printStackTrace();
+                                                }
+                                        } else {
+                                                // Try update the diary
+                                                try {
+                                                        DiaryService diaryService = new DiaryService(username);
+                                                        String diaryContent = RichTextCSVExporter.exportToCSV(editor);
+                                                        ServiceResult result = diaryService.editDiaryEntry(
+                                                                        diary.getDiaryId(), title.getText(),
+                                                                        LocalDateTime.now(), diaryContent);
+                                                        if (result.isSuccessful()) {
+                                                                App.openPopUpAtTop("success-message",
+                                                                                result.getReturnMessage());
+                                                        } else {
+                                                                App.openPopUpAtTop("error-message",
+                                                                                result.getReturnMessage());
+                                                        }
+                                                } catch (IOException ex) {
+                                                        ex.printStackTrace();
+                                                }
+
+                                        }
+
+                                        // // Method below is provided at the end of the page (CAN MODIFY OR CHANGE)
+                                        // saveDocument(linkedDocument);
                                 } else {
                                         // Error handling here...
                                 }
@@ -389,12 +455,13 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
          * METHOD TO SAVE DOCUMENT. (CAN CHANGE OR MODIFY)
          * 
          ***/
-        private void saveDocument(Document document) {
-                try {
-                        RichTextCSVExporter.exportToCSV(editor, "data.csv"); // Filename can change also
-                } catch (IOException e) {
-                        e.printStackTrace();
-                }
-        }
+        // private void saveDocument(Document document) {
+        // try {
+        // RichTextCSVExporter.exportToCSV(editor, "data.csv"); // Filename can change
+        // also
+        // } catch (IOException e) {
+        // e.printStackTrace();
+        // }
+        // }
 
 }

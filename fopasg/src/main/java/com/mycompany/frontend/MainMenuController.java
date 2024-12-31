@@ -2,6 +2,10 @@ package com.mycompany.frontend;
 
 import java.io.IOException;
 import java.util.Stack;
+
+import com.mycompany.backend.Diary;
+import com.mycompany.backend.UserSession;
+
 import javafx.util.Duration;
 
 import javafx.animation.KeyFrame;
@@ -73,6 +77,7 @@ public class MainMenuController {
 
         // When user click on newDiaryBtn, navigate to diary-entry-page
         newDiaryBtn.setOnMouseClicked(e -> {
+            UserSession.getSession().getCurrentDiary();
             loadNewContent("diary-entry-page");
         });
 

@@ -63,4 +63,15 @@ public class Diary
     {
         this.diaryContent = diaryContent;
     }
+
+    public String toString(){
+        return diaryId +
+            ", {" +
+            "username='" + username + '\'' +
+            ", diaryId='" + diaryId + '\'' +
+            ", diaryTitle='" + diaryTitle + '\'' +
+            ", diaryDate='" + (diaryDate != null ? diaryDate.toString() : "null") + '\'' +
+            ", diaryContent='" + diaryContent + '\'' +
+            '}';
+    }
 }
