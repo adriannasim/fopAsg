@@ -3,7 +3,13 @@ package com.mycompany.backend;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import java.io.IOException;
 import java.util.List;
+
 
 public class FileIO 
 {
@@ -80,6 +86,35 @@ public class FileIO
             }
         }
     }
+
+    public void exportToPDFUsingPDFBox(String pdfFilename, List<String> content) throws IOException {
+    try (PDDocument document = new PDDocument()) {
+        PDPage page = new PDPage();
+        document.addPage(page);
+
+        try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
+            contentStream.setFont(PDType1Font.HELVETICA, 12);
+            contentStream.beginText();
+            contentStream.setLeading(14.5f);
+            contentStream.newLineAtOffset(50, 750);
+
+            for (String line : content) {
+                contentStream.showText(line);
+                contentStream.newLine();
+            }
+
+            contentStream.endText();
+        }
+
+        document.save(pdfFilename);
+        System.out.println("PDF created successfully using PDFBox: " + pdfFilename);
+    } catch (Exception e) {
+        throw new IOException("Error creating PDF with PDFBox: " + e.getMessage(), e);
+    }
+}
+
+
+    
 
     //Append
     public void appendFile(String filename, Object dataToAdd) throws IOException, URISyntaxException
