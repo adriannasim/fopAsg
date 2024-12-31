@@ -76,7 +76,7 @@ class RichTextCSVExporter {
 
         // Write the drafted content to file using BufferedWriter
         // try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-        //     writer.write(csvContent.toString());
+        // writer.write(csvContent.toString());
         // }
 
         // return the formatted contents
@@ -130,12 +130,12 @@ class RichTextCSVExporter {
                         .append(DECORATION_DELIMITER);
             }
             // Strikethrough text
-            if (textDecoration.isStrikethrough()) {
+            if (textDecoration.isStrikethrough() != null) {
                 encoded.append("strikethrough:").append(textDecoration.isStrikethrough())
                         .append(DECORATION_DELIMITER);
             }
             // Underlined text
-            if (textDecoration.isUnderline()) {
+            if (textDecoration.isUnderline() != null) {
                 encoded.append("underline:").append(textDecoration.isUnderline())
                         .append(DECORATION_DELIMITER);
             }
@@ -196,33 +196,37 @@ class RichTextCSVExporter {
         // // Read from CSV
         // try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
 
-        //     // Skip the header
-        //     String line = reader.readLine();
+        // // Skip the header
+        // String line = reader.readLine();
 
         String[] line = contents.split("###SPLIT###");
-        
-            for (int i = 0; i< line.length; i++) {
-                String[] columns = splitCSVLine(line[i]);
 
-                // Handle case where there are not enough columns (means error occurs)
-                if (columns.length < 3) {
-                    continue;
-                }
+        for (int i = 0; i < line.length; i++) {
+            String[] columns = splitCSVLine(line[i]);
 
-                // Assuming the CSV columns: Text, Decorations, ParagraphDecorations
-                String text = unescapeCSV(columns[0]);
-                String decorations = columns[1];
-                String paragraphDecorations = columns[2];
-
-                // Decode the decorations
-                TextDecoration textDecoration = decodeTextDecorations(decorations);
-                ParagraphDecoration paragraphDecoration = decodeParagraphDecorations(
-                        paragraphDecorations);
-
-                // Append the text and decorations to the RichTextArea
-                document = appendTextToDocument(document, text, textDecoration, paragraphDecoration);
+            // Handle case where there are not enough columns (means error occurs)
+            if (columns.length < 3) {
+                continue;
             }
-        
+
+            // Assuming the CSV columns: Text, Decorations, ParagraphDecorations
+            String text = unescapeCSV(columns[0]);
+            String decorations = columns[1];
+            String paragraphDecorations = columns[2];
+
+            // Decode the decorations
+            TextDecoration textDecoration = (decorations != null && !decorations.isEmpty())
+                    ? decodeTextDecorations(decorations)
+                    : TextDecoration.builder().presets().build();
+
+            ParagraphDecoration paragraphDecoration = (paragraphDecorations != null && !paragraphDecorations.isEmpty())
+                    ? decodeParagraphDecorations(paragraphDecorations)
+                    : ParagraphDecoration.builder().presets().build();
+
+            // Append the text and decorations to the RichTextArea
+            document = appendTextToDocument(document, text, textDecoration, paragraphDecoration);
+        }
+
         return document;
     }
 
@@ -302,12 +306,16 @@ class RichTextCSVExporter {
             else if (part.startsWith("strikethrough:")) {
                 if (part.substring(14).equals("true")) {
                     builder.strikethrough(true);
+                } else {
+                    builder.strikethrough(false);
                 }
             }
             // Retrieve the underline
             else if (part.startsWith("underline:")) {
                 if (part.substring(10).equals("true")) {
                     builder.underline(true);
+                } else {
+                    builder.underline(false);
                 }
             }
         }

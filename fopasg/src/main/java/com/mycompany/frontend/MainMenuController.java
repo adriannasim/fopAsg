@@ -77,7 +77,7 @@ public class MainMenuController {
 
         // When user click on newDiaryBtn, navigate to diary-entry-page
         newDiaryBtn.setOnMouseClicked(e -> {
-            UserSession.getSession().getCurrentDiary();
+            UserSession.getSession().setCurrentDiary(null);
             loadNewContent("diary-entry-page");
         });
 

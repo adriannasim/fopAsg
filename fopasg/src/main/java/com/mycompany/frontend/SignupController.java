@@ -69,7 +69,7 @@ public class SignupController {
             
             try 
             {
-                if ((boolean) result.getReturnObject() == true)
+                if ((boolean) result.isSuccessful() == true)
                 {
                     //Pop up sign up successful
                     App.openPopUpAtTop("success-message", result.getReturnMessage());

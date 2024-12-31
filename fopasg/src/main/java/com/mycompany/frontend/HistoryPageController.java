@@ -13,6 +13,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+
 import com.mycompany.backend.DiaryService;
 import com.mycompany.backend.UserSession;
 import com.mycompany.backend.Diary;
@@ -193,6 +195,13 @@ public class HistoryPageController extends SharedPaneCharacteristics {
                                 
         // Date Format                        
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMM yyyy");
+
+        // If there is no diary entry
+        if(diaryList.isEmpty()){
+            Text emptyMsg = new Text();
+            emptyMsg.setText("No diary entry is present.");
+            diaryItemsVBox.getChildren().add(emptyMsg);
+        }
 
         // Iterate through groups and add diary items
         // 1. 'Group' means the entries grouped by date, eg. 1 Dec 2024 got 2 entries written, 

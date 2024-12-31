@@ -24,6 +24,10 @@ public class DiaryService
         List<Diary> diaryList = new ArrayList<>();
         try 
         {
+            if (!fileIO.loadFile(filename).exists())
+            {
+                    fileIO.createFile(filename);   
+            }
             List<String> data = fileIO.readFile(filename);
 
             for (String line : data)

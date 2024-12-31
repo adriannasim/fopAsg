@@ -165,15 +165,28 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
                 // If there is a diary to refer to
                 Diary diary = UserSession.getSession().getCurrentDiary();
                 if (diary != null) {
-                        try {
-                                // Set title
-                                title.setText(diary.getDiaryTitle());
-                                editor.getActionFactory()
-                                                .open(RichTextCSVExporter.importFromCSV(diary.getDiaryContent()))
-                                                .execute(new ActionEvent());
-                        } catch (IOException ex) {
-                                ex.printStackTrace();
-                        }
+                       
+                                try {
+                                        // Set title
+                                        title.setText(diary.getDiaryTitle());
+
+                                        // This code will run on the JavaFX Application Thread
+                                        String importedDocText = RichTextCSVExporter
+                                                        .importFromCSV(diary.getDiaryContent()).getText();
+                                        List<DecorationModel> importedDocDeco = RichTextCSVExporter
+                                                        .importFromCSV(diary.getDiaryContent()).getDecorations();
+                                        int importedDocCaret = RichTextCSVExporter
+                                                        .importFromCSV(diary.getDiaryContent()).getCaretPosition();
+
+                                        // Create the document and open it in the editor
+                                        Document document = new Document(importedDocText, importedDocDeco,
+                                                        importedDocCaret);
+                                        
+                                        editor.getActionFactory().open(document).execute(new ActionEvent());
+                                } catch (IOException ex) {
+                                        ex.printStackTrace();
+                                }
+                        
                 }
                 // If there is no diary to refer to
                 else {
@@ -183,6 +196,7 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
                 editor.autoSaveProperty().set(true);
 
                 /*** STEPS TO HANDLE CONTENTS FORMATTING ***/
+
                 // Steps to handle font family change
                 fontFamilyComboBox.setEditable(true);
                 fontFamilyComboBox.getItems().setAll(Font.getFamilies());
@@ -197,6 +211,7 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
                                 .asDoubleStream().boxed().collect(Collectors.toList()));
                 new TextDecorateAction<>(editor, fontSizeComboBox.valueProperty(), TextDecoration::getFontSize,
                                 (builder, a) -> builder.fontSize(a).build());
+
                 fontSizeComboBox.setConverter(new StringConverter<>() {
                         @Override
                         public String toString(Double aDouble) {
@@ -335,7 +350,7 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
                                                         String diaryContent = RichTextCSVExporter.exportToCSV(editor);
                                                         ServiceResult result = diaryService.editDiaryEntry(
                                                                         diary.getDiaryId(), title.getText(),
-                                                                        LocalDateTime.now(), diaryContent);
+                                                                        diary.getDiaryDate(), diaryContent);
                                                         if (result.isSuccessful()) {
                                                                 App.openPopUpAtTop("success-message",
                                                                                 result.getReturnMessage());
