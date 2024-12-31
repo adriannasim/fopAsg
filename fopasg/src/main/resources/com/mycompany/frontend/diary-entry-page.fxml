@@ -30,7 +30,7 @@
                      <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Label layoutX="37.0" layoutY="63.0" minWidth="-Infinity" style="-fx-background-color: #ffffff;" text="01 December 2024" textFill="#6a669d">
+            <Label fx:id="date" layoutX="37.0" layoutY="63.0" minWidth="-Infinity" style="-fx-background-color: #ffffff;" textFill="#6a669d">
                <font>
                   <Font name="Roboto Bold" size="20.0" />
                </font>

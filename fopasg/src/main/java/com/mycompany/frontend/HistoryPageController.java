@@ -194,7 +194,7 @@ public class HistoryPageController extends SharedPaneCharacteristics {
         
                                 
         // Date Format                        
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMM yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy");
 
         // If there is no diary entry
         if(diaryList.isEmpty()){

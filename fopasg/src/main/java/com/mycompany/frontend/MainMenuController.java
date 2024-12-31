@@ -26,7 +26,8 @@ public class MainMenuController {
 
     // This used to store the user navigation history, so user can navigate back to
     // previous pages.
-    private static Stack<AnchorPane> anchorPaneHistory = new Stack<>();
+    private static Stack<String> navigationHistory = new Stack<>();
+    private String currentFilename;
 
     /***
      * ELEMENTS WITH FX:ID
@@ -145,11 +146,35 @@ public class MainMenuController {
      ***/
     public void loadNewContent(String filename) {
         try {
-            // Save the current state of the rootPane to history
-            AnchorPane currentState = new AnchorPane();
-            currentState.getChildren().setAll(rootPane.getChildren());
-            anchorPaneHistory.push(currentState);
+            // Save the current file name to history
+            if(currentFilename!=null){
+                navigationHistory.push(currentFilename);
+            }
 
+            // Load the new content from the FXML file
+            FXMLLoader loader = new FXMLLoader(App.class.getResource(filename + ".fxml"));
+            AnchorPane newContent = loader.load();
+
+            // Get the controller of the loaded FXML
+            Object controller = loader.getController();
+
+            // Check if the controller is an instance of SharedPaneCharacteristics and set
+            // the MainMenuController
+            if (controller instanceof SharedPaneCharacteristics) {
+                SharedPaneCharacteristics sharedController = (SharedPaneCharacteristics) controller;
+                sharedController.setMainMenuController(this); // Pass reference to controller
+            }
+
+            // Replace the children of rootPane with the new content
+            rootPane.getChildren().setAll(newContent.getChildren());
+            currentFilename = filename;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void reloadContent(String filename) {
+        try {
             // Load the new content from the FXML file
             FXMLLoader loader = new FXMLLoader(App.class.getResource(filename + ".fxml"));
             AnchorPane newContent = loader.load();
@@ -177,12 +202,13 @@ public class MainMenuController {
      * 
      ***/
     public void goBackToPreviousAnchorPane() {
-        if (!anchorPaneHistory.isEmpty()) {
+        if (!navigationHistory.isEmpty()) {
             // Get the previous AnchorPane state
-            AnchorPane previousState = anchorPaneHistory.pop();
+            String previousState = navigationHistory.pop();
 
             // Restore the previous state to the rootPane
-            rootPane.getChildren().setAll(previousState.getChildren());
+            reloadContent(previousState);
+            currentFilename = previousState;
         } else {
             System.out.println("No previous state to go back to.");
         }

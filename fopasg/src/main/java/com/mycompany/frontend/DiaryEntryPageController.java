@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.control.ColorPicker;
@@ -40,6 +41,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import static com.gluonhq.richtextarea.model.ParagraphDecoration.GraphicType.BULLETED_LIST;
 import static com.gluonhq.richtextarea.model.ParagraphDecoration.GraphicType.NONE;
@@ -60,6 +62,9 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
          * ELEMENTS WITH FX:ID.
          * 
          ***/
+        @FXML
+        private Label date;  // Used to display the current date
+
         @FXML
         private TextField title; // Used to hold title
 
@@ -155,6 +160,10 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
         public void initialize() {
 
                 super.initialize();
+
+                // Set Date
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy");
+                date.setText(LocalDateTime.now().format(formatter));
 
                 // Place the editor (rich text area) into Pane textarea
                 textarea.getChildren().add(editor);
