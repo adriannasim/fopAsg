@@ -165,6 +165,5 @@ private String formatDiaryEntryForExport(Diary diary) {
            "Content:\n" + diary.getDiaryContent() + "\n" +
            "----------------------------------------";
 }   
-
-
+    
 }
