@@ -32,8 +32,11 @@ public class DiaryService
             for (String line : data)
             {
                 String[] diaryInfo = line.split(",");
-                Diary.Mood mood = Diary.Mood.valueOf(diaryInfo[4]);
-                diaryList.add(new Diary(filename, diaryInfo[0], diaryInfo[1], LocalDateTime.parse(diaryInfo[2]), diaryInfo[3], mood));
+                if (diaryInfo[5].equals("null"))
+                {
+                    Diary.Mood mood = Diary.Mood.valueOf(diaryInfo[4]);
+                    diaryList.add(new Diary(filename, diaryInfo[0], diaryInfo[1], LocalDateTime.parse(diaryInfo[2]), diaryInfo[3], mood));
+                }
             }
 
             //done
@@ -112,11 +115,13 @@ public class DiaryService
     }
 
     //delete diary
-    public ServiceResult deleteDiaryEntry(String diaryId)
+    public ServiceResult deleteDiaryEntry(Diary diaryEntryToBeDeleted)
     {
         try 
         {
-            fileIO.deleteLineFile(filename, diaryId);
+            fileIO.editFile(filename, new Diary(filename, diaryEntryToBeDeleted.getDiaryId(), diaryEntryToBeDeleted.getDiaryTitle(), diaryEntryToBeDeleted.getDiaryDate(),
+                diaryEntryToBeDeleted.getDiaryContent(), diaryEntryToBeDeleted.getMood(), LocalDateTime.now()), diaryEntryToBeDeleted.getDiaryId()
+            );
             
             //done 
             return new ServiceResult(true, null, "Diary entry deleted successfully.");

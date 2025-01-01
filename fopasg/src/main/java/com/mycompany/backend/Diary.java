@@ -9,17 +9,18 @@ public class Diary
         HAPPY, SAD, NORMAL;
     }
     
-
     private String username;
     private String diaryId;
     private String diaryTitle;
     private LocalDateTime diaryDate;
     private String diaryContent;
-    private Mood mood; 
+    private Mood mood;
+    private LocalDateTime deletionDate;
 
     //constructors
     public Diary() {}
 
+    //not deleted
     public Diary(String username, String diaryId, String diaryTitle, LocalDateTime diaryDate, String diaryContent, Mood mood)
     {   
         this.username = username;
@@ -28,10 +29,15 @@ public class Diary
         this.diaryDate = diaryDate;
         this.diaryContent = diaryContent;
         this.mood = mood;
-
+        this.deletionDate = null;
     }
 
-    
+    //deleted
+    public Diary(String username, String diaryId, String diaryTitle, LocalDateTime diaryDate, String diaryContent, Mood mood, LocalDateTime deletionDate)
+    {   
+        this(username, diaryId, diaryTitle, diaryDate, diaryContent, mood);
+        this.deletionDate = deletionDate;
+    }
 
     //getter
     public String getUsername()
@@ -64,6 +70,11 @@ public class Diary
         return mood;
     }
 
+    public LocalDateTime getDeletionDate() 
+    {
+        return deletionDate;
+    }
+
     //setter
     public void setDiaryTitle(String diaryTitle)
     {
@@ -85,5 +96,15 @@ public class Diary
         this.mood = mood;
     }
 
+    public void setDeletionDate(LocalDateTime deletionDate) 
+    {
+        this.deletionDate = deletionDate;
+    }
+
+    //to string
+    public String toString()
+    {
+        return diaryId + "," + diaryTitle + "," + diaryDate + "," + diaryContent + "," + mood + "," + (deletionDate == null ? "null" : deletionDate);
+    }
 }
     
