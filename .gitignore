@@ -25,4 +25,5 @@ replay_pid*
 /fopasg/nbproject/private/
 /fopasg/build/
 /fopasg/target/
-/.vscode
+
+.vscode/
