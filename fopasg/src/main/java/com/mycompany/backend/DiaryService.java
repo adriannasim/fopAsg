@@ -131,32 +131,32 @@ public class DiaryService
     }
     
     // Export diary entries within a range to PDF
-public ServiceResult exportDiaryToPDF(LocalDateTime startDate, LocalDateTime endDate, String pdfFilename) {
-    try {
-        // Fetch all diary entries
-        List<Diary> diaryList = getAllDiary();
+    public ServiceResult exportDiaryToPDF(LocalDateTime startDate, LocalDateTime endDate, String pdfFilename) {
+        try {
+            // Fetch all diary entries
+            List<Diary> diaryList = getAllDiary();
 
-        // Filter entries by date range
-        List<String> entriesInRange = new ArrayList<>();
-        for (Diary diary : diaryList) {
-            if (!diary.getDiaryDate().isBefore(startDate) && !diary.getDiaryDate().isAfter(endDate)) {
-                // Format each diary entry for PDF export
-                entriesInRange.add(formatDiaryEntryForExport(diary));
+            // Filter entries by date range
+            List<String> entriesInRange = new ArrayList<>();
+            for (Diary diary : diaryList) {
+                if (!diary.getDiaryDate().isBefore(startDate) && !diary.getDiaryDate().isAfter(endDate)) {
+                    // Format each diary entry for PDF export
+                    entriesInRange.add(formatDiaryEntryForExport(diary));
+                }
             }
+
+            if (entriesInRange.isEmpty()) {
+                return new ServiceResult(false, null, "No diary entries found in the specified date range.");
+            }
+
+            // Export filtered entries to PDF using FileIO
+            fileIO.exportToPDFUsingPDFBox(pdfFilename, entriesInRange); // Replace with `exportToPDFUsingIText` if preferred
+
+            return new ServiceResult(true, null, "Diary entries exported to PDF successfully.");
+        } catch (Exception e) {
+            return new ServiceResult(false, null, "Error exporting diary entries to PDF: " + e.getMessage());
         }
-
-        if (entriesInRange.isEmpty()) {
-            return new ServiceResult(false, null, "No diary entries found in the specified date range.");
-        }
-
-        // Export filtered entries to PDF using FileIO
-        fileIO.exportToPDFUsingPDFBox(pdfFilename, entriesInRange); // Replace with `exportToPDFUsingIText` if preferred
-
-        return new ServiceResult(true, null, "Diary entries exported to PDF successfully.");
-    } catch (Exception e) {
-        return new ServiceResult(false, null, "Error exporting diary entries to PDF: " + e.getMessage());
     }
-}
 
 // Helper method to format a diary entry for PDF export
 private String formatDiaryEntryForExport(Diary diary) {
