@@ -1,16 +1,18 @@
 package com.mycompany.backend;
 
-import static org.junit.Assert.*;
-
 import java.time.LocalDateTime;
 
-import org.junit.*;
+import org.junit.After;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
 
 public class DiaryServiceTests 
 {
     String userFile = "TestUsers.txt";
     UserService userService = new UserService(userFile);
     FileIO fileIO = new FileIO();
+    
         
     @Before
     public void setup()
@@ -35,7 +37,7 @@ public class DiaryServiceTests
         String loginUser = userService.userLogin("TestUser1", "test123");
         DiaryService diaryService = new DiaryService(loginUser);
 
-        assertTrue(diaryService.newDiaryEntry("Test Diary Title", LocalDateTime.now(), "Today I am Happy."));
+        assertTrue(diaryService.newDiaryEntry("Test Diary Title", LocalDateTime.now(), "Today I am Happy.", Diary.Mood.HAPPY));
         
         //TODO assertEquals using search 
     }
@@ -52,4 +54,5 @@ public class DiaryServiceTests
     {
 
     }
+
 }
