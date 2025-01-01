@@ -1,18 +1,18 @@
 package com.mycompany.frontend;
 
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.gluonhq.richtextarea.RichTextArea;
 import com.gluonhq.richtextarea.model.Document;
 import com.mycompany.backend.Diary;
-import com.mycompany.backend.DiaryService;
-import com.mycompany.backend.User;
 import com.mycompany.backend.UserSession;
 
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -30,6 +30,15 @@ public class DiaryViewController extends SharedPaneCharacteristics {
      * ELEMENTS WITH FX:ID.
      * 
      ***/
+    @FXML
+    private Label date; // Used to display the current date
+
+    @FXML
+    private Label day; // Used to display the current day of week
+
+    @FXML
+    private Label time; // used to display the current time
+
     @FXML
     private TextField title; // Used to display the title
 
@@ -62,29 +71,44 @@ public class DiaryViewController extends SharedPaneCharacteristics {
 
         // Place the viewer (rich text area) into Pane textarea
         textarea.getChildren().add(viewer);
+
         // Set the viewer same width and height with the textarea container
         viewer.prefWidthProperty().bind(textarea.widthProperty());
         viewer.prefHeightProperty().bind(textarea.heightProperty());
+
         // Set viewer view-only
         viewer.setEditable(false);
-        // Make sure the document is updated whenever user has entered something
-        viewer.autoSaveProperty().set(true);
-
-        // Display the images uploaded by users
-        displayImages();
 
         // Set current diary to refer
         Diary diary = UserSession.getSession().getCurrentDiary();
 
+        // Display the images uploaded by users
+        displayImages();
+
         // Set title
         title.setText(diary.getDiaryTitle());
-    
+
         // Import the content from CSV file (CAN CHANGE OR MODIFY)
         try {
-            viewer.getActionFactory().open(RichTextCSVExporter.importFromCSV(diary.getDiaryContent())).execute(new ActionEvent());
+            viewer.getActionFactory().open(RichTextCSVExporter.importFromCSV(diary.getDiaryContent()))
+                    .execute(new ActionEvent());
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+
+        // Set Date
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd MMMM yyyy");
+        date.setText(diary.getDiaryDate().format(dateFormatter));
+
+        // Set Day of Week
+        String formattedDay = diary.getDiaryDate().getDayOfWeek().toString().toLowerCase();
+        formattedDay = Character.toUpperCase(formattedDay.charAt(0))
+                + formattedDay.substring(1);
+        day.setText(formattedDay);
+
+        // Set time
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm a");
+        time.setText(diary.getDiaryDate().format(timeFormatter));
 
         // Listen to the document change event for viewer
         viewer.documentProperty().addListener((o, ov, nv) -> {
@@ -141,13 +165,12 @@ public class DiaryViewController extends SharedPaneCharacteristics {
 
             // Open image pop up view
             imageView.setOnMouseClicked(e -> {
-                try{
+                try {
                     App.openPopUpImg("pop-up-img", new Image(path));
-                } catch (IOException ex){
+                } catch (IOException ex) {
                     ex.printStackTrace();
                 }
             });
-            
 
             // Add ImageView to the container
             images.getChildren().add(imageView);

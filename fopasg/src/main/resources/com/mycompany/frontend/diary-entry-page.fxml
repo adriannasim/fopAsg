@@ -35,12 +35,12 @@
                   <Font name="Roboto Bold" size="20.0" />
                </font>
             </Label>
-            <Label layoutX="37.0" layoutY="102.0" style="-fx-background-color: #ffffff;" text="Sunday" textFill="#8f8f8f">
+            <Label fx:id="day" layoutX="37.0" layoutY="102.0" style="-fx-background-color: #ffffff;" textFill="#8f8f8f">
                <font>
                   <Font name="Roboto Bold" size="15.0" />
                </font>
             </Label>
-            <Label layoutX="622.0" layoutY="95.0" style="-fx-background-color: #ffffff;" text="10:15 PM" textFill="#8f8f8f">
+            <Label fx:id="time" layoutX="622.0" layoutY="95.0" style="-fx-background-color: #ffffff;" textFill="#8f8f8f">
                <font>
                   <Font name="Roboto Bold" size="12.0" />
                </font>

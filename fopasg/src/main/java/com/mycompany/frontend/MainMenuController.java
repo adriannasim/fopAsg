@@ -3,7 +3,6 @@ package com.mycompany.frontend;
 import java.io.IOException;
 import java.util.Stack;
 
-import com.mycompany.backend.Diary;
 import com.mycompany.backend.UserSession;
 
 import javafx.util.Duration;
@@ -24,7 +23,7 @@ import javafx.scene.layout.AnchorPane;
 
 public class MainMenuController {
 
-    // This used to store the user navigation history, so user can navigate back to
+    // This used to store the user navigation history and current file name, so user can navigate back to
     // previous pages.
     private static Stack<String> navigationHistory = new Stack<>();
     private String currentFilename;
@@ -173,6 +172,10 @@ public class MainMenuController {
         }
     }
 
+    /***
+     * METHOD TO RELOAD THE CONTENT INTO THE ROOTPANE
+     * 
+     ***/
     public void reloadContent(String filename) {
         try {
             // Load the new content from the FXML file

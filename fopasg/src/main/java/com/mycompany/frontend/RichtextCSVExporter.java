@@ -7,12 +7,9 @@ import com.gluonhq.richtextarea.model.Decoration;
 import com.gluonhq.richtextarea.model.TextDecoration;
 import com.gluonhq.richtextarea.model.ParagraphDecoration.GraphicType;
 import com.gluonhq.richtextarea.model.ParagraphDecoration;
+import com.gluonhq.richtextarea.model.TableDecoration;
 
 import java.io.IOException;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.FileReader;
-import java.io.BufferedReader;
 
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
@@ -45,9 +42,6 @@ class RichTextCSVExporter {
         Document document = richTextArea.getDocument();
         StringBuilder csvContent = new StringBuilder();
 
-        // // Add CSV headers
-        // csvContent.append("Text,Decorations,ParagraphDecorations\n");
-
         // Iterate through the document content
         String text = document.getText();
         List<DecorationModel> decorations = document.getDecorations();
@@ -73,11 +67,6 @@ class RichTextCSVExporter {
 
             currentPos += decoration.getLength();
         }
-
-        // Write the drafted content to file using BufferedWriter
-        // try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-        // writer.write(csvContent.toString());
-        // }
 
         // return the formatted contents
         return csvContent.toString();
@@ -192,12 +181,6 @@ class RichTextCSVExporter {
     public static Document importFromCSV(String contents) throws IOException {
 
         Document document = new Document();
-
-        // // Read from CSV
-        // try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-
-        // // Skip the header
-        // String line = reader.readLine();
 
         String[] line = contents.split("###SPLIT###");
 
@@ -357,6 +340,7 @@ class RichTextCSVExporter {
             builder.rightInset(0.0);
             builder.bottomInset(0.0);
             builder.leftInset(0.0);
+            builder.tableDecoration(new TableDecoration());
         }
 
         return builder.build();

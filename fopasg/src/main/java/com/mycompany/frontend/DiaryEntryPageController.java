@@ -63,7 +63,13 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
          * 
          ***/
         @FXML
-        private Label date;  // Used to display the current date
+        private Label date; // Used to display the current date
+
+        @FXML
+        private Label day; // Used to display the current day of week
+
+        @FXML
+        private Label time; // used to display the current time
 
         @FXML
         private TextField title; // Used to hold title
@@ -153,6 +159,9 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
         // later
         Document document = new Document(text, List.of(decorationModel), text.length());
 
+        // Used to control the stop of timeNow
+        private volatile boolean stop = false;
+
         /***
          * INITILIZATION OF THE CONTROLLER.
          * 
@@ -161,46 +170,66 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
 
                 super.initialize();
 
-                // Set Date
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy");
-                date.setText(LocalDateTime.now().format(formatter));
-
                 // Place the editor (rich text area) into Pane textarea
                 textarea.getChildren().add(editor);
+
                 // Set the editor same width and height with the textarea container
                 editor.prefWidthProperty().bind(textarea.widthProperty());
                 editor.prefHeightProperty().bind(textarea.heightProperty());
+                
+                // Used to define whether this is ADD NEW or EDIT page by retrieving diary from currentDiary
+                // If no currentDiary -> ADD NEW
+                // If has currentDiary -> EDIT
+                Diary diary = UserSession.getSession().getCurrentDiary();
+
                 // Link the document to the editor
                 // If there is a diary to refer to
-                Diary diary = UserSession.getSession().getCurrentDiary();
                 if (diary != null) {
-                       
-                                try {
-                                        // Set title
-                                        title.setText(diary.getDiaryTitle());
+                        try {
+                                // Linked to the existing diary
+                                editor.getActionFactory()
+                                                .open(RichTextCSVExporter.importFromCSV(diary.getDiaryContent()))
+                                                .execute(new ActionEvent());
 
-                                        // This code will run on the JavaFX Application Thread
-                                        String importedDocText = RichTextCSVExporter
-                                                        .importFromCSV(diary.getDiaryContent()).getText();
-                                        List<DecorationModel> importedDocDeco = RichTextCSVExporter
-                                                        .importFromCSV(diary.getDiaryContent()).getDecorations();
-                                        int importedDocCaret = RichTextCSVExporter
-                                                        .importFromCSV(diary.getDiaryContent()).getCaretPosition();
+                                // Set title
+                                title.setText(diary.getDiaryTitle());
 
-                                        // Create the document and open it in the editor
-                                        Document document = new Document(importedDocText, importedDocDeco,
-                                                        importedDocCaret);
-                                        
-                                        editor.getActionFactory().open(document).execute(new ActionEvent());
-                                } catch (IOException ex) {
-                                        ex.printStackTrace();
-                                }
-                        
+                                // Set Date
+                                DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd MMMM yyyy");
+                                date.setText(diary.getDiaryDate().format(dateFormatter));
+
+                                // Set Day of Week
+                                String formattedDay = diary.getDiaryDate().getDayOfWeek().toString().toLowerCase();
+                                formattedDay = Character.toUpperCase(formattedDay.charAt(0))
+                                                + formattedDay.substring(1);
+                                day.setText(formattedDay);
+
+                                // Set time
+                                DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm a");
+                                time.setText(diary.getDiaryDate().format(timeFormatter));
+
+                        } catch (IOException ex) {
+                                ex.printStackTrace();
+                        }
                 }
                 // If there is no diary to refer to
                 else {
+                        // link to empty diary
                         editor.getActionFactory().open(document).execute(new ActionEvent());
+
+                        // Set Date
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy");
+                        date.setText(LocalDateTime.now().format(formatter));
+
+                        // Set Day of Week
+                        String formattedDay = LocalDateTime.now().getDayOfWeek().toString().toLowerCase();
+                        formattedDay = Character.toUpperCase(formattedDay.charAt(0)) + formattedDay.substring(1);
+                        day.setText(formattedDay);
+
+                        // Set time
+                        timeNow();
                 }
+
                 // Make sure the document is updated whenever user has entered something
                 editor.autoSaveProperty().set(true);
 
@@ -331,8 +360,8 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
                                 // Check if the document exists
                                 Document linkedDocument = editor.getDocument();
                                 if (linkedDocument != null) {
-                                        // Get username
                                         String username = UserSession.getSession().getUsername();
+                                        // If this is a new entry
                                         if (diary == null) {
                                                 // Try insert the diary
                                                 try {
@@ -352,7 +381,9 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
                                                 } catch (IOException ex) {
                                                         ex.printStackTrace();
                                                 }
-                                        } else {
+                                        } 
+                                        // If the diary existed
+                                        else {
                                                 // Try update the diary
                                                 try {
                                                         DiaryService diaryService = new DiaryService(username);
@@ -372,9 +403,6 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
                                                 }
 
                                         }
-
-                                        // // Method below is provided at the end of the page (CAN MODIFY OR CHANGE)
-                                        // saveDocument(linkedDocument);
                                 } else {
                                         // Error handling here...
                                 }
@@ -476,16 +504,26 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
         }
 
         /***
-         * METHOD TO SAVE DOCUMENT. (CAN CHANGE OR MODIFY)
+         * METHOD TO GET CURRENT TIME
          * 
          ***/
-        // private void saveDocument(Document document) {
-        // try {
-        // RichTextCSVExporter.exportToCSV(editor, "data.csv"); // Filename can change
-        // also
-        // } catch (IOException e) {
-        // e.printStackTrace();
-        // }
-        // }
+        private void timeNow() {
+                Thread thread = new Thread(() -> {
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a");
+                        while (!stop) {
+                                try {
+                                        Thread.sleep(1000);
+                                } catch (Exception ex) {
+                                        ex.printStackTrace();
+                                }
+
+                                final String timenow = LocalDateTime.now().format(formatter);
+                                Platform.runLater(() -> {
+                                        time.setText(timenow);
+                                });
+                        }
+                });
+                thread.start();
+        }
 
 }
