@@ -135,11 +135,11 @@ public class DiaryService
     {
         List<Diary> diaries = getAllDiary();
 
-        for (Diary Diary : diaries)
+        for (Diary diary : diaries)
         {
-            if (Diary.getDiaryTitle().equals(diaryTitle))
+            if (diary.getDiaryTitle().equals(diaryTitle))
             {
-                return Diary;
+                return diary;
             }
         }
         //user doesnt exists
