@@ -52,7 +52,7 @@ public class DiaryService
     //get diary by title (Search) TODO
 
     //create diary
-    public boolean newDiaryEntry(String diaryTitle, LocalDateTime diaryDate, String diaryContent, Diary.Mood mood)
+    public ServiceResult newDiaryEntry(String diaryTitle, LocalDateTime diaryDate, String diaryContent, Diary.Mood mood)
     {
         if (diaryTitle == null || diaryDate == null || diaryContent == null || mood == null)
         {
@@ -68,13 +68,10 @@ public class DiaryService
                     fileIO.createFile(filename);   
                 }
 
-            try 
-            {
                 fileIO.appendFile(filename, new Diary(filename, UUID.randomUUID().toString(), diaryTitle, diaryDate, diaryContent, mood));
                 
                 //done 
                 return new ServiceResult(true, null, "Diary entry created.");
-
             }
             catch (IOException e)
             {
@@ -88,7 +85,7 @@ public class DiaryService
     }
 
     //edit diary
-    public boolean editDiaryEntry(String diaryId, String diaryTitle, LocalDateTime diaryDate, String diaryContent, Mood mood)
+    public ServiceResult editDiaryEntry(String diaryId, String diaryTitle, LocalDateTime diaryDate, String diaryContent, Diary.Mood mood)
     {
         if (diaryTitle == null || diaryDate == null || diaryContent == null || mood == null)
         {
