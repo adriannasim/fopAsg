@@ -1,6 +1,6 @@
 package com.mycompany.backend;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class Diary 
 {
@@ -12,16 +12,16 @@ public class Diary
     private String username;
     private String diaryId;
     private String diaryTitle;
-    private LocalDateTime diaryDate;
+    private LocalDate diaryDate;
     private String diaryContent;
     private Mood mood;
-    private LocalDateTime deletionDate;
+    private LocalDate deletionDate;
 
     //constructors
     public Diary() {}
 
     //not deleted
-    public Diary(String username, String diaryId, String diaryTitle, LocalDateTime diaryDate, String diaryContent, Mood mood)
+    public Diary(String username, String diaryId, String diaryTitle, LocalDate diaryDate, String diaryContent, Mood mood)
     {   
         this.username = username;
         this.diaryId = diaryId;
@@ -33,7 +33,7 @@ public class Diary
     }
 
     //deleted
-    public Diary(String username, String diaryId, String diaryTitle, LocalDateTime diaryDate, String diaryContent, Mood mood, LocalDateTime deletionDate)
+    public Diary(String username, String diaryId, String diaryTitle, LocalDate diaryDate, String diaryContent, Mood mood, LocalDate deletionDate)
     {   
         this(username, diaryId, diaryTitle, diaryDate, diaryContent, mood);
         this.deletionDate = deletionDate;
@@ -55,7 +55,7 @@ public class Diary
         return diaryTitle;
     }
 
-    public LocalDateTime getDiaryDate()
+    public LocalDate getDiaryDate()
     {
         return diaryDate;
     }
@@ -70,7 +70,7 @@ public class Diary
         return mood;
     }
 
-    public LocalDateTime getDeletionDate() 
+    public LocalDate getDeletionDate() 
     {
         return deletionDate;
     }
@@ -81,7 +81,7 @@ public class Diary
         this.diaryTitle = diaryTitle;
     }
 
-    public void setDiaryDate(LocalDateTime diaryDate)
+    public void setDiaryDate(LocalDate diaryDate)
     {
         this.diaryDate = diaryDate;
     }
@@ -96,7 +96,7 @@ public class Diary
         this.mood = mood;
     }
 
-    public void setDeletionDate(LocalDateTime deletionDate) 
+    public void setDeletionDate(LocalDate deletionDate) 
     {
         this.deletionDate = deletionDate;
     }
