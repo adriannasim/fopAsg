@@ -176,8 +176,9 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
                 // Set the editor same width and height with the textarea container
                 editor.prefWidthProperty().bind(textarea.widthProperty());
                 editor.prefHeightProperty().bind(textarea.heightProperty());
-                
-                // Used to define whether this is ADD NEW or EDIT page by retrieving diary from currentDiary
+
+                // Used to define whether this is ADD NEW or EDIT page by retrieving diary from
+                // currentDiary
                 // If no currentDiary -> ADD NEW
                 // If has currentDiary -> EDIT
                 Diary diary = UserSession.getSession().getCurrentDiary();
@@ -216,7 +217,8 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
                 else {
                         // link to empty diary
                         editor.getActionFactory().open(document).execute(new ActionEvent());
-
+                        editor.setPromptText("Start typing your diary here.");
+                        
                         // Set Date
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy");
                         date.setText(LocalDateTime.now().format(formatter));
@@ -356,57 +358,93 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
 
                 // When user want to save the diary content
                 submitBtn.setOnMouseClicked(e -> {
-                        Platform.runLater(() -> {
-                                // Check if the document exists
-                                Document linkedDocument = editor.getDocument();
-                                if (linkedDocument != null) {
-                                        String username = UserSession.getSession().getUsername();
-                                        // If this is a new entry
-                                        if (diary == null) {
-                                                // Try insert the diary
-                                                try {
-                                                        DiaryService diaryService = new DiaryService(username);
-                                                        String diaryContent = RichTextCSVExporter.exportToCSV(editor);
-                                                        ServiceResult result = diaryService.newDiaryEntry(
-                                                                        title.getText(),
-                                                                        LocalDateTime.now(), diaryContent);
+                        title.getStyleClass().remove("error");
+                        titleMsg.setText("");
+                        textarea.getStyleClass().remove("error");
+                        contentMsg.setText("");
 
-                                                        if (result.isSuccessful()) {
-                                                                App.openPopUpAtTop("success-message",
-                                                                                result.getReturnMessage());
-                                                        } else {
-                                                                App.openPopUpAtTop("error-message",
-                                                                                result.getReturnMessage());
-                                                        }
-                                                } catch (IOException ex) {
-                                                        ex.printStackTrace();
-                                                }
-                                        } 
-                                        // If the diary existed
-                                        else {
-                                                // Try update the diary
-                                                try {
-                                                        DiaryService diaryService = new DiaryService(username);
-                                                        String diaryContent = RichTextCSVExporter.exportToCSV(editor);
-                                                        ServiceResult result = diaryService.editDiaryEntry(
-                                                                        diary.getDiaryId(), title.getText(),
-                                                                        diary.getDiaryDate(), diaryContent);
-                                                        if (result.isSuccessful()) {
-                                                                App.openPopUpAtTop("success-message",
-                                                                                result.getReturnMessage());
-                                                        } else {
-                                                                App.openPopUpAtTop("error-message",
-                                                                                result.getReturnMessage());
-                                                        }
-                                                } catch (IOException ex) {
-                                                        ex.printStackTrace();
-                                                }
+                        if (title.getText() != null && !title.getText().equals("") &&
+                                        editor.getTextLength() != 0) {
+                                Platform.runLater(() -> {
+                                        // Check if the document exists
+                                        Document linkedDocument = editor.getDocument();
+                                        if (linkedDocument != null) {
+                                                String username = UserSession.getSession().getUsername();
+                                                // If this is a new entry
+                                                if (diary == null) {
+                                                        // Try insert the diary
+                                                        try {
+                                                                DiaryService diaryService = new DiaryService(username);
+                                                                String diaryContent = RichTextCSVExporter
+                                                                                .exportToCSV(editor);
+                                                                ServiceResult result = diaryService.newDiaryEntry(
+                                                                                title.getText(),
+                                                                                LocalDateTime.now(), diaryContent);
 
+                                                                if (result.isSuccessful()) {
+                                                                        App.openPopUpAtTop("success-message",
+                                                                                        result.getReturnMessage());
+                                                                } else {
+                                                                        App.openPopUpAtTop("error-message",
+                                                                                        result.getReturnMessage());
+                                                                }
+                                                        } catch (IOException ex) {
+                                                                ex.printStackTrace();
+                                                        }
+                                                }
+                                                // If the diary existed
+                                                else {
+                                                        // Try update the diary
+                                                        try {
+                                                                DiaryService diaryService = new DiaryService(username);
+                                                                String diaryContent = RichTextCSVExporter
+                                                                                .exportToCSV(editor);
+                                                                ServiceResult result = diaryService.editDiaryEntry(
+                                                                                diary.getDiaryId(), title.getText(),
+                                                                                diary.getDiaryDate(), diaryContent);
+                                                                if (result.isSuccessful()) {
+                                                                        App.openPopUpAtTop("success-message",
+                                                                                        result.getReturnMessage());
+                                                                } else {
+                                                                        App.openPopUpAtTop("error-message",
+                                                                                        result.getReturnMessage());
+                                                                }
+                                                        } catch (IOException ex) {
+                                                                ex.printStackTrace();
+                                                        }
+
+                                                }
+                                        } else {
+                                                // Error handling here...
+                                        }
+                                });
+                        } else {
+                                if (title.getText() == null || title.getText().equals("")) {
+                                        title.getStyleClass().add("error");
+                                        titleMsg.setText("Title cannot be empty.");
+                                }
+
+                                if (editor.getTextLength() == 0) {
+                                        textarea.getStyleClass().add("error");
+                                        contentMsg.setText("Content cannot be empty.");
+                                }
+
+                                // If this is a new entry
+                                if (diary == null) {
+                                        try {
+                                                App.openPopUpAtTop("error-message", "Failed to add this diary.");
+                                        } catch (IOException ex) {
+                                                ex.printStackTrace();
                                         }
                                 } else {
-                                        // Error handling here...
+                                        try {
+                                                App.openPopUpAtTop("error-message", "Failed to update this diary.");
+                                        } catch (IOException ex) {
+                                                ex.printStackTrace();
+                                        }
                                 }
-                        });
+
+                        }
                 });
 
                 // When user want to add image, then will display the images
