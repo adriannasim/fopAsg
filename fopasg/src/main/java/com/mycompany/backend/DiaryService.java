@@ -56,32 +56,31 @@ public class DiaryService
     {
         if (diaryTitle == null || diaryDate == null || diaryContent == null || mood == null)
         {
-            System.err.println("Info incomplete.");
-            return false;
+            return new ServiceResult(false, null, "Info incomplete.");
         }
         else
         {
             //check if the file exists, if not, it means that its the user's first entry so create a new file for the user
-            if (!fileIO.loadFile(filename).exists())
+            try 
             {
-                try 
+                if (!fileIO.loadFile(filename).exists())
                 {
-                    fileIO.createFile(filename);
+                    fileIO.createFile(filename);   
                 }
-                catch (IOException e)
-                {
-                    throw new RuntimeException(e);
-                }
-            }
 
             try 
             {
                 fileIO.appendFile(filename, new Diary(filename, UUID.randomUUID().toString(), diaryTitle, diaryDate, diaryContent, mood));
                 
                 //done 
-                return true;
+                return new ServiceResult(true, null, "Diary entry created.");
+
             }
             catch (IOException e)
+            {
+                throw new RuntimeException(e);
+            }
+            catch (URISyntaxException e) 
             {
                 throw new RuntimeException(e);
             }
@@ -93,8 +92,7 @@ public class DiaryService
     {
         if (diaryTitle == null || diaryDate == null || diaryContent == null || mood == null)
         {
-            System.err.println("Info incomplete.");
-            return false;
+            return new ServiceResult(false, null, "Info incomplete.");
         }
         else
         {
@@ -102,8 +100,8 @@ public class DiaryService
             {
                 fileIO.editFile(filename, new Diary(filename, UUID.randomUUID().toString(), diaryTitle, diaryDate, diaryContent, mood), diaryId);
                 
-                //done 
-                return true;
+                //done
+                return new ServiceResult(true, null, "Diary entry edited.");
             }
             catch (IOException e)
             {
@@ -117,14 +115,14 @@ public class DiaryService
     }
 
     //delete diary
-    public boolean deleteDiaryEntry(String diaryId)
+    public ServiceResult deleteDiaryEntry(String diaryId)
     {
         try 
         {
             fileIO.deleteLineFile(filename, diaryId);
             
             //done 
-            return true;
+            return new ServiceResult(true, null, "Diary entry deleted successfully.");
         }
         catch (IOException e)
         {
@@ -135,7 +133,4 @@ public class DiaryService
             throw new RuntimeException(e);
         }
     }
-
-    
-
 }

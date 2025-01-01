@@ -1,6 +1,9 @@
 package com.mycompany.frontend.helper;
 
 import java.io.IOException;
+import java.util.function.Supplier;
+
+import com.mycompany.backend.ServiceResult;
 import com.mycompany.frontend.App;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -33,9 +36,11 @@ public class PopUpBoxController {
      ***/
     private String filename;
 
-    private String successMessage;
+    // private String successMessage;
     
-    private String failedMessage;
+    // private String failedMessage;
+
+    private Supplier<ServiceResult> serviceOperation;
 
     /***
      * INITILIZATION OF THE CONTROLLER.
@@ -73,39 +78,47 @@ public class PopUpBoxController {
         this.filename = filename;
     }
 
-    /*** METHOD TO SET THE SUCCESS MESSAGE TEXT.
-     * 
-     * ***/
-    public void setSuccessMessageText(String successMessage) {
-        this.successMessage = successMessage;
-    }
+    // /*** METHOD TO SET THE SUCCESS MESSAGE TEXT.
+    //  * 
+    //  * ***/
+    // public void setSuccessMessageText(String successMessage) {
+    //     this.successMessage = successMessage;
+    // }
 
-    /*** METHOD TO SET THE FAILED MESSAGE TEXT.
+    // /*** METHOD TO SET THE FAILED MESSAGE TEXT.
+    //  * 
+    //  * ***/
+    // public void setFailedMessageText(String failedMessage) {
+    //     this.failedMessage = failedMessage;
+    // }
+
+    /*** METHOD TO SET SERVICE OPERATION RESULT.
      * 
      * ***/
-    public void setFailedMessageText(String failedMessage) {
-        this.failedMessage = failedMessage;
+    public void setServiceOperation(Supplier<ServiceResult> serviceOperation) {
+        this.serviceOperation = serviceOperation;
     }
 
     /*** METHOD TO HANDLE YES BUTTON CLICK.
      * 
      * ***/
     public void handleYesButtonClick() {
-        boolean success = false;
+        boolean success;
         String message;
 
         // Close the pop-up
         Stage stage = (Stage) yesButton.getScene().getWindow();
         stage.close();
         
-        // Operation here (change the success value, either true or false)
+        //Get the result of the operation
+        success = (boolean) serviceOperation.get().getReturnObject();
 
         if (success){
             filename = "success-message";
-            message = successMessage;
+            message = serviceOperation.get().getReturnMessage();
         } else {
             filename = "error-message";
-            message = failedMessage;
+            message = serviceOperation.get().getReturnMessage();
         }
 
         // Display the message box to users

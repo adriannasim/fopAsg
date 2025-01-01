@@ -10,6 +10,9 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import java.io.IOException;
 import java.util.Stack;
+import java.util.function.Supplier;
+
+import com.mycompany.backend.ServiceResult;
 import com.mycompany.frontend.helper.MessageController;
 import com.mycompany.frontend.helper.PopUpBoxController;
 import com.mycompany.frontend.helper.PopUpImgController;
@@ -70,7 +73,7 @@ public class App extends Application {
      * METHOD TO SHOW A CONFIRMATION POP UP.
      * 
      ***/
-    public static void openConfirmationPopUp(String confirmationText, String successMessage, String failedMessage)
+    public static void openConfirmationPopUp(String confirmationText, Supplier<ServiceResult> serviceOperation)
             throws IOException {
         FXMLLoader loader = loadFXML("pop-up-box");
         Parent root = loader.getRoot();
@@ -78,12 +81,15 @@ public class App extends Application {
         PopUpBoxController controller = loader.getController(); 
         // Use the controller to set the confirmation text that displayed to users.
         controller.setConfirmationText(confirmationText); 
-        // Use the controller to set the success message that displayed to the users 
-        // when user wanted action performed correctly.
-        controller.setSuccessMessageText(successMessage);
-         // Use the controller to set the failed message that displayed to the users 
-         // when user wanted action performed wrongly. 
-        controller.setFailedMessageText(failedMessage);
+        // // Use the controller to set the success message that displayed to the users 
+        // // when user wanted action performed correctly.
+        // controller.setSuccessMessageText(successMessage);
+        //  // Use the controller to set the failed message that displayed to the users 
+        //  // when user wanted action performed wrongly. 
+        // controller.setFailedMessageText(failedMessage);
+        
+        //set what service function to invoke if user press yes
+        controller.setServiceOperation(serviceOperation);
 
         Stage popupStage = new Stage();
         // Remove the default window decorations (title bar, close, minimize, and maximize buttons).

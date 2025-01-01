@@ -13,42 +13,39 @@ public class FileIO
         File file;
         if (filename.toLowerCase().contains("test"))
         {
-            file = new File("src/test/resources/" + filename);
+            file = new File((System.getProperty("user.dir").contains("fopasg") ? "" : "fopasg/") + "src/test/resources/" + filename);
         }
         else
         {
-            file = new File("src/main/resources/" + filename);
+            file = new File((System.getProperty("user.dir").contains("fopasg") ? "" : "fopasg/") + "src/main/resources/" + filename);
         }
+        System.out.println("Attempting to create file to: " + file.getAbsolutePath());
         
         file.createNewFile();
     }
 
     //Load file
-    public File loadFile(String filename)
+    public File loadFile(String filename) throws URISyntaxException, FileNotFoundException
     {
         File file;
         if (filename.toLowerCase().contains("test"))
         {
-            file = new File("src/test/resources/" + filename);
+            file = new File((System.getProperty("user.dir").contains("fopasg") ? "" : "fopasg/") + "src/test/resources/" + filename);
         }
         else
         {
-            file = new File("src/main/resources/" + filename);
+            file = new File((System.getProperty("user.dir").contains("fopasg") ? "" : "fopasg/") + "src/main/resources/" + filename);
         }
+
         return file;
 
-        // URL resource = getClass().getClassLoader().getResource(filename);
-        // if (resource == null)
+        // ClassLoader classLoader = getClass().getClassLoader();
+        // URL resource = classLoader.getResource(filename);
+        // if (resource == null) 
         // {
-        //     throw new RuntimeException("File not found: " + filename);
+        //     throw new FileNotFoundException("File not found: " + filename);
         // }
-        //try 
-        //{
-            //return new File(resource.toURI());
-        //} 
-        // catch (URISyntaxException e) {
-        //     throw new RuntimeException(e);
-        // }
+        // return new File(resource.toURI());
     }
 
     //TXT file manipulation methods
@@ -68,26 +65,35 @@ public class FileIO
     }
 
     //Write
-    public void writeFile(String filename, List<String> lines) throws IOException 
+    public void writeFile(String filename, List<String> lines) throws IOException, URISyntaxException
     {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(loadFile(filename)))) 
         {
             for (String line : lines) 
             {
+                //only insert next line if its not the first data
+                if (lines.indexOf(line) != 0)
+                {
+                    bw.newLine();
+                }
                 bw.write(line);
-                bw.newLine();
             }
         }
     }
 
     //Append
-    public void appendFile(String filename, Object dataToAdd) throws IOException 
+    public void appendFile(String filename, Object dataToAdd) throws IOException, URISyntaxException
     {
+        File file = loadFile(filename);
         //add new line of data at the end of the file
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(loadFile(filename), true))) 
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file, true))) 
         {
+            //if file nt empty
+            if (file.length() != 0) 
+            {
+                bw.newLine();
+            }
             bw.write(dataToAdd.toString());
-            bw.newLine();
         }
     }
 
@@ -147,110 +153,27 @@ public class FileIO
         writeFile(filename, lines); //rewrite entire thing back to the txt file
     }
 
-    //Purge entire file content
-    public void purgeFile(String filename)
+    //Clear entire file content
+    public void clearFile(String filename) throws URISyntaxException, IOException
     {
-        try {
-            try (BufferedWriter bw = new BufferedWriter(new FileWriter(loadFile(filename)))) 
-            {
-                bw.write("");
-            }
-        }
-        catch (IOException e)
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(loadFile(filename)))) 
         {
-            throw new RuntimeException(e);
+            bw.write("");
         }
     }
 
-//     //CSV file manipulation methods
-//     //Write
-//     public void writeCsv(String fileName, List<String[]> data) 
-//     {
-//         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) 
-//         {
-//             for (String[] row : data)
-//             {
-//                 String line = String.join(",", row);
-//                 writer.write(line);
-//                 writer.newLine();
-//             }
-//         } 
-//         catch (IOException e) 
-//         {
-//             throw new RuntimeException("Failed to write to CSV file.", e);
-//         }
-//     }
+    //Purge file
+    public void purgeFile(String filename) throws URISyntaxException, FileNotFoundException
+    {
+        File file = loadFile(filename);
 
-//     //Read
-//     public List<String[]> readCsv(String fileName)
-//     {
-//     List<String[]> data = new ArrayList<>();
-//     try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) 
-//     {
-//         String line;
-//         while ((line = reader.readLine()) != null) 
-//         {
-//             String[] row = line.split(",");
-//             data.add(row);
-//         }
-//     } 
-//     catch (IOException e)
-//     {
-//         throw new RuntimeException("Failed to read from CSV file.", e);
-//     }
-//     return data;
-// }
-
-//     //Edit
-//     public void editCsv(String fileName, String[] row) 
-//     {
-//         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true))) 
-//         {
-//             String line = String.join(",", row);
-//             writer.write(line);
-//             writer.newLine();
-//         } 
-//         catch (IOException e) 
-//         {
-//             throw new RuntimeException("Failed to edit CSV file.", e);
-//         }
-//     }
-
-//     //Delete
-//     public void deleteCsv(String fileName, int keyIndex, String keyValue) 
-//     {
-//         File inputFile = new File(fileName);
-//         File tempFile = new File("temp_" + fileName);
-    
-//         try (BufferedReader reader = new BufferedReader(new FileReader(fileName));
-//              BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) 
-//         {
-//             String line;
-//             while ((line = reader.readLine()) != null) 
-//             {
-//                 String[] row = line.split(",");
-//                 if (row.length > keyIndex && row[keyIndex].equals(keyValue)) 
-//                 {
-//                     //skip this line so when we write the new file it would be without the data that we want to delete
-//                     continue;
-//                 }
-//                 writer.write(line);
-//                 writer.newLine();
-//             }
-//         } 
-//         catch (IOException e) 
-//         {
-//             throw new RuntimeException("Failed to delete from CSV file.", e);
-//         }
-    
-//         //replace original file with the new file
-//         if (!inputFile.delete()) 
-//         {
-//             throw new RuntimeException("Failed to delete the original file.");
-//         }
-//         if (!tempFile.renameTo(inputFile)) 
-//         {
-//             throw new RuntimeException("Failed to rename the temporary file.");
-//         }
-//     }
+        if (file.delete()) 
+        {
+            System.out.println("File \"" + filename + "\" deleted successfully.");
+        } 
+        else 
+        {
+            System.out.println("Failed to delete file \""+ filename + "\". File may not exist or is in use.");
+        }
+    }
 }
