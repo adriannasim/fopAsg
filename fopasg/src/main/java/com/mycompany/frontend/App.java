@@ -144,7 +144,7 @@ public class App extends Application {
         // Calculate the center position
         double popupWidth = root.prefWidth(-1);
         double popupHeight = root.prefHeight(-1);
-        double centerX = (stageX + 100) + (stageWidth - popupWidth) / 2;
+        double centerX = (stageX) + (stageWidth - popupWidth) / 2;
         double centerY = stageY + (stageHeight - popupHeight) / 2;
 
         // Set the position of the pop-up
@@ -246,7 +246,7 @@ public class App extends Application {
 
         // Calculate the center position
         double popupWidth = root.prefWidth(-1);
-        double centerX = (stageX + 100) + (stageWidth - popupWidth) / 2;
+        double centerX = (stageX) + (stageWidth - popupWidth) / 2;
         double higherY = stageY + 80;
 
         // Set the position of the pop-up

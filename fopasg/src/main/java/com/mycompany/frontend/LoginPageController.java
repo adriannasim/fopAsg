@@ -1,16 +1,21 @@
 package com.mycompany.frontend;
 
 import java.io.IOException;
-
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.Pane;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 import com.mycompany.backend.ServiceResult;
 import com.mycompany.backend.UserService;
 import com.mycompany.backend.UserSession;
+import com.mycompany.frontend.helper.TogglePasswordField;
 
 /***
  * THIS CONTROLLER CLASS IS USED FOR login-page.fxml
@@ -24,6 +29,9 @@ public class LoginPageController extends SharedPaneCharacteristics{
      * ELEMENTS WITH FX:ID
      * 
      ***/
+    @FXML
+    private Pane pane; // this will used to store all the contents
+
     @FXML
     private TextField username;  // This will store the user input for username/email, use username.getText() to get the value
 
@@ -49,6 +57,20 @@ public class LoginPageController extends SharedPaneCharacteristics{
      ***/
     @FXML
     public void initialize() {
+
+        // Add in togglePasswordFields that can have password visibility toggle
+        // functions
+        TogglePasswordField password = new TogglePasswordField();
+        password.setLayoutX(87.0);
+        password.setLayoutY(273.0);
+        password.setPrefHeight(38.0);
+        password.setPrefWidth(600.0);
+        password.setAlignment(Pos.CENTER);
+        password.setPromptText("Password");
+        password.setFont(Font.font("Roboto", FontWeight.BOLD, 12));
+        password.setStyle("-fx-background-color:#6ABC6A; -fx-background-radius: 50; -fx-text-inner-color: #ffffff;");
+        pane.getChildren().add(password);
+
         // Steps to show and hide the label
         username.setOnMouseClicked(e -> {
             usernameLabel.setVisible(true);

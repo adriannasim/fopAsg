@@ -29,6 +29,7 @@ import com.gluonhq.richtextarea.model.DecorationModel;
 import com.gluonhq.richtextarea.model.Document;
 import com.gluonhq.richtextarea.model.ParagraphDecoration;
 import com.gluonhq.richtextarea.model.TextDecoration;
+
 import com.mycompany.backend.Diary;
 import com.mycompany.backend.DiaryService;
 import com.mycompany.backend.ServiceResult;
@@ -384,6 +385,7 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
                                                                 if (result.isSuccessful()) {
                                                                         App.openPopUpAtTop("success-message",
                                                                                         result.getReturnMessage());
+                                                                                        mainMenuController.loadNewContent("diary-history-page");
                                                                 } else {
                                                                         App.openPopUpAtTop("error-message",
                                                                                         result.getReturnMessage());
