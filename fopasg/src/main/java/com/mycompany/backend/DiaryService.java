@@ -7,10 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+
 public class DiaryService
 {
     private FileIO fileIO = new FileIO();
     private String filename;
+    
 
     public DiaryService(String username)
     {
@@ -20,7 +22,8 @@ public class DiaryService
 
     //get all diary entries for the user
     public List<Diary> getAllDiary()
-    {
+    {   
+        
         List<Diary> diaryList = new ArrayList<>();
         try 
         {
@@ -29,7 +32,8 @@ public class DiaryService
             for (String line : data)
             {
                 String[] diaryInfo = line.split(",");
-                diaryList.add(new Diary(filename, diaryInfo[0], diaryInfo[1], LocalDateTime.parse(diaryInfo[2]), diaryInfo[3]));
+                Diary.Mood mood = Diary.Mood.valueOf(diaryInfo[4]);
+                diaryList.add(new Diary(filename, diaryInfo[0], diaryInfo[1], LocalDateTime.parse(diaryInfo[2]), diaryInfo[3], mood));
             }
 
             //done
@@ -48,9 +52,9 @@ public class DiaryService
     //get diary by title (Search) TODO
 
     //create diary
-    public ServiceResult newDiaryEntry(String diaryTitle, LocalDateTime diaryDate, String diaryContent)
+    public boolean newDiaryEntry(String diaryTitle, LocalDateTime diaryDate, String diaryContent, Diary.Mood mood)
     {
-        if (diaryTitle == null || diaryDate == null || diaryContent == null)
+        if (diaryTitle == null || diaryDate == null || diaryContent == null || mood == null)
         {
             return new ServiceResult(false, null, "Info incomplete.");
         }
@@ -64,8 +68,9 @@ public class DiaryService
                     fileIO.createFile(filename);   
                 }
 
-                //update file
-                fileIO.appendFile(filename, new Diary(filename, UUID.randomUUID().toString(), diaryTitle, diaryDate, diaryContent));
+            try 
+            {
+                fileIO.appendFile(filename, new Diary(filename, UUID.randomUUID().toString(), diaryTitle, diaryDate, diaryContent, mood));
                 
                 //done 
                 return new ServiceResult(true, null, "Diary entry created.");
@@ -83,9 +88,9 @@ public class DiaryService
     }
 
     //edit diary
-    public ServiceResult editDiaryEntry(String diaryId, String diaryTitle, LocalDateTime diaryDate, String diaryContent)
+    public boolean editDiaryEntry(String diaryId, String diaryTitle, LocalDateTime diaryDate, String diaryContent, Mood mood)
     {
-        if (diaryTitle == null || diaryDate == null || diaryContent == null)
+        if (diaryTitle == null || diaryDate == null || diaryContent == null || mood == null)
         {
             return new ServiceResult(false, null, "Info incomplete.");
         }
@@ -93,7 +98,7 @@ public class DiaryService
         {
             try 
             {
-                fileIO.editFile(filename, new Diary(filename, UUID.randomUUID().toString(), diaryTitle, diaryDate, diaryContent), diaryId);
+                fileIO.editFile(filename, new Diary(filename, UUID.randomUUID().toString(), diaryTitle, diaryDate, diaryContent, mood), diaryId);
                 
                 //done
                 return new ServiceResult(true, null, "Diary entry edited.");
@@ -128,5 +133,4 @@ public class DiaryService
             throw new RuntimeException(e);
         }
     }
-
 }

@@ -7,7 +7,10 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 
-import org.junit.*;
+import org.junit.After;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
 
 public class DiaryServiceTests 
 {
@@ -57,9 +60,13 @@ public class DiaryServiceTests
     @Test 
     public void testNewDiaryEntry()
     {        
+        //login
+        String loginUser = userService.userLogin("TestUser1", "test123");
+        DiaryService diaryService = new DiaryService(loginUser);
+
         //check if the result of a new diary entry returns true (means operation successful)
-        assertTrue(diaryService.newDiaryEntry("Test Diary Title", LocalDateTime.now(), "Today I am Happy.").isSuccessful());
-        
+        assertTrue(diaryService.newDiaryEntry("Test Diary Title", LocalDateTime.now(), "Today I am Happy.", Diary.Mood.HAPPY).isSuccessful());
+  
         //TODO assertEquals using search 
     }
 
