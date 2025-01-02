@@ -27,3 +27,5 @@ replay_pid*
 /fopasg/target/
 
 .vscode/
+
+/fopasg/src/main/resources/
