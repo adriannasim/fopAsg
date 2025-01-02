@@ -41,12 +41,12 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Label fx:id="usernameLabel" layoutX="94.0" layoutY="183.0" text="Username/Email" visible="false">
+            <Label fx:id="usernameLabel" layoutX="94.0" layoutY="183.0" text="Username/Email">
                <font>
                   <Font name="Roboto Black" size="12.0" />
                </font>
             </Label>
-            <Label fx:id="passwordLabel" layoutX="94.0" layoutY="253.0" text="Password" visible="false">
+            <Label fx:id="passwordLabel" layoutX="94.0" layoutY="253.0" text="Password">
                <font>
                   <Font name="Roboto Black" size="12.0" />
                </font>

@@ -3,13 +3,13 @@ package com.mycompany.frontend;
 import java.io.IOException;
 import java.util.Stack;
 
+import com.mycompany.backend.DiaryService;
 import com.mycompany.backend.UserSession;
 
 import javafx.util.Duration;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -65,15 +65,14 @@ public class MainMenuController {
         // Initial page
         loadNewContent("main-root-pane");
 
-        // Open the mood indicator page when user enter (Call this after enter main menu)
-        // CAN ADD LOGIC of when it should display here...
-        Platform.runLater(() -> {
-            try {
-                App.openPopUp("mood-indicator");
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        });
+        // Get user session
+        String sessionUsername = UserSession.getSession().getUsername();
+
+        // Get user diary
+        DiaryService diaryService = new DiaryService(sessionUsername);
+
+        // Delete < 0 days entries
+        diaryService.clearOldDiaryEntry(sessionUsername);
 
         // When user click on newDiaryBtn, navigate to diary-entry-page
         newDiaryBtn.setOnMouseClicked(e -> {

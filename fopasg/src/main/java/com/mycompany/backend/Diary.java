@@ -1,6 +1,7 @@
 package com.mycompany.backend;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Diary 
 {
@@ -12,7 +13,7 @@ public class Diary
     private String username;
     private String diaryId;
     private String diaryTitle;
-    private LocalDate diaryDate;
+    private LocalDateTime diaryDate;
     private String diaryContent;
     private Mood mood;
     private LocalDate deletionDate;
@@ -21,7 +22,7 @@ public class Diary
     public Diary() {}
 
     //not deleted
-    public Diary(String username, String diaryId, String diaryTitle, LocalDate diaryDate, String diaryContent, Mood mood)
+    public Diary(String username, String diaryId, String diaryTitle, LocalDateTime diaryDate, String diaryContent, Mood mood)
     {   
         this.username = username;
         this.diaryId = diaryId;
@@ -33,7 +34,7 @@ public class Diary
     }
 
     //deleted
-    public Diary(String username, String diaryId, String diaryTitle, LocalDate diaryDate, String diaryContent, Mood mood, LocalDate deletionDate)
+    public Diary(String username, String diaryId, String diaryTitle, LocalDateTime diaryDate, String diaryContent, Mood mood, LocalDate deletionDate)
     {   
         this(username, diaryId, diaryTitle, diaryDate, diaryContent, mood);
         this.deletionDate = deletionDate;
@@ -55,7 +56,7 @@ public class Diary
         return diaryTitle;
     }
 
-    public LocalDate getDiaryDate()
+    public LocalDateTime getDiaryDate()
     {
         return diaryDate;
     }
@@ -81,7 +82,7 @@ public class Diary
         this.diaryTitle = diaryTitle;
     }
 
-    public void setDiaryDate(LocalDate diaryDate)
+    public void setDiaryDate(LocalDateTime diaryDate)
     {
         this.diaryDate = diaryDate;
     }
@@ -102,18 +103,13 @@ public class Diary
     }
 
     //to string
-    public String toString()
-    {
-        return diaryId + "," + diaryTitle + "," + diaryDate + "," + diaryContent + "," + mood + "," + (deletionDate == null ? "null" : deletionDate);
-    }
-
     public String toString(){
         return diaryId +
             ", {" +
-            "username='" + username + '\'' +
-            ", diaryId='" + diaryId + '\'' +
-            ", diaryTitle='" + diaryTitle + '\'' +
+            "diaryTitle='" + diaryTitle + '\'' +
             ", diaryDate='" + (diaryDate != null ? diaryDate.toString() : "null") + '\'' +
+            ", mood='" + mood + '\'' +
+            ", deletionDate='" + (deletionDate == null ? "null" : deletionDate) + '\'' +
             ", diaryContent='" + diaryContent + '\'' +
             '}';
     }

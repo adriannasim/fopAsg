@@ -40,6 +40,12 @@ public class DiaryViewController extends SharedPaneCharacteristics {
     private Label time; // used to display the current time
 
     @FXML
+    private ImageView moodIcon; // used to display the selected mood icon
+
+    @FXML
+    private Label moodLabel; // Used to display the selected mood label
+
+    @FXML
     private TextField title; // Used to display the title
 
     @FXML
@@ -61,6 +67,8 @@ public class DiaryViewController extends SharedPaneCharacteristics {
     // Initialize the place user view their diary content
     private final RichTextArea viewer = new RichTextArea();
 
+    private String mood;
+
     /***
      * INITILIZATION OF THE CONTROLLER.
      * 
@@ -81,6 +89,12 @@ public class DiaryViewController extends SharedPaneCharacteristics {
 
         // Set current diary to refer
         Diary diary = UserSession.getSession().getCurrentDiary();
+
+        // Get the mood
+        mood = diary.getMood().toString();
+
+        // Set the mood
+        setMoodLabelAndIcon();
 
         // Display the images uploaded by users
         displayImages();
@@ -174,6 +188,32 @@ public class DiaryViewController extends SharedPaneCharacteristics {
 
             // Add ImageView to the container
             images.getChildren().add(imageView);
+        }
+    }
+
+    /***
+     * METHOD TO SET MOOD LABEL AND ICON
+     * 
+     ***/
+    private void setMoodLabelAndIcon() {
+        // Set the mood
+        moodLabel.setText(mood);
+        switch (mood) {
+            case "HAPPY":
+                moodIcon.setImage(new Image(getClass()
+                        .getResourceAsStream(
+                                "/com/mycompany/frontend/images/Happy-hover (mood).png")));
+                break;
+            case "NORMAL":
+                moodIcon.setImage(new Image(getClass()
+                        .getResourceAsStream(
+                                "/com/mycompany/frontend/images/Neutral-hover (mood).png")));
+                break;
+            case "SAD":
+                moodIcon.setImage(new Image(getClass()
+                        .getResourceAsStream(
+                                "/com/mycompany/frontend/images/Sad-hover (mood).png")));
+                break;
         }
     }
 

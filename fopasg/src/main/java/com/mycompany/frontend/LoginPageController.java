@@ -21,7 +21,7 @@ import com.mycompany.frontend.helper.TogglePasswordField;
  * THIS CONTROLLER CLASS IS USED FOR login-page.fxml
  * 
  ***/
-public class LoginPageController extends SharedPaneCharacteristics{
+public class LoginPageController extends SharedPaneCharacteristics {
 
     private UserService userService = new UserService();
 
@@ -33,10 +33,12 @@ public class LoginPageController extends SharedPaneCharacteristics{
     private Pane pane; // this will used to store all the contents
 
     @FXML
-    private TextField username;  // This will store the user input for username/email, use username.getText() to get the value
+    private TextField username; // This will store the user input for username/email, use username.getText() to
+                                // get the value
 
     @FXML
-    private PasswordField password;  // This will store the user input for password, use password.getText() to get the value
+    private PasswordField password; // This will store the user input for password, use password.getText() to get
+                                    // the value
 
     @FXML
     private Label usernameLabel;
@@ -49,7 +51,6 @@ public class LoginPageController extends SharedPaneCharacteristics{
 
     @FXML
     private Button signUpBtn;
-
 
     /***
      * INITILIZATION OF THE CONTROLLER
@@ -71,56 +72,31 @@ public class LoginPageController extends SharedPaneCharacteristics{
         password.setStyle("-fx-background-color:#6ABC6A; -fx-background-radius: 50; -fx-text-inner-color: #ffffff;");
         pane.getChildren().add(password);
 
-        // Steps to show and hide the label
-        username.setOnMouseClicked(e -> {
-            usernameLabel.setVisible(true);
-        });
-        username.setOnMouseExited(e -> {
-            String input = username.getText();
-            if (input == "" || input.isEmpty()) {
-                usernameLabel.setVisible(false);
-            }
-        });
-        password.setOnMouseClicked(e -> {
-            passwordLabel.setVisible(true);
-        });
-
-        password.setOnMouseExited(e -> {
-            String input = password.getText();
-            if (input == "" || input.isEmpty()) {
-                passwordLabel.setVisible(false);
-            }
-        });
-
         // When user want to sign up, open sign up page
-        signUpBtn.setOnMouseClicked(e->{
-            try{
+        signUpBtn.setOnMouseClicked(e -> {
+            try {
                 App.openPopUpSignUp("sign-up");
-            } catch(IOException ex){
+            } catch (IOException ex) {
                 ex.printStackTrace();
-            } 
+            }
         });
 
         // When user want to login, process the user details
-        submitBtn.setOnMouseClicked(e->{
-            try
-            {
-                //pass the username and password input by user to the service
+        submitBtn.setOnMouseClicked(e -> {
+            try {
+                // pass the username and password input by user to the service
                 ServiceResult result = userService.userLogin(username.getText(), password.getText());
 
-                //If successfully logged in
-                if (result.getReturnObject() != null) 
-                {
+                // If successfully logged in
+                if (result.getReturnObject() != null) {
                     App.openPopUpAtTop("success-message", result.getReturnMessage());
                     UserSession.getSession().setUsername(username.getText());
                     App.switchScene("main-menu");
-                } 
-                else 
-                {
-                    //pop up fail msg
+                } else {
+                    // pop up fail msg
                     App.openPopUpAtTop("error-message", result.getReturnMessage());
                 }
-            } catch (IOException ex){
+            } catch (IOException ex) {
                 ex.printStackTrace();
             }
         });

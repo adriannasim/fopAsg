@@ -73,6 +73,12 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
         private Label time; // used to display the current time
 
         @FXML
+        private ImageView moodIcon; // used to display the selected mood icon
+
+        @FXML
+        private Label moodLabel; // Used to display the selected mood label
+
+        @FXML
         private TextField title; // Used to hold title
 
         @FXML
@@ -163,6 +169,8 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
         // Used to control the stop of timeNow
         private volatile boolean stop = false;
 
+        private String mood;
+
         /***
          * INITILIZATION OF THE CONTROLLER.
          * 
@@ -188,6 +196,30 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
                 // If there is a diary to refer to
                 if (diary != null) {
                         try {
+                                 // Get the mood
+                                 mood = diary.getMood().toString();
+
+                                 // Set the mood
+                                 setMoodLabelAndIcon();
+
+                                 moodIcon.setOnMouseClicked(e -> {
+                                         try {
+                                                 mood = App.openMoodIndicator();
+                                                 setMoodLabelAndIcon();
+                                         } catch (IOException ex) {
+                                                 ex.printStackTrace();
+                                         }
+                                 });
+
+                                 moodLabel.setOnMouseClicked(e -> {
+                                         try {
+                                                 mood = App.openMoodIndicator();
+                                                 setMoodLabelAndIcon();
+                                         } catch (IOException ex) {
+                                                 ex.printStackTrace();
+                                         }
+                                 });
+
                                 // Linked to the existing diary
                                 editor.getActionFactory()
                                                 .open(RichTextCSVExporter.importFromCSV(diary.getDiaryContent()))
@@ -216,10 +248,43 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
                 }
                 // If there is no diary to refer to
                 else {
+                        // Open the mood indicator page when user enter (Call this after enter main
+                        // menu)
+                        // CAN ADD LOGIC of when it should display here...
+                        Platform.runLater(() -> {
+                                try {
+                                        // Get the mood
+                                        mood = App.openMoodIndicator();
+
+                                        // Set the mood
+                                        setMoodLabelAndIcon();
+
+                                        moodIcon.setOnMouseClicked(e -> {
+                                                try {
+                                                        mood = App.openMoodIndicator();
+                                                        setMoodLabelAndIcon();
+                                                } catch (IOException ex) {
+                                                        ex.printStackTrace();
+                                                }
+                                        });
+
+                                        moodLabel.setOnMouseClicked(e -> {
+                                                try {
+                                                        mood = App.openMoodIndicator();
+                                                        setMoodLabelAndIcon();
+                                                } catch (IOException ex) {
+                                                        ex.printStackTrace();
+                                                }
+                                        });
+                                } catch (IOException ex) {
+                                        ex.printStackTrace();
+                                }
+                        });
+
                         // link to empty diary
                         editor.getActionFactory().open(document).execute(new ActionEvent());
                         editor.setPromptText("Start typing your diary here.");
-                        
+
                         // Set Date
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy");
                         date.setText(LocalDateTime.now().format(formatter));
@@ -380,12 +445,14 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
                                                                                 .exportToCSV(editor);
                                                                 ServiceResult result = diaryService.newDiaryEntry(
                                                                                 title.getText(),
-                                                                                LocalDateTime.now(), diaryContent);
+                                                                                LocalDateTime.now(), diaryContent,
+                                                                                Diary.Mood.valueOf(mood));
 
                                                                 if (result.isSuccessful()) {
                                                                         App.openPopUpAtTop("success-message",
                                                                                         result.getReturnMessage());
-                                                                                        mainMenuController.loadNewContent("diary-history-page");
+                                                                        mainMenuController.loadNewContent(
+                                                                                        "diary-history-page");
                                                                 } else {
                                                                         App.openPopUpAtTop("error-message",
                                                                                         result.getReturnMessage());
@@ -403,7 +470,8 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
                                                                                 .exportToCSV(editor);
                                                                 ServiceResult result = diaryService.editDiaryEntry(
                                                                                 diary.getDiaryId(), title.getText(),
-                                                                                diary.getDiaryDate(), diaryContent);
+                                                                                diary.getDiaryDate(), diaryContent,
+                                                                                Diary.Mood.valueOf(mood));
                                                                 if (result.isSuccessful()) {
                                                                         App.openPopUpAtTop("success-message",
                                                                                         result.getReturnMessage());
@@ -564,6 +632,32 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
                         }
                 });
                 thread.start();
+        }
+
+        /***
+         * METHOD TO SET MOOD LABEL AND ICON
+         * 
+         ***/
+        private void setMoodLabelAndIcon() {
+                // Set the mood
+                moodLabel.setText(mood);
+                switch (mood) {
+                        case "HAPPY":
+                                moodIcon.setImage(new Image(getClass()
+                                                .getResourceAsStream(
+                                                                "/com/mycompany/frontend/images/Happy-hover (mood).png")));
+                                break;
+                        case "NORMAL":
+                                moodIcon.setImage(new Image(getClass()
+                                                .getResourceAsStream(
+                                                                "/com/mycompany/frontend/images/Neutral-hover (mood).png")));
+                                break;
+                        case "SAD":
+                                moodIcon.setImage(new Image(getClass()
+                                                .getResourceAsStream(
+                                                                "/com/mycompany/frontend/images/Sad-hover (mood).png")));
+                                break;
+                }
         }
 
 }

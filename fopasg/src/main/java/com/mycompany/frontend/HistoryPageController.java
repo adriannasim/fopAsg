@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -16,6 +18,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import com.mycompany.backend.DiaryService;
+import com.mycompany.backend.UserService;
 import com.mycompany.backend.UserSession;
 import com.mycompany.backend.Diary;
 
@@ -60,6 +63,12 @@ public class HistoryPageController extends SharedPaneCharacteristics {
     @FXML
     private Button basedOnMonth; // Export option menu 2 item 3
 
+    /***
+     * VARIABLES
+     * 
+     ***/
+    private DiaryService diaryService = new DiaryService(UserSession.getSession().getUsername());
+
     // A class representing a diary group by date (CHANGE
     // LATER!!!!!!!!!!!!!!!!!!!!!)
     class DiaryGroup {
@@ -90,19 +99,21 @@ public class HistoryPageController extends SharedPaneCharacteristics {
         }
     }
 
-    /*** INITILIZATION OF THE CONTROLLER
+    /***
+     * INITILIZATION OF THE CONTROLLER
      * 
-     * ***/
+     ***/
     @FXML
     public void initialize() {
         // Inherit Super Class's initialization
-        super.initialize(); 
+        super.initialize();
 
-        /*** Export button click action
-        * 
-        * ***/
+        /***
+         * Export button click action
+         * 
+         ***/
         exportButton.setOnMouseClicked(e -> {
-            exportOptions.setVisible(true); 
+            exportOptions.setVisible(true);
             exportOptions2.setVisible(false);
         });
 
@@ -123,7 +134,7 @@ public class HistoryPageController extends SharedPaneCharacteristics {
         });
 
         // When user chosen to pick entries to export
-        basedOnPickedEntries.setOnMouseClicked(e->{
+        basedOnPickedEntries.setOnMouseClicked(e -> {
             exportOptions.setVisible(false);
             // Operation here
         });
@@ -136,24 +147,22 @@ public class HistoryPageController extends SharedPaneCharacteristics {
         });
 
         // When user want export by day
-        basedOnDay.setOnMouseClicked(e->{
+        basedOnDay.setOnMouseClicked(e -> {
             mainMenuController.loadNewContent("export-by-day");
             exportOptions2.setVisible(false);
         });
 
         // When user want export by week
-        basedOnWeek.setOnMouseClicked(e->{
+        basedOnWeek.setOnMouseClicked(e -> {
             mainMenuController.loadNewContent("export-by-week");
             exportOptions2.setVisible(false);
         });
 
         // When user want export by month
-        basedOnMonth.setOnMouseClicked(e->{
+        basedOnMonth.setOnMouseClicked(e -> {
             mainMenuController.loadNewContent("export-by-month");
             exportOptions2.setVisible(false);
         });
-
-
 
         // Get user session
         String sessionUsername = UserSession.getSession().getUsername();
@@ -161,51 +170,50 @@ public class HistoryPageController extends SharedPaneCharacteristics {
         // Get user diary
         DiaryService diaryService = new DiaryService(sessionUsername);
         List<Diary> diaryList = diaryService.getAllDiary();
+        // filter not deleted diries
+        diaryList = diaryList.stream().filter(diary -> diary.getDeletionDate()==null).collect(Collectors.toList());
 
         // Group the diary based on date
         List<DiaryGroup> groupedDiaryItems = new ArrayList<>();
 
-        for (Diary diary:diaryList){
-            if (groupedDiaryItems.isEmpty()){
+        for (Diary diary : diaryList) {
+            if (groupedDiaryItems.isEmpty()) {
                 groupedDiaryItems.add(new DiaryGroup(diary.getDiaryDate().toLocalDate(), diary));
             } else {
                 boolean foundDate = false;
                 int index = 0;
-                
-                for (int i=0; i<groupedDiaryItems.size(); i++){
+
+                for (int i = 0; i < groupedDiaryItems.size(); i++) {
                     LocalDate date = diary.getDiaryDate().toLocalDate();
-                    if (groupedDiaryItems.get(i).getDate().equals(date)){
+                    if (groupedDiaryItems.get(i).getDate().equals(date)) {
                         foundDate = true;
                         index = i;
-                    }  
-                }   
+                    }
+                }
 
-                if (!foundDate){
+                if (!foundDate) {
                     groupedDiaryItems.add(new DiaryGroup(diary.getDiaryDate().toLocalDate(), diary));
                 } else {
                     groupedDiaryItems.get(index).getDiaries().add(diary);
                 }
             }
-            
-        }
-        
 
-        
-        
-                                
-        // Date Format                        
+        }
+
+        // Date Format
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy");
 
         // If there is no diary entry
-        if(diaryList.isEmpty()){
+        if (diaryList.isEmpty()) {
             Text emptyMsg = new Text();
             emptyMsg.setText("No diary entry is present.");
             diaryItemsVBox.getChildren().add(emptyMsg);
         }
 
         // Iterate through groups and add diary items
-        // 1. 'Group' means the entries grouped by date, eg. 1 Dec 2024 got 2 entries written, 
-        //     thus, the two entries are grouped together under the same date.
+        // 1. 'Group' means the entries grouped by date, eg. 1 Dec 2024 got 2 entries
+        // written,
+        // thus, the two entries are grouped together under the same date.
         // 2. 'Diary Item' means the box for each entry.
         for (DiaryGroup group : groupedDiaryItems) {
 
@@ -261,7 +269,8 @@ public class HistoryPageController extends SharedPaneCharacteristics {
         Label titleLabel = new Label(item.getDiaryTitle()); // Name put here
         titleLabel.setLayoutX(74.0);
         titleLabel.setLayoutY(23.0);
-        titleLabel.setStyle("-fx-background-color: #F1F1F1; -fx-max-width: 100px; -fx-wrap-text: false; overflow: hidden; text-overflow: ellipsis; display: inline-block;");
+        titleLabel.setStyle(
+                "-fx-background-color: #F1F1F1; -fx-max-width: 100px; -fx-wrap-text: false; overflow: hidden; text-overflow: ellipsis; display: inline-block;");
         titleLabel.setTextFill(javafx.scene.paint.Color.web("#9abf80"));
         titleLabel.setFont(javafx.scene.text.Font.font("Roboto Bold", 15));
 
@@ -345,13 +354,16 @@ public class HistoryPageController extends SharedPaneCharacteristics {
      * 
      ***/
     private void handleDelete(Diary diary) {
-        // Show a delete confirmation page
-        // try {
-        // App.openConfirmationPopUp("Are you sure you want to delete this entry?",
-        // "Entry has been deleted.", "Entry failed to delete.");
-        // } catch (IOException ex) {
-        // ex.printStackTrace();
-        // }
+        // Set current diary to refer
+        UserSession.getSession().setCurrentDiary(diary);
+        try {
+            // show a confimation pop up
+            App.openConfirmationPopUp("Confirm to delete this entry?",
+                    () -> diaryService.moveEntryToBin(UserSession.getSession().getCurrentDiary()));
+            mainMenuController.reloadContent("diary-history-page");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
     /***
