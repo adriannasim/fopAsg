@@ -74,30 +74,40 @@ public class DiaryService
         String diaryDateStr = fields[1].split("=")[1].replace("'", "").trim();
         String mood = fields[2].split("=")[1].replace("'", "").trim();
         String deletionDateStr = fields[3].split("=")[1].replace("'", "").trim();
-        String diaryContent = fields[4].split("=")[1].replaceFirst("'", "").replaceAll("'$", "").trim();
+        
+        //images
+        List<String> imagePaths = new ArrayList<>();
+        //loop to save images
+        for (String imagePath : fields[4].split("=")[1].replace("'","").trim().split(";"))
+        {
+            imagePaths.add(imagePath);
+        }
+
+        String diaryContent = fields[5].split("=")[1].replaceFirst("'", "").replaceAll("'$", "").trim();
 
         // Parse diaryDate
         LocalDateTime diaryDate = null;
-        LocalDate deletionDate = null;
 
         try {
             diaryDate = LocalDateTime.parse(diaryDateStr);
-            if (!deletionDateStr.equals("null")){
-                deletionDate = LocalDate.parse(deletionDateStr);
-            }
+
             
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         // Return a new Diary object
-        return new Diary(filename, diaryId, diaryTitle, diaryDate, diaryContent, Diary.Mood.valueOf(mood), deletionDate);
+        Diary diary = new Diary(filename, diaryId, diaryTitle, diaryDate, diaryContent, Diary.Mood.valueOf(mood));
+        diary.setDeletionDate(deletionDateStr.equals("null") ? null : LocalDate.parse(deletionDateStr));
+        diary.setImagePaths(imagePaths);
+
+        return diary;
     }
 
     //get diary by title (Search) TODO
 
     //create diary
-    public ServiceResult newDiaryEntry(String diaryTitle, LocalDateTime diaryDate, String diaryContent, Diary.Mood mood)
+    public ServiceResult newDiaryEntry(String diaryTitle, LocalDateTime diaryDate, String diaryContent, Diary.Mood mood, List<String> imagePaths)
     {
         if (diaryTitle == null || diaryDate == null || diaryContent == null || mood == null)
         {
@@ -113,7 +123,13 @@ public class DiaryService
                     fileIO.createFile(filename);   
                 }
 
-                fileIO.appendFile(filename, new Diary(filename, UUID.randomUUID().toString(), diaryTitle, diaryDate, diaryContent, mood));
+                Diary diary = new Diary(filename, UUID.randomUUID().toString(), diaryTitle, diaryDate, diaryContent, mood);
+                //add images if imagePaths is not empty
+                if (!imagePaths.isEmpty())
+                {
+                    diary.setImagePaths(imagePaths);
+                }
+                fileIO.appendFile(filename, diary);
                 
                 //done 
                 return new ServiceResult(true, null, "Diary entry created.");
@@ -130,7 +146,7 @@ public class DiaryService
     }
 
     //edit diary
-    public ServiceResult editDiaryEntry(String diaryId, String diaryTitle, LocalDateTime diaryDate, String diaryContent, Diary.Mood mood)
+    public ServiceResult editDiaryEntry(String diaryId, String diaryTitle, LocalDateTime diaryDate, String diaryContent, Diary.Mood mood, List<String> imagePaths)
     {
         
         if (diaryTitle == null || diaryDate == null || diaryContent == null || mood == null)
@@ -141,7 +157,13 @@ public class DiaryService
         {
             try 
             {
-                fileIO.editFile(filename, new Diary(filename, diaryId.toString(), diaryTitle, diaryDate, diaryContent, mood), diaryId);
+                Diary diary = new Diary(filename, diaryId, diaryTitle, diaryDate, diaryContent, mood);
+                //add images if imagePaths is not empty
+                if (!imagePaths.isEmpty())
+                {
+                    diary.setImagePaths(imagePaths);
+                }
+                fileIO.editFile(filename, diary, diaryId);
                 
                 //done
                 return new ServiceResult(true, null, "Diary entry edited.");
@@ -162,9 +184,10 @@ public class DiaryService
     {
         try 
         {
-            fileIO.editFile(filename, new Diary(filename, diaryEntryToBeDeleted.getDiaryId(), diaryEntryToBeDeleted.getDiaryTitle(), diaryEntryToBeDeleted.getDiaryDate(),
-                diaryEntryToBeDeleted.getDiaryContent(), diaryEntryToBeDeleted.getMood(), LocalDate.now()), diaryEntryToBeDeleted.getDiaryId()
-            );
+            //set deletion date to now
+            diaryEntryToBeDeleted.setDeletionDate(LocalDate.now());
+
+            fileIO.editFile(filename, diaryEntryToBeDeleted, diaryEntryToBeDeleted.getDiaryId());
             
             //done 
             return new ServiceResult(true, null, "Diary entry deleted successfully.");
@@ -184,9 +207,9 @@ public class DiaryService
     {
         try 
         {
-            fileIO.editFile(filename, new Diary(filename, diaryEntryToBeRestored.getDiaryId(), diaryEntryToBeRestored.getDiaryTitle(), diaryEntryToBeRestored.getDiaryDate(),
-                diaryEntryToBeRestored.getDiaryContent(), diaryEntryToBeRestored.getMood(), null), diaryEntryToBeRestored.getDiaryId()
-            );
+            diaryEntryToBeRestored.setDeletionDate(null);
+
+            fileIO.editFile(filename, diaryEntryToBeRestored, diaryEntryToBeRestored.getDiaryId());
             
             //done 
             return new ServiceResult(true, null, "Diary entry restored successfully.");
@@ -249,5 +272,10 @@ public class DiaryService
         {
             throw new RuntimeException(e);
         }
+    }
+
+    public void addOrRemove()
+    {
+        
     }
 }

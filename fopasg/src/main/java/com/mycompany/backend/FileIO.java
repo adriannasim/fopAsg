@@ -97,6 +97,9 @@ public class FileIO
         }
     }
 
+    //Add files (TODO)
+
+
     //Edit
     //use key to find which line to replace/edit
     public void editFile(String filename, Object dataToUpdate, String key) throws IOException, URISyntaxException
