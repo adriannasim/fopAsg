@@ -41,7 +41,7 @@
 
             <!-- ScrollPane with FlowPane for Diary Items -->
                 <ScrollPane fitToWidth="true" hbarPolicy="NEVER" layoutX="34.0" layoutY="142.0" prefHeight="300.0" prefWidth="645.0" vbarPolicy="AS_NEEDED">
-                    <FlowPane fx:id="diaryItemsFlowPane" alignment="TOP_LEFT" hgap="15.0" prefWidth="632.0" vgap="20.0" />
+                    <FlowPane fx:id="diariesFlowPane" alignment="TOP_LEFT" hgap="15.0" prefWidth="632.0" vgap="20.0" />
                 </ScrollPane>
                <!-- ScrollPane with FlowPane for Diary Items -->
                

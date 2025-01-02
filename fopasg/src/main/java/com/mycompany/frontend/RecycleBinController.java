@@ -1,84 +1,82 @@
 package com.mycompany.frontend;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 import javafx.scene.image.ImageView;
+import com.mycompany.backend.Diary;
+import com.mycompany.backend.DiaryService;
+import com.mycompany.backend.UserSession;
 
-/*** 
- * THIS CONTROLLER CLASS IS USED FOR diary-recycle-bin.fxml 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+
+/***
+ * THIS CONTROLLER CLASS IS USED FOR diary-recycle-bin.fxml
  * 
  ***/
 
-public class RecycleBinController extends SharedPaneCharacteristics{
+public class RecycleBinController extends SharedPaneCharacteristics {
 
-    /*** ELEMENTS WITH FX:ID  
+    /***
+     * ELEMENTS WITH FX:ID
      * 
-     * ***/
+     ***/
     @FXML
-    private FlowPane diaryItemsFlowPane;; // Reference to the FlowPane in diary-recycle-bin.fxml
+    private FlowPane diariesFlowPane; // Reference to the FlowPane in diary-recycle-bin.fxml
 
-
-
-    // Just for illustration purpose (MUST CHANGE!!!!!!!!!!!!!!!!!!)
-    // A class representing a diary item
-    static class DiaryItem {
-        String title;
-        String date;
-        String daysLeft;
-
-        DiaryItem(String title, String date, String daysLeft) {
-            this.title = title;
-            this.date = date;
-            this.daysLeft = daysLeft;
-        }
-    }
-
-
-    /*** INITILIZATION OF THE CONTROLLER
+    /***
+     * VARIABLES
      * 
-     * ***/
+     ***/
+    private DiaryService diaryService = new DiaryService(UserSession.getSession().getUsername());
+
+    /***
+     * INITILIZATION OF THE CONTROLLER
+     * 
+     ***/
     @FXML
     public void initialize() {
         // Inherit Super Class's initialize()
-        super.initialize(); 
-        
-        // Just for illustration purpose (MUST CHANGE!!!!!!!!!!!!!!!!!!!!!)
-        // Sample data for diary items
-        List<DiaryItem> diaryItems = new ArrayList<>();
-        diaryItems.add(new DiaryItem("Diary 1", "1 December 2024", "29 days left"));
-        diaryItems.add(new DiaryItem("Diary 2", "5 December 2024", "15 days left"));
-        diaryItems.add(new DiaryItem("Diary 3", "10 December 2024", "5 days left"));
-        diaryItems.add(new DiaryItem("Diary 4", "10 December 2024", "5 days left"));
-        diaryItems.add(new DiaryItem("Diary 1", "1 December 2024", "29 days left"));
-        diaryItems.add(new DiaryItem("Diary 2", "5 December 2024", "15 days left"));
-        diaryItems.add(new DiaryItem("Diary 3", "10 December 2024", "5 days left"));
-        diaryItems.add(new DiaryItem("Diary 4", "10 December 2024", "5 days left"));
-        diaryItems.add(new DiaryItem("Diary 1", "1 December 2024", "29 days left"));
-        diaryItems.add(new DiaryItem("Diary 2", "5 December 2024", "15 days left"));
-        diaryItems.add(new DiaryItem("Diary 3", "10 December 2024", "5 days left"));
-        diaryItems.add(new DiaryItem("Diary 4", "10 December 2024", "5 days left"));
-        diaryItems.add(new DiaryItem("Diary 1", "1 December 2024", "29 days left"));
-        diaryItems.add(new DiaryItem("Diary 2", "5 December 2024", "15 days left"));
-        diaryItems.add(new DiaryItem("Diary 3", "10 December 2024", "5 days left"));
-        diaryItems.add(new DiaryItem("Diary 4", "10 December 2024", "5 days left"));
+        super.initialize();
+
+        // Get user session
+        String sessionUsername = UserSession.getSession().getUsername();
+
+        // Get user diary
+        DiaryService diaryService = new DiaryService(sessionUsername);
+        List<Diary> diaries = diaryService.getAllDiary();
+        // filter deleted diries
+        diaries = diaries.stream().filter(diary -> diary.getDeletionDate() != null).collect(Collectors.toList());
+
+        // If there is no diary entry
+        if (diaries.isEmpty()) {
+            Text emptyMsg = new Text();
+            emptyMsg.setText("No diary entry is present.");
+            diariesFlowPane.getChildren().add(emptyMsg);
+        }
+
 
         // Loop through the list and create a Pane for each diary item
-        for (DiaryItem item : diaryItems) {
-            Pane diaryItemPane = createDiaryItemPane(item);
-            diaryItemsFlowPane.getChildren().add(diaryItemPane); // Add the pane to the FlowPane
+        for (Diary item : diaries) {
+            Pane diaryPane = createDiaryPane(item);
+            diariesFlowPane.getChildren().add(diaryPane); // Add the pane to the FlowPane
         }
     }
 
-    /*** METHOD TO CREATE DIARYITEMPANE FOR EACH OF THE ENTRIES
+    /***
+     * METHOD TO CREATE DIARYITEMPANE FOR EACH OF THE ENTRIES
      * 
-     * ***/
-    private Pane createDiaryItemPane(DiaryItem item) {
+     ***/
+    private Pane createDiaryPane(Diary diary) {
         Pane pane = new Pane();
         pane.setPrefSize(195.0, 65.0);
         pane.setStyle("-fx-background-color: #F1F1F1;");
@@ -92,7 +90,7 @@ public class RecycleBinController extends SharedPaneCharacteristics{
         imageView.setLayoutY(15.0);
 
         // Title Label
-        Label titleLabel = new Label(item.title);
+        Label titleLabel = new Label(diary.getDiaryTitle());
         titleLabel.setLayoutX(74.0);
         titleLabel.setLayoutY(23.0);
         titleLabel.setStyle("-fx-background-color: #F1F1F1;");
@@ -100,7 +98,8 @@ public class RecycleBinController extends SharedPaneCharacteristics{
         titleLabel.setFont(javafx.scene.text.Font.font("Roboto Bold", 15));
 
         // Days Left Label
-        Label daysLeftLabel = new Label(item.daysLeft);
+        Label daysLeftLabel = new Label(
+                (30 - ChronoUnit.DAYS.between(diary.getDeletionDate(), LocalDate.now())) + " day(s) left");
         daysLeftLabel.setLayoutX(140.0);
         daysLeftLabel.setLayoutY(45.0);
         daysLeftLabel.setStyle("-fx-background-color: #F1F1F1;");
@@ -108,7 +107,8 @@ public class RecycleBinController extends SharedPaneCharacteristics{
         daysLeftLabel.setFont(javafx.scene.text.Font.font("Roboto Bold", 8));
 
         // Date Label
-        Label dateLabel = new Label(item.date);
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd MMMM yyyy");
+        Label dateLabel = new Label(diary.getDiaryDate().format(dateFormatter));
         dateLabel.setLayoutX(120.0);
         dateLabel.setLayoutY(10.0);
         dateLabel.setStyle("-fx-background-color: #F1F1F1;");
@@ -158,56 +158,66 @@ public class RecycleBinController extends SharedPaneCharacteristics{
 
         // Event handler for restore icon
         restoreIcon.setOnMouseClicked(e -> {
-            // Perform the restore action here 
-            handleRestore();
+            // Perform the restore action here
+            handleRestore(diary);
         });
 
         // Event handler for delete icon
         deleteIcon.setOnMouseClicked(e -> {
             // Perform the delete action here
-            handleDelete();
+            handleDelete(diary);
         });
 
         // Event handler for view icon
         viewIcon.setOnMouseClicked(e -> {
-            // Perform the view action here 
-            handleView(); 
+            // Perform the view action here
+            handleView(diary);
         });
 
         return pane;
     }
 
-    /*** METHOD TO HANDLE THE DELETE ACTION
+    /***
+     * METHOD TO HANDLE THE DELETE ACTION
      * 
-     * ***/
-    private void handleDelete() {
-
-        // Show a delete confirmation page
+     ***/
+    private void handleDelete(Diary diary) {
+        // Set current diary to refer
+        UserSession.getSession().setCurrentDiary(diary);
         try {
-            App.openConfirmationPopUp("Are you sure you want to permanently delete this entry?", "Entry has been deleted permanently.", "Entry failed to delete.");
+            // show a confimation pop up
+            App.openConfirmationPopUp("Confirm to delete this entry permanently?",
+                    () -> diaryService.deleteDiaryEntry(diary.getDiaryId()));
+            mainMenuController.reloadContent("diary-recycle-bin");
         } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
 
-    /*** METHOD TO HANDLE THE RESTORE ACTION
+    /***
+     * METHOD TO HANDLE THE RESTORE ACTION
      * 
-     * ***/
-    private void handleRestore() {
-
-        // Show a restore confirmation page
+     ***/
+    private void handleRestore(Diary diary) {
+        // Set current diary to refer
+        UserSession.getSession().setCurrentDiary(diary);
         try {
-            App.openConfirmationPopUp("Do you confirm to restore this entry?", "Entry has been restored.", "Entry failed to restore.");
+            // show a confimation pop up
+            App.openConfirmationPopUp("Confirm to retore this entry?",
+                    () -> diaryService.restoreDiaryEntry(diary));
+            mainMenuController.reloadContent("diary-recycle-bin");
         } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
 
-    /*** METHOD TO HANDLE THE VIEW ACTION
+    /***
+     * METHOD TO HANDLE THE VIEW ACTION
      * 
-     * ***/
-    private void handleView() {
-
+     ***/
+    private void handleView(Diary diary) {
+        // Set current diary to refer
+        UserSession.getSession().setCurrentDiary(diary);
         // Show a view page
         mainMenuController.loadNewContent("diary-view-page");
     }

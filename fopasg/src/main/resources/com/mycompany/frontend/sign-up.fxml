@@ -3,7 +3,6 @@
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
@@ -12,21 +11,19 @@
 
 <Pane style="-fx-background-radius: 20; -fx-background-color: #ffffff;" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.frontend.SignupController">
    <children>
-      <AnchorPane id="AnchorPane" prefHeight="440.0" prefWidth="303.0" style="-fx-background-radius: 20px;">
+      <AnchorPane fx:id="anchorPane" prefHeight="440.0" prefWidth="303.0" style="-fx-background-radius: 20px;">
          <children>
             <Label layoutX="40.0" layoutY="40.0" prefHeight="35.0" prefWidth="138.0" text="SIGN UP">
                <font>
                   <Font name="System Bold" size="24.0" />
                </font>
             </Label>
-            <PasswordField fx:id="password" layoutX="40.0" layoutY="243.0" prefHeight="26.0" prefWidth="219.0" style="-fx-background-color: #D9D9D9;" />
-            <Text styleClass="errorMsg" fx:id="passwordMsg" layoutX="47.0" layoutY="281.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-background-color: #ffffff;" wrappingWidth="208.0">
+            <Text fx:id="passwordMsg" layoutX="47.0" layoutY="281.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-background-color: #ffffff;" styleClass="errorMsg" wrappingWidth="208.0">
                <font>
                   <Font name="Roboto Bold" size="10.0" />
                </font>
             </Text>
-            <PasswordField fx:id="confirmPassword" layoutX="40.0" layoutY="305.0" prefHeight="26.0" prefWidth="219.0" style="-fx-background-color: #D9D9D9;" />
-            <Text styleClass="errorMsg" fx:id="confirmPasswordMsg" layoutX="47.0" layoutY="343.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-background-color: #ffffff;" wrappingWidth="208.0">
+            <Text fx:id="confirmPasswordMsg" layoutX="47.0" layoutY="343.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-background-color: #ffffff;" styleClass="errorMsg" wrappingWidth="208.0">
                <font>
                   <Font name="Roboto Bold" size="10.0" />
                </font>
@@ -42,7 +39,7 @@
                </font>
             </Label>
             <TextField fx:id="email" layoutX="40.0" layoutY="183.0" prefHeight="27.0" prefWidth="219.0" style="-fx-background-color: #D9D9D9;" />
-            <Text styleClass="errorMsg" fx:id="emailMsg" layoutX="47.0" layoutY="221.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-background-color: #ffffff;" wrappingWidth="208.0">
+            <Text fx:id="emailMsg" layoutX="47.0" layoutY="221.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-background-color: #ffffff;" styleClass="errorMsg" wrappingWidth="208.0">
                <font>
                   <Font name="Roboto Bold" size="10.0" />
                </font>
@@ -52,13 +49,13 @@
                   <Font name="System Bold" size="11.0" />
                </font>
             </Label>
-            <TextField fx:id="username" layoutX="40.0" layoutY="126.0" prefHeight="27.0" prefWidth="219.0" style="-fx-background-color: #D9D9D9;" />
-            <Text styleClass="errorMsg" fx:id="usernameMsg" layoutX="47.0" layoutY="162.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-background-color: #ffffff;" wrappingWidth="208.0">
+            <TextField fx:id="username" layoutX="40.0" layoutY="124.0" prefHeight="27.0" prefWidth="219.0" style="-fx-background-color: #D9D9D9;" />
+            <Text fx:id="usernameMsg" layoutX="47.0" layoutY="162.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-background-color: #ffffff;" styleClass="errorMsg" wrappingWidth="208.0">
                <font>
                   <Font name="Roboto Bold" size="10.0" />
                </font>
             </Text>
-            <Label layoutX="40.0" layoutY="106.0" text="Username">
+            <Label layoutX="40.0" layoutY="104.0" text="Username">
                <font>
                   <Font name="System Bold" size="11.0" />
                </font>
