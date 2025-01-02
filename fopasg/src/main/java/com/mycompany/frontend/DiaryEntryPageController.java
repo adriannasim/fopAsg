@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.control.ColorPicker;
@@ -29,12 +30,19 @@ import com.gluonhq.richtextarea.model.Document;
 import com.gluonhq.richtextarea.model.ParagraphDecoration;
 import com.gluonhq.richtextarea.model.TextDecoration;
 
+import com.mycompany.backend.Diary;
+import com.mycompany.backend.DiaryService;
+import com.mycompany.backend.ServiceResult;
+import com.mycompany.backend.UserSession;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import static com.gluonhq.richtextarea.model.ParagraphDecoration.GraphicType.BULLETED_LIST;
 import static com.gluonhq.richtextarea.model.ParagraphDecoration.GraphicType.NONE;
@@ -55,6 +63,24 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
          * ELEMENTS WITH FX:ID.
          * 
          ***/
+        @FXML
+        private Label date; // Used to display the current date
+
+        @FXML
+        private Label day; // Used to display the current day of week
+
+        @FXML
+        private Label time; // used to display the current time
+
+        @FXML
+        private ImageView moodIcon; // used to display the selected mood icon
+
+        @FXML
+        private Label moodLabel; // Used to display the selected mood label
+
+        @FXML
+        private TextField title; // Used to hold title
+
         @FXML
         private Pane textarea; // Used to hold the rich text area
 
@@ -107,7 +133,8 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
         private Text titleMsg; // Used to store the title error message, use titleMsg.setText() to set message
 
         @FXML
-        private Text contentMsg; // Used to store the content error message, use contentMsg.setText() to set message
+        private Text contentMsg; // Used to store the content error message, use contentMsg.setText() to set
+                                 // message
 
         /***
          * VARIABLES.
@@ -139,7 +166,11 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
         // later
         Document document = new Document(text, List.of(decorationModel), text.length());
 
-        
+        // Used to control the stop of timeNow
+        private volatile boolean stop = false;
+
+        private String mood;
+
         /***
          * INITILIZATION OF THE CONTROLLER.
          * 
@@ -150,15 +181,128 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
 
                 // Place the editor (rich text area) into Pane textarea
                 textarea.getChildren().add(editor);
+
                 // Set the editor same width and height with the textarea container
                 editor.prefWidthProperty().bind(textarea.widthProperty());
                 editor.prefHeightProperty().bind(textarea.heightProperty());
+
+                // Used to define whether this is ADD NEW or EDIT page by retrieving diary from
+                // currentDiary
+                // If no currentDiary -> ADD NEW
+                // If has currentDiary -> EDIT
+                Diary diary = UserSession.getSession().getCurrentDiary();
+
                 // Link the document to the editor
-                editor.getActionFactory().open(document).execute(new ActionEvent());
+                // If there is a diary to refer to
+                if (diary != null) {
+                        try {
+                                 // Get the mood
+                                 mood = diary.getMood().toString();
+
+                                 // Set the mood
+                                 setMoodLabelAndIcon();
+
+                                 moodIcon.setOnMouseClicked(e -> {
+                                         try {
+                                                 mood = App.openMoodIndicator();
+                                                 setMoodLabelAndIcon();
+                                         } catch (IOException ex) {
+                                                 ex.printStackTrace();
+                                         }
+                                 });
+
+                                 moodLabel.setOnMouseClicked(e -> {
+                                         try {
+                                                 mood = App.openMoodIndicator();
+                                                 setMoodLabelAndIcon();
+                                         } catch (IOException ex) {
+                                                 ex.printStackTrace();
+                                         }
+                                 });
+
+                                // Linked to the existing diary
+                                editor.getActionFactory()
+                                                .open(RichTextCSVExporter.importFromCSV(diary.getDiaryContent()))
+                                                .execute(new ActionEvent());
+
+                                // Set title
+                                title.setText(diary.getDiaryTitle());
+
+                                // Set Date
+                                DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd MMMM yyyy");
+                                date.setText(diary.getDiaryDate().format(dateFormatter));
+
+                                // Set Day of Week
+                                String formattedDay = diary.getDiaryDate().getDayOfWeek().toString().toLowerCase();
+                                formattedDay = Character.toUpperCase(formattedDay.charAt(0))
+                                                + formattedDay.substring(1);
+                                day.setText(formattedDay);
+
+                                // Set time
+                                DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm a");
+                                time.setText(diary.getDiaryDate().format(timeFormatter));
+
+                        } catch (IOException ex) {
+                                ex.printStackTrace();
+                        }
+                }
+                // If there is no diary to refer to
+                else {
+                        // Open the mood indicator page when user enter (Call this after enter main
+                        // menu)
+                        // CAN ADD LOGIC of when it should display here...
+                        Platform.runLater(() -> {
+                                try {
+                                        // Get the mood
+                                        mood = App.openMoodIndicator();
+
+                                        // Set the mood
+                                        setMoodLabelAndIcon();
+
+                                        moodIcon.setOnMouseClicked(e -> {
+                                                try {
+                                                        mood = App.openMoodIndicator();
+                                                        setMoodLabelAndIcon();
+                                                } catch (IOException ex) {
+                                                        ex.printStackTrace();
+                                                }
+                                        });
+
+                                        moodLabel.setOnMouseClicked(e -> {
+                                                try {
+                                                        mood = App.openMoodIndicator();
+                                                        setMoodLabelAndIcon();
+                                                } catch (IOException ex) {
+                                                        ex.printStackTrace();
+                                                }
+                                        });
+                                } catch (IOException ex) {
+                                        ex.printStackTrace();
+                                }
+                        });
+
+                        // link to empty diary
+                        editor.getActionFactory().open(document).execute(new ActionEvent());
+                        editor.setPromptText("Start typing your diary here.");
+
+                        // Set Date
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy");
+                        date.setText(LocalDateTime.now().format(formatter));
+
+                        // Set Day of Week
+                        String formattedDay = LocalDateTime.now().getDayOfWeek().toString().toLowerCase();
+                        formattedDay = Character.toUpperCase(formattedDay.charAt(0)) + formattedDay.substring(1);
+                        day.setText(formattedDay);
+
+                        // Set time
+                        timeNow();
+                }
+
                 // Make sure the document is updated whenever user has entered something
                 editor.autoSaveProperty().set(true);
 
                 /*** STEPS TO HANDLE CONTENTS FORMATTING ***/
+
                 // Steps to handle font family change
                 fontFamilyComboBox.setEditable(true);
                 fontFamilyComboBox.getItems().setAll(Font.getFamilies());
@@ -173,6 +317,7 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
                                 .asDoubleStream().boxed().collect(Collectors.toList()));
                 new TextDecorateAction<>(editor, fontSizeComboBox.valueProperty(), TextDecoration::getFontSize,
                                 (builder, a) -> builder.fontSize(a).build());
+
                 fontSizeComboBox.setConverter(new StringConverter<>() {
                         @Override
                         public String toString(Double aDouble) {
@@ -279,16 +424,97 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
 
                 // When user want to save the diary content
                 submitBtn.setOnMouseClicked(e -> {
-                        Platform.runLater(() -> {
-                                // Check if the document exists
-                                Document linkedDocument = editor.getDocument();
-                                if (linkedDocument != null) {
-                                        // Method below is provided at the end of the page (CAN MODIFY OR CHANGE)
-                                        saveDocument(linkedDocument);
-                                } else {
-                                        // Error handling here...
+                        title.getStyleClass().remove("error");
+                        titleMsg.setText("");
+                        textarea.getStyleClass().remove("error");
+                        contentMsg.setText("");
+
+                        if (title.getText() != null && !title.getText().equals("") &&
+                                        editor.getTextLength() != 0) {
+                                Platform.runLater(() -> {
+                                        // Check if the document exists
+                                        Document linkedDocument = editor.getDocument();
+                                        if (linkedDocument != null) {
+                                                String username = UserSession.getSession().getUsername();
+                                                // If this is a new entry
+                                                if (diary == null) {
+                                                        // Try insert the diary
+                                                        try {
+                                                                DiaryService diaryService = new DiaryService(username);
+                                                                String diaryContent = RichTextCSVExporter
+                                                                                .exportToCSV(editor);
+                                                                ServiceResult result = diaryService.newDiaryEntry(
+                                                                                title.getText(),
+                                                                                LocalDateTime.now(), diaryContent,
+                                                                                Diary.Mood.valueOf(mood));
+
+                                                                if (result.isSuccessful()) {
+                                                                        App.openPopUpAtTop("success-message",
+                                                                                        result.getReturnMessage());
+                                                                        mainMenuController.loadNewContent(
+                                                                                        "diary-history-page");
+                                                                } else {
+                                                                        App.openPopUpAtTop("error-message",
+                                                                                        result.getReturnMessage());
+                                                                }
+                                                        } catch (IOException ex) {
+                                                                ex.printStackTrace();
+                                                        }
+                                                }
+                                                // If the diary existed
+                                                else {
+                                                        // Try update the diary
+                                                        try {
+                                                                DiaryService diaryService = new DiaryService(username);
+                                                                String diaryContent = RichTextCSVExporter
+                                                                                .exportToCSV(editor);
+                                                                ServiceResult result = diaryService.editDiaryEntry(
+                                                                                diary.getDiaryId(), title.getText(),
+                                                                                diary.getDiaryDate(), diaryContent,
+                                                                                Diary.Mood.valueOf(mood));
+                                                                if (result.isSuccessful()) {
+                                                                        App.openPopUpAtTop("success-message",
+                                                                                        result.getReturnMessage());
+                                                                } else {
+                                                                        App.openPopUpAtTop("error-message",
+                                                                                        result.getReturnMessage());
+                                                                }
+                                                        } catch (IOException ex) {
+                                                                ex.printStackTrace();
+                                                        }
+
+                                                }
+                                        } else {
+                                                // Error handling here...
+                                        }
+                                });
+                        } else {
+                                if (title.getText() == null || title.getText().equals("")) {
+                                        title.getStyleClass().add("error");
+                                        titleMsg.setText("Title cannot be empty.");
                                 }
-                        });
+
+                                if (editor.getTextLength() == 0) {
+                                        textarea.getStyleClass().add("error");
+                                        contentMsg.setText("Content cannot be empty.");
+                                }
+
+                                // If this is a new entry
+                                if (diary == null) {
+                                        try {
+                                                App.openPopUpAtTop("error-message", "Failed to add this diary.");
+                                        } catch (IOException ex) {
+                                                ex.printStackTrace();
+                                        }
+                                } else {
+                                        try {
+                                                App.openPopUpAtTop("error-message", "Failed to update this diary.");
+                                        } catch (IOException ex) {
+                                                ex.printStackTrace();
+                                        }
+                                }
+
+                        }
                 });
 
                 // When user want to add image, then will display the images
@@ -386,14 +612,51 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
         }
 
         /***
-         * METHOD TO SAVE DOCUMENT. (CAN CHANGE OR MODIFY)
+         * METHOD TO GET CURRENT TIME
          * 
          ***/
-        private void saveDocument(Document document) {
-                try {
-                        RichTextCSVExporter.exportToCSV(editor, "data.csv"); // Filename can change also
-                } catch (IOException e) {
-                        e.printStackTrace();
+        private void timeNow() {
+                Thread thread = new Thread(() -> {
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a");
+                        while (!stop) {
+                                try {
+                                        Thread.sleep(1000);
+                                } catch (Exception ex) {
+                                        ex.printStackTrace();
+                                }
+
+                                final String timenow = LocalDateTime.now().format(formatter);
+                                Platform.runLater(() -> {
+                                        time.setText(timenow);
+                                });
+                        }
+                });
+                thread.start();
+        }
+
+        /***
+         * METHOD TO SET MOOD LABEL AND ICON
+         * 
+         ***/
+        private void setMoodLabelAndIcon() {
+                // Set the mood
+                moodLabel.setText(mood);
+                switch (mood) {
+                        case "HAPPY":
+                                moodIcon.setImage(new Image(getClass()
+                                                .getResourceAsStream(
+                                                                "/com/mycompany/frontend/images/Happy-hover (mood).png")));
+                                break;
+                        case "NORMAL":
+                                moodIcon.setImage(new Image(getClass()
+                                                .getResourceAsStream(
+                                                                "/com/mycompany/frontend/images/Neutral-hover (mood).png")));
+                                break;
+                        case "SAD":
+                                moodIcon.setImage(new Image(getClass()
+                                                .getResourceAsStream(
+                                                                "/com/mycompany/frontend/images/Sad-hover (mood).png")));
+                                break;
                 }
         }
 

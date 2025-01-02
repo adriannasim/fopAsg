@@ -7,6 +7,7 @@ public class UserSession
 {
     private static UserSession session;
     private final StringProperty username = new SimpleStringProperty();
+    private Diary currentDiary;
 
     private UserSession() {}
 
@@ -32,6 +33,14 @@ public class UserSession
     public StringProperty usernameProperty() 
     {
         return username;
+    }
+
+    public void setCurrentDiary(Diary diary){
+        this.currentDiary = diary;
+    }
+
+    public Diary getCurrentDiary(){
+        return this.currentDiary;
     }
 
     public void clearSession() 

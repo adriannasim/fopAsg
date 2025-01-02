@@ -30,23 +30,23 @@
                      <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Label layoutX="37.0" layoutY="63.0" minWidth="-Infinity" style="-fx-background-color: #ffffff;" text="01 December 2024" textFill="#6a669d">
+            <Label fx:id="date" layoutX="37.0" layoutY="63.0" minWidth="-Infinity" style="-fx-background-color: #ffffff;" textFill="#6a669d">
                <font>
                   <Font name="Roboto Bold" size="20.0" />
                </font>
             </Label>
-            <Label layoutX="37.0" layoutY="102.0" style="-fx-background-color: #ffffff;" text="Sunday" textFill="#8f8f8f">
+            <Label fx:id="day" layoutX="37.0" layoutY="102.0" style="-fx-background-color: #ffffff;" textFill="#8f8f8f">
                <font>
                   <Font name="Roboto Bold" size="15.0" />
                </font>
             </Label>
-            <Label layoutX="622.0" layoutY="95.0" style="-fx-background-color: #ffffff;" text="10:15 PM" textFill="#8f8f8f">
+            <Label fx:id="time" layoutX="622.0" layoutY="95.0" style="-fx-background-color: #ffffff;" textFill="#8f8f8f">
                <font>
                   <Font name="Roboto Bold" size="12.0" />
                </font>
             </Label>
             <!-- Add styleClass="error" to have the red border effect -->
-            <TextField layoutX="37.0" layoutY="138.0" prefHeight="40.0" prefWidth="638.0" promptText="Click here to enter the title" style="-fx-background-color: #F1F1F1; -fx-background-radius: 0px;">
+            <TextField fx:id="title" layoutX="37.0" layoutY="138.0" prefHeight="40.0" prefWidth="638.0" promptText="Click here to enter the title" style="-fx-background-color: #F1F1F1; -fx-background-radius: 0px;">
                <font>
                   <Font name="Roboto Bold" size="15.0" />
                </font>
@@ -55,7 +55,7 @@
                </padding>
             </TextField>
             <!-- Below is the error message. -->
-            <Text fx:id="titleMsg" styleClass="errorMsg" layoutX="36.0" layoutY="188.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="101.376953125">
+            <Text fx:id="titleMsg" layoutX="36.0" layoutY="188.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="errorMsg" wrappingWidth="101.376953125">
                <font>
                   <Font name="Roboto Black" size="10.0" />
                </font>
@@ -68,7 +68,7 @@
                         <Pane id="pt" fx:id="textarea" prefHeight="300.0" prefWidth="638.0">  
                         </Pane>
                         <!-- Below is the error message. -->
-                        <Text fx:id="contentMsg" styleClass="errorMsg" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="118.26585388183594">
+                        <Text fx:id="contentMsg" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="errorMsg" wrappingWidth="118.26585388183594">
                            <font>
                               <Font name="Roboto Black" size="10.0" />
                            </font>
@@ -184,6 +184,14 @@
                   <Line endX="12.0" layoutX="515.0" layoutY="20.0" rotate="90.0" startX="-10.0" stroke="#8f8f8f" strokeWidth="0.5" />
                </children>
             </Pane>
+            <ImageView fx:id="moodIcon" fitHeight="25.0" fitWidth="26.0" layoutX="600.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></ImageView>
+            <Label fx:id="moodLabel" layoutX="633.0" layoutY="34.0" prefHeight="23.0" prefWidth="51.0">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></Label>
          </children>
       </Pane>
    </children>

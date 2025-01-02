@@ -111,7 +111,8 @@ public class PopUpBoxController {
         stage.close();
         
         //Get the result of the operation
-        success = (boolean) serviceOperation.get().getReturnObject();
+        // success = (boolean) serviceOperation.get().getReturnObject();
+        success = (boolean) serviceOperation.get().isSuccessful();
 
         if (success){
             filename = "success-message";

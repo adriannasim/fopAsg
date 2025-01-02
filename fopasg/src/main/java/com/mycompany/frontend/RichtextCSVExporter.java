@@ -7,12 +7,9 @@ import com.gluonhq.richtextarea.model.Decoration;
 import com.gluonhq.richtextarea.model.TextDecoration;
 import com.gluonhq.richtextarea.model.ParagraphDecoration.GraphicType;
 import com.gluonhq.richtextarea.model.ParagraphDecoration;
+import com.gluonhq.richtextarea.model.TableDecoration;
 
 import java.io.IOException;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.FileReader;
-import java.io.BufferedReader;
 
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
@@ -41,12 +38,9 @@ class RichTextCSVExporter {
      * METHOD TO EXPORT THE RICH TEXT AREA CONTENT INTO CSV.
      * 
      ***/
-    public static void exportToCSV(RichTextArea richTextArea, String filePath) throws IOException {
+    public static String exportToCSV(RichTextArea richTextArea) throws IOException {
         Document document = richTextArea.getDocument();
         StringBuilder csvContent = new StringBuilder();
-
-        // Add CSV headers
-        csvContent.append("Text,Decorations,ParagraphDecorations\n");
 
         // Iterate through the document content
         String text = document.getText();
@@ -69,15 +63,13 @@ class RichTextCSVExporter {
             // Add to content drafted
             csvContent.append(escapedSegment).append(",")
                     .append(textDecorations).append(",")
-                    .append(paragraphDecorations).append("\n");
+                    .append(paragraphDecorations).append("###SPLIT###");
 
             currentPos += decoration.getLength();
         }
 
-        // Write the drafted content to file using BufferedWriter
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-            writer.write(csvContent.toString());
-        }
+        // return the formatted contents
+        return csvContent.toString();
     }
 
     /***
@@ -127,12 +119,12 @@ class RichTextCSVExporter {
                         .append(DECORATION_DELIMITER);
             }
             // Strikethrough text
-            if (textDecoration.isStrikethrough()) {
+            if (textDecoration.isStrikethrough() != null) {
                 encoded.append("strikethrough:").append(textDecoration.isStrikethrough())
                         .append(DECORATION_DELIMITER);
             }
             // Underlined text
-            if (textDecoration.isUnderline()) {
+            if (textDecoration.isUnderline() != null) {
                 encoded.append("underline:").append(textDecoration.isUnderline())
                         .append(DECORATION_DELIMITER);
             }
@@ -186,38 +178,38 @@ class RichTextCSVExporter {
      * - Return the Document.
      * 
      ***/
-    public static Document importFromCSV(String filePath) throws IOException {
+    public static Document importFromCSV(String contents) throws IOException {
 
         Document document = new Document();
 
-        // Read from CSV
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+        String[] line = contents.split("###SPLIT###");
 
-            // Skip the header
-            String line = reader.readLine();
+        for (int i = 0; i < line.length; i++) {
+            String[] columns = splitCSVLine(line[i]);
 
-            while ((line = reader.readLine()) != null) {
-                String[] columns = splitCSVLine(line);
-
-                // Handle case where there are not enough columns (means error occurs)
-                if (columns.length < 3) {
-                    continue;
-                }
-
-                // Assuming the CSV columns: Text, Decorations, ParagraphDecorations
-                String text = unescapeCSV(columns[0]);
-                String decorations = columns[1];
-                String paragraphDecorations = columns[2];
-
-                // Decode the decorations
-                TextDecoration textDecoration = decodeTextDecorations(decorations);
-                ParagraphDecoration paragraphDecoration = decodeParagraphDecorations(
-                        paragraphDecorations);
-
-                // Append the text and decorations to the RichTextArea
-                document = appendTextToDocument(document, text, textDecoration, paragraphDecoration);
+            // Handle case where there are not enough columns (means error occurs)
+            if (columns.length < 3) {
+                continue;
             }
+
+            // Assuming the CSV columns: Text, Decorations, ParagraphDecorations
+            String text = unescapeCSV(columns[0]);
+            String decorations = columns[1];
+            String paragraphDecorations = columns[2];
+
+            // Decode the decorations
+            TextDecoration textDecoration = (decorations != null && !decorations.isEmpty())
+                    ? decodeTextDecorations(decorations)
+                    : TextDecoration.builder().presets().build();
+
+            ParagraphDecoration paragraphDecoration = (paragraphDecorations != null && !paragraphDecorations.isEmpty())
+                    ? decodeParagraphDecorations(paragraphDecorations)
+                    : ParagraphDecoration.builder().presets().build();
+
+            // Append the text and decorations to the RichTextArea
+            document = appendTextToDocument(document, text, textDecoration, paragraphDecoration);
         }
+
         return document;
     }
 
@@ -297,12 +289,16 @@ class RichTextCSVExporter {
             else if (part.startsWith("strikethrough:")) {
                 if (part.substring(14).equals("true")) {
                     builder.strikethrough(true);
+                } else {
+                    builder.strikethrough(false);
                 }
             }
             // Retrieve the underline
             else if (part.startsWith("underline:")) {
                 if (part.substring(10).equals("true")) {
                     builder.underline(true);
+                } else {
+                    builder.underline(false);
                 }
             }
         }
@@ -344,6 +340,7 @@ class RichTextCSVExporter {
             builder.rightInset(0.0);
             builder.bottomInset(0.0);
             builder.leftInset(0.0);
+            builder.tableDecoration(new TableDecoration());
         }
 
         return builder.build();
