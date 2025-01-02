@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import org.junit.After;
 import org.junit.Before;
@@ -64,7 +64,7 @@ public class DiaryServiceTests
         DiaryService diaryService = new DiaryService((String) result.getReturnObject());
 
         //check if the result of a new diary entry returns true (means operation successful)
-        assertTrue(diaryService.newDiaryEntry("Test Diary Title", LocalDateTime.now(), "Today I am Happy.", Diary.Mood.HAPPY).isSuccessful());
+        assertTrue(diaryService.newDiaryEntry("Test Diary Title", LocalDate.now(), "Today I am Happy.", Diary.Mood.HAPPY).isSuccessful());
   
         //TODO assertEquals using search 
     }

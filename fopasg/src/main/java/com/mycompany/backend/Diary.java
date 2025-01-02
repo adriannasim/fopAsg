@@ -1,6 +1,6 @@
 package com.mycompany.backend;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class Diary 
 {
@@ -9,18 +9,19 @@ public class Diary
         HAPPY, SAD, NORMAL;
     }
     
-
     private String username;
     private String diaryId;
     private String diaryTitle;
-    private LocalDateTime diaryDate;
+    private LocalDate diaryDate;
     private String diaryContent;
-    private Mood mood; 
+    private Mood mood;
+    private LocalDate deletionDate;
 
     //constructors
     public Diary() {}
 
-    public Diary(String username, String diaryId, String diaryTitle, LocalDateTime diaryDate, String diaryContent, Mood mood)
+    //not deleted
+    public Diary(String username, String diaryId, String diaryTitle, LocalDate diaryDate, String diaryContent, Mood mood)
     {   
         this.username = username;
         this.diaryId = diaryId;
@@ -28,10 +29,15 @@ public class Diary
         this.diaryDate = diaryDate;
         this.diaryContent = diaryContent;
         this.mood = mood;
-
+        this.deletionDate = null;
     }
 
-    
+    //deleted
+    public Diary(String username, String diaryId, String diaryTitle, LocalDate diaryDate, String diaryContent, Mood mood, LocalDate deletionDate)
+    {   
+        this(username, diaryId, diaryTitle, diaryDate, diaryContent, mood);
+        this.deletionDate = deletionDate;
+    }
 
     //getter
     public String getUsername()
@@ -49,7 +55,7 @@ public class Diary
         return diaryTitle;
     }
 
-    public LocalDateTime getDiaryDate()
+    public LocalDate getDiaryDate()
     {
         return diaryDate;
     }
@@ -64,13 +70,18 @@ public class Diary
         return mood;
     }
 
+    public LocalDate getDeletionDate() 
+    {
+        return deletionDate;
+    }
+
     //setter
     public void setDiaryTitle(String diaryTitle)
     {
         this.diaryTitle = diaryTitle;
     }
 
-    public void setDiaryDate(LocalDateTime diaryDate)
+    public void setDiaryDate(LocalDate diaryDate)
     {
         this.diaryDate = diaryDate;
     }
@@ -85,5 +96,15 @@ public class Diary
         this.mood = mood;
     }
 
+    public void setDeletionDate(LocalDate deletionDate) 
+    {
+        this.deletionDate = deletionDate;
+    }
+
+    //to string
+    public String toString()
+    {
+        return diaryId + "," + diaryTitle + "," + diaryDate + "," + diaryContent + "," + mood + "," + (deletionDate == null ? "null" : deletionDate);
+    }
 }
     
