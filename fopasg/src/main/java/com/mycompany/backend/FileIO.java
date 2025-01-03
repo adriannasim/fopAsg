@@ -24,6 +24,24 @@ public class FileIO
         file.createNewFile();
     }
 
+    //Create folder
+    public void createFolder(String folderName) throws IOException
+    {
+        File folder;
+        if (folderName.toLowerCase().contains("test"))
+        {
+            folder = new File((System.getProperty("user.dir").contains("fopasg") ? "" : "fopasg/") + "src/test/resources/" + folderName);
+        }
+        else
+        {
+            folder = new File((System.getProperty("user.dir").contains("fopasg") ? "" : "fopasg/") + "src/main/resources/" + folderName);
+        }
+        System.out.println("Attempting to create folder at: " + folder.getAbsolutePath());
+        
+        //create the folder
+        folder.mkdir();
+    }
+
     //Load file
     public File loadFile(String filename) throws URISyntaxException, FileNotFoundException
     {
@@ -38,6 +56,41 @@ public class FileIO
         }
 
         return file;
+
+        // ClassLoader classLoader = getClass().getClassLoader();
+        // URL resource = classLoader.getResource(filename);
+        // if (resource == null) 
+        // {
+        //     throw new FileNotFoundException("File not found: " + filename);
+        // }
+        // return new File(resource.toURI());
+    }
+
+    //Load files
+    public List<File> loadFiles(String folderName, String key) throws URISyntaxException, FileNotFoundException
+    {
+        List<File> files = new ArrayList<>();
+        File filePath;
+
+        if (folderName.toLowerCase().contains("test"))
+        {
+            filePath = new File((System.getProperty("user.dir").contains("fopasg") ? "" : "fopasg/") + "src/test/resources/" + folderName);
+        }
+        else
+        {
+            filePath = new File((System.getProperty("user.dir").contains("fopasg") ? "" : "fopasg/") + "src/main/resources/" + folderName);
+        }
+
+        //get files that matches the key
+        for (File file : filePath.listFiles())
+        {
+            if (file.getName().startsWith(key))
+            {
+                files.add(file);
+            }
+        }
+
+        return files;
 
         // ClassLoader classLoader = getClass().getClassLoader();
         // URL resource = classLoader.getResource(filename);
@@ -98,6 +151,10 @@ public class FileIO
     }
 
     //Add files (TODO)
+    public void addFile(String folderToAdd, File file, String filenameToSaveAs, String fileType)
+    {
+        
+    }
 
 
     //Edit

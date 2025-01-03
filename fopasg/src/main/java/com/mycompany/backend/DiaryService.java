@@ -1,5 +1,6 @@
 package com.mycompany.backend;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
@@ -9,17 +10,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import com.google.common.io.ByteSource;
+import com.google.common.io.Files;
+
 
 public class DiaryService
 {
     private FileIO fileIO = new FileIO();
     private String filename;
+    private String imageFolder;
+
     
 
     public DiaryService(String username)
     {
         //diary entries file will be saved as username
         filename = username + ".csv";
+        //user image folder
+        imageFolder = username;
     }
 
     //get all diary entries for the user
@@ -107,7 +115,7 @@ public class DiaryService
     //get diary by title (Search) TODO
 
     //create diary
-    public ServiceResult newDiaryEntry(String diaryTitle, LocalDateTime diaryDate, String diaryContent, Diary.Mood mood, List<String> imagePaths)
+    public ServiceResult newDiaryEntry(String diaryTitle, LocalDateTime diaryDate, String diaryContent, Diary.Mood mood, List<File> images)
     {
         if (diaryTitle == null || diaryDate == null || diaryContent == null || mood == null)
         {
@@ -115,21 +123,29 @@ public class DiaryService
         }
         else
         {
-            //check if the file exists, if not, it means that its the user's first entry so create a new file for the user
             try 
             {
+                //check if the file exists, if not, it means that its the user's first entry so create a new file for the user
                 if (!fileIO.loadFile(filename).exists())
                 {
                     fileIO.createFile(filename);   
                 }
 
+                //check if user's image folder exists, if not, create one
+                if (!fileIO.loadFile(imageFolder).exists())
+                {
+                    fileIO.createFolder(imageFolder);  
+                }
+
                 Diary diary = new Diary(filename, UUID.randomUUID().toString(), diaryTitle, diaryDate, diaryContent, mood);
                 //add images if imagePaths is not empty
-                if (!imagePaths.isEmpty())
+                if (!images.isEmpty())
                 {
-                    diary.setImagePaths(imagePaths);
+                    diary.setImagePaths(addOrRemovePic(images, diary.getDiaryId()));
                 }
                 fileIO.appendFile(filename, diary);
+                
+                //add images (TODO)
                 
                 //done 
                 return new ServiceResult(true, null, "Diary entry created.");
@@ -146,7 +162,7 @@ public class DiaryService
     }
 
     //edit diary
-    public ServiceResult editDiaryEntry(String diaryId, String diaryTitle, LocalDateTime diaryDate, String diaryContent, Diary.Mood mood, List<String> imagePaths)
+    public ServiceResult editDiaryEntry(String diaryId, String diaryTitle, LocalDateTime diaryDate, String diaryContent, Diary.Mood mood, List<File> images)
     {
         
         if (diaryTitle == null || diaryDate == null || diaryContent == null || mood == null)
@@ -159,9 +175,9 @@ public class DiaryService
             {
                 Diary diary = new Diary(filename, diaryId, diaryTitle, diaryDate, diaryContent, mood);
                 //add images if imagePaths is not empty
-                if (!imagePaths.isEmpty())
+                if (!images.isEmpty())
                 {
-                    diary.setImagePaths(imagePaths);
+                    diary.setImagePaths(addOrRemovePic(images, diary.getDiaryId()));
                 }
                 fileIO.editFile(filename, diary, diaryId);
                 
@@ -274,8 +290,46 @@ public class DiaryService
         }
     }
 
-    public void addOrRemove()
+    public List<String> addOrRemovePic(List<File> newImages, String diaryId)
     {
-        
+        List<String> imagePaths = new ArrayList<>();
+        try 
+        {
+            //get existing images in user folder
+            List<File> existingImages = fileIO.loadFiles(imageFolder, diaryId);
+    
+            //check existing images and updated images by comparing image hashes (to see if user removed any images)
+            for (File existingImage : existingImages)
+            {
+                for (File newImage : newImages)
+                {
+                    //if the incoming image is already in the existing image list (means user didnt remove it)
+                    if (Files.asByteSource(existingImage).contentEquals(Files.asByteSource(newImage)))
+                    {
+                        break; //break out of the inner loop to continue checking if other existing images have been deleted or not
+                    }
+                }
+                //if no matches (means user deleted it), then delete it from folder
+                fileIO.purgeFile(existingImage.getAbsolutePath());
+            }
+    
+            //rename all the image to diaryId + index and save it into user folder
+            for (File newImage : newImages)
+            {
+                imagePaths.add(diaryId + "-" + (newImages.indexOf(newImage) + 1) + ".jpg");
+                fileIO.addFile(imageFolder, newImage, diaryId + "-" + (newImages.indexOf(newImage) + 1), "jpg");
+            }
+
+            //lastly return the list of imagePaths
+            return imagePaths;
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException(e);
+        }
+        catch (URISyntaxException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 }
