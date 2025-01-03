@@ -27,25 +27,32 @@ public class MoodIndicatorController {
     private Button sadBtn;
 
     /***
+     * VARIABLES
+     * 
+     ***/
+    private String mood;
+
+    /***
      * INITILIZATION OF THE CONTROLLER
      * 
      ***/
     @FXML
     public void initialize() {
+        final String opt;
         // Handle the 'Happy' button click
         happyBtn.setOnAction(event -> {
             // Close the pop-up
             Stage stage = (Stage) happyBtn.getScene().getWindow();
             stage.close();
-            // Display a motivational quote
-            Platform.runLater(() -> {
-                try {
-                    App.openPopUp("motivational-quotes");
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-            });
-
+            // // Display a motivational quote
+            // Platform.runLater(() -> {
+            //     try {
+            //         App.openPopUp("motivational-quotes");
+            //     } catch (IOException ex) {
+            //         ex.printStackTrace();
+            //     }
+            // });
+            mood = "HAPPY";
         });
 
         // Handle the 'Normal' button click
@@ -53,14 +60,15 @@ public class MoodIndicatorController {
             // Close the pop-up
             Stage stage = (Stage) normalBtn.getScene().getWindow();
             stage.close();
-            // Display a motivational quote
-            Platform.runLater(() -> {
-                try {
-                    App.openPopUp("motivational-quotes");
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-            });
+            // // Display a motivational quote
+            // Platform.runLater(() -> {
+            //     try {
+            //         App.openPopUp("motivational-quotes");
+            //     } catch (IOException ex) {
+            //         ex.printStackTrace();
+            //     }
+            // });
+            mood = "NORMAL";
         });
 
         // Handle the 'Sad' button click
@@ -68,14 +76,19 @@ public class MoodIndicatorController {
             // Close the pop-up
             Stage stage = (Stage) sadBtn.getScene().getWindow();
             stage.close();
-            // Display a motivational quote
-            Platform.runLater(() -> {
-                try {
-                    App.openPopUp("motivational-quotes");
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-            });
+            // // Display a motivational quote
+            // Platform.runLater(() -> {
+            //     try {
+            //         App.openPopUp("motivational-quotes");
+            //     } catch (IOException ex) {
+            //         ex.printStackTrace();
+            //     }
+            // });
+            mood = "SAD";
         });
+    }
+
+    public String getMood(){
+        return this.mood;
     }
 }

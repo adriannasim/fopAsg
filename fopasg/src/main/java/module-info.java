@@ -16,10 +16,14 @@ module com.mycompany {
     //gson
     requires com.google.gson;
 
+    //guava
+    requires com.google.common;
+
     opens com.mycompany.frontend to javafx.fxml;
     opens com.mycompany.frontend.helper to javafx.fxml;
     opens com.mycompany.frontend.exportOptions to javafx.fxml;
-    opens com.mycompany.backend to com.google.gson, com.google.guava;
+
+    opens com.mycompany.backend to com.google.gson, com.google.common;
 
     exports com.mycompany.frontend;
     exports com.mycompany.backend;

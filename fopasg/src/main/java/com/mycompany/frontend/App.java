@@ -10,6 +10,9 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import java.io.IOException;
 import java.util.Stack;
+import java.util.function.Supplier;
+
+import com.mycompany.backend.ServiceResult;
 import com.mycompany.frontend.helper.MessageController;
 import com.mycompany.frontend.helper.PopUpBoxController;
 import com.mycompany.frontend.helper.PopUpImgController;
@@ -26,11 +29,11 @@ public class App extends Application {
      * 
      ***/
     // This is used to keep track the previous scene (But it is not used for now).
-    private static Stack<Scene> sceneHistory = new Stack<>(); 
+    private static Stack<Scene> sceneHistory = new Stack<>();
 
-    // This is used to refer to the main stage with the same reference, which used throughout the App.
-    private static Stage stage; 
-
+    // This is used to refer to the main stage with the same reference, which used
+    // throughout the App.
+    private static Stage stage;
 
     /***
      * MAIN METHOD TO START.
@@ -53,7 +56,7 @@ public class App extends Application {
         stage.setTitle("Digital Diary");
         stage.show();
         // Push the initial scene to the history stack
-        sceneHistory.push(initialScene); 
+        sceneHistory.push(initialScene);
     }
 
     /***
@@ -70,25 +73,30 @@ public class App extends Application {
      * METHOD TO SHOW A CONFIRMATION POP UP.
      * 
      ***/
-    public static void openConfirmationPopUp(String confirmationText, String successMessage, String failedMessage)
+    public static void openConfirmationPopUp(String confirmationText, Supplier<ServiceResult> serviceOperation)
             throws IOException {
         FXMLLoader loader = loadFXML("pop-up-box");
         Parent root = loader.getRoot();
         // Get the PopUpBoxController.
-        PopUpBoxController controller = loader.getController(); 
+        PopUpBoxController controller = loader.getController();
         // Use the controller to set the confirmation text that displayed to users.
-        controller.setConfirmationText(confirmationText); 
-        // Use the controller to set the success message that displayed to the users 
-        // when user wanted action performed correctly.
-        controller.setSuccessMessageText(successMessage);
-         // Use the controller to set the failed message that displayed to the users 
-         // when user wanted action performed wrongly. 
-        controller.setFailedMessageText(failedMessage);
+        controller.setConfirmationText(confirmationText);
+        // // Use the controller to set the success message that displayed to the users
+        // // when user wanted action performed correctly.
+        // controller.setSuccessMessageText(successMessage);
+        // // Use the controller to set the failed message that displayed to the users
+        // // when user wanted action performed wrongly.
+        // controller.setFailedMessageText(failedMessage);
+
+        // set what service function to invoke if user press yes
+        controller.setServiceOperation(serviceOperation);
 
         Stage popupStage = new Stage();
-        // Remove the default window decorations (title bar, close, minimize, and maximize buttons).
-        popupStage.initStyle(StageStyle.UNDECORATED); 
-        // Set the modality of the pop-up to APPLICATION_MODAL, making it block interactions 
+        // Remove the default window decorations (title bar, close, minimize, and
+        // maximize buttons).
+        popupStage.initStyle(StageStyle.UNDECORATED);
+        // Set the modality of the pop-up to APPLICATION_MODAL, making it block
+        // interactions
         // with other application windows until the pop-up is closed.
         popupStage.initModality(Modality.APPLICATION_MODAL);
         Scene scene = new Scene(root);
@@ -110,8 +118,9 @@ public class App extends Application {
         popupStage.setX(centerX);
         popupStage.setY(centerY);
 
-        // Display the pop-up window and block further code execution until the pop-up is closed.
-        popupStage.showAndWait(); 
+        // Display the pop-up window and block further code execution until the pop-up
+        // is closed.
+        popupStage.showAndWait();
     }
 
     /***
@@ -121,11 +130,13 @@ public class App extends Application {
     public static void openPopUp(String filename) throws IOException {
         Parent root = loadFXML(filename).getRoot();
         Stage popupStage = new Stage();
-        // Remove the default window decorations (title bar, close, minimize, and maximize buttons).
-        popupStage.initStyle(StageStyle.UNDECORATED); 
-        // Set the modality of the pop-up to APPLICATION_MODAL, making it block interactions 
+        // Remove the default window decorations (title bar, close, minimize, and
+        // maximize buttons).
+        popupStage.initStyle(StageStyle.UNDECORATED);
+        // Set the modality of the pop-up to APPLICATION_MODAL, making it block
+        // interactions
         // with other application windows until the pop-up is closed.
-        popupStage.initModality(Modality.APPLICATION_MODAL); 
+        popupStage.initModality(Modality.APPLICATION_MODAL);
         Scene scene = new Scene(root);
         popupStage.setScene(scene);
 
@@ -138,15 +149,56 @@ public class App extends Application {
         // Calculate the center position
         double popupWidth = root.prefWidth(-1);
         double popupHeight = root.prefHeight(-1);
-        double centerX = (stageX + 100) + (stageWidth - popupWidth) / 2;
+        double centerX = (stageX) + (stageWidth - popupWidth) / 2;
         double centerY = stageY + (stageHeight - popupHeight) / 2;
 
         // Set the position of the pop-up
         popupStage.setX(centerX);
         popupStage.setY(centerY);
 
-        // Display the pop-up window and block further code execution until the pop-up is closed.
-        popupStage.showAndWait(); 
+        // Display the pop-up window and block further code execution until the pop-up
+        // is closed.
+        popupStage.showAndWait();
+    }
+
+    /***
+     * METHOD TO SHOW A MOOD INDICATOR.
+     * 
+     ***/
+    public static String openMoodIndicator() throws IOException {
+        FXMLLoader loader = loadFXML("mood-indicator");
+        Parent root = loader.getRoot();
+
+        // Get the controller
+        MoodIndicatorController controller = loader.getController();
+
+        // Create a new stage for the popup
+        Stage popupStage = new Stage();
+        popupStage.initStyle(StageStyle.UNDECORATED);
+        popupStage.initModality(Modality.APPLICATION_MODAL);
+        popupStage.setScene(new Scene(root));
+
+         // Get the dimensions of the parent stage and screen
+         double stageX = stage.getX();
+         double stageY = stage.getY();
+         double stageWidth = stage.getWidth();
+         double stageHeight = stage.getHeight();
+ 
+         // Calculate the center position
+         double popupWidth = root.prefWidth(-1);
+         double popupHeight = root.prefHeight(-1);
+         double centerX = (stageX) + (stageWidth - popupWidth) / 2;
+         double centerY = stageY + (stageHeight - popupHeight) / 2;
+ 
+         // Set the position of the pop-up
+         popupStage.setX(centerX);
+         popupStage.setY(centerY); 
+
+        // Show the popup and wait for it to close
+        popupStage.showAndWait();
+
+        // Retrieve the selected mood from the controller
+        return controller.getMood();
     }
 
     /***
@@ -156,8 +208,9 @@ public class App extends Application {
     public static void openPopUpSignUp(String filename) throws IOException {
         Parent root = loadFXML(filename).getRoot();
         Stage popupStage = new Stage();
-        // Remove the default window decorations (title bar, close, minimize, and maximize buttons).
-        popupStage.initStyle(StageStyle.UNDECORATED); 
+        // Remove the default window decorations (title bar, close, minimize, and
+        // maximize buttons).
+        popupStage.initStyle(StageStyle.UNDECORATED);
         Scene scene = new Scene(root);
         popupStage.setScene(scene);
 
@@ -177,8 +230,9 @@ public class App extends Application {
         popupStage.setX(centerX);
         popupStage.setY(centerY);
 
-        // Display the pop-up window and block further code execution until the pop-up is closed.
-        popupStage.showAndWait(); 
+        // Display the pop-up window and block further code execution until the pop-up
+        // is closed.
+        popupStage.showAndWait();
     }
 
     /***
@@ -189,11 +243,11 @@ public class App extends Application {
         FXMLLoader loader = loadFXML(filename);
         Parent root = loader.getRoot();
         // Get controller to set the image
-        PopUpImgController controller = loader.getController(); 
-        controller.setImage(img); 
+        PopUpImgController controller = loader.getController();
+        controller.setImage(img);
 
         Stage popupStage = new Stage();
-        popupStage.initStyle(StageStyle.UNDECORATED); 
+        popupStage.initStyle(StageStyle.UNDECORATED);
         Scene scene = new Scene(root);
         popupStage.setScene(scene);
 
@@ -213,8 +267,9 @@ public class App extends Application {
         popupStage.setX(centerX);
         popupStage.setY(centerY);
 
-        // Display the pop-up window and block further code execution until the pop-up is closed.
-        popupStage.show(); 
+        // Display the pop-up window and block further code execution until the pop-up
+        // is closed.
+        popupStage.show();
     }
 
     /***
@@ -225,11 +280,11 @@ public class App extends Application {
         FXMLLoader loader = loadFXML(filename);
         Parent root = loader.getRoot();
         // Get the controller to set the message text
-        MessageController controller = loader.getController(); 
-        controller.setMessageText(message); 
+        MessageController controller = loader.getController();
+        controller.setMessageText(message);
 
         Stage messageBoxStage = new Stage();
-        messageBoxStage.initStyle(StageStyle.UNDECORATED); 
+        messageBoxStage.initStyle(StageStyle.UNDECORATED);
         Scene scene = new Scene(root);
         messageBoxStage.setScene(scene);
 
@@ -240,7 +295,7 @@ public class App extends Application {
 
         // Calculate the center position
         double popupWidth = root.prefWidth(-1);
-        double centerX = (stageX + 100) + (stageWidth - popupWidth) / 2;
+        double centerX = (stageX) + (stageWidth - popupWidth) / 2;
         double higherY = stageY + 80;
 
         // Set the position of the pop-up
@@ -250,9 +305,8 @@ public class App extends Application {
         messageBoxStage.show();
 
         // After 3 seconds, close the pop-up
-        javafx.animation.PauseTransition pause = new
-        javafx.animation.PauseTransition(
-        javafx.util.Duration.seconds(3));
+        javafx.animation.PauseTransition pause = new javafx.animation.PauseTransition(
+                javafx.util.Duration.seconds(3));
         pause.setOnFinished(e -> messageBoxStage.close());
         pause.play();
     }
