@@ -113,6 +113,20 @@ public class DiaryService
     }
 
     //get diary by title (Search) TODO
+    public Diary SearchDiaryTitle(String diaryTitle)
+    {
+        List<Diary> diaries = getAllDiary();
+
+        for (Diary diary : diaries)
+        {
+            if (diary.getDiaryTitle().equals(diaryTitle))
+            {
+                return diary;
+            }
+        }
+        //diary doesnt exists
+        return null;
+    }
 
     //create diary
     public ServiceResult newDiaryEntry(String diaryTitle, LocalDateTime diaryDate, String diaryContent, Diary.Mood mood, List<File> images)
@@ -289,7 +303,7 @@ public class DiaryService
             throw new RuntimeException(e);
         }
     }
-
+  
     public List<String> addOrRemovePic(List<File> newImages, String diaryId)
     {
         List<String> imagePaths = new ArrayList<>();
