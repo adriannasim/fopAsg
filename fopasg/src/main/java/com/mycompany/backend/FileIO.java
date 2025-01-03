@@ -5,6 +5,8 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.io.Files;
+
 public class FileIO 
 {
     //Create file
@@ -150,12 +152,18 @@ public class FileIO
         }
     }
 
-    //Add files (TODO)
-    public void addFile(String folderToAdd, File file, String filenameToSaveAs, String fileType)
+    //Add files
+    public void addFile(String folderToAdd, File file, String filenameToSaveAs, String fileType) throws IOException
     {
-        
-    }
+        File destination = new File(folderToAdd, filenameToSaveAs + "." + fileType);
 
+        //copy file to destination
+        try(FileOutputStream fos = new FileOutputStream(destination))
+        {
+            Files.copy(file, fos);
+        }
+
+    }
 
     //Edit
     //use key to find which line to replace/edit
