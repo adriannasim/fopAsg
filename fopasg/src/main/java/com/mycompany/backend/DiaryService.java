@@ -9,8 +9,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
-import com.google.common.io.ByteSource;
 import com.google.common.io.Files;
 
 
@@ -112,8 +110,8 @@ public class DiaryService
         return diary;
     }
 
-    //get diary by title (Search) TODO
-    public Diary SearchDiaryTitle(String diaryTitle)
+    //get diary by title (Search)
+    public Diary getDiaryByTitle(String diaryTitle)
     {
         List<Diary> diaries = getAllDiary();
 
@@ -126,6 +124,24 @@ public class DiaryService
         }
         //diary doesnt exists
         return null;
+    }
+
+    //get a list of diary by search matches (Search)
+    public List<Diary> SearchDiariesByTitle(String searchInput)
+    {
+        List<Diary> diaries = getAllDiary();
+        List<Diary> searchResult = new ArrayList<>();
+
+        for (Diary diary : diaries)
+        {
+            if (diary.getDiaryTitle().contains(searchInput))
+            {
+                searchResult.add(diary);
+            }
+        }
+
+        //return list of results
+        return searchResult;
     }
 
     //create diary
@@ -158,8 +174,6 @@ public class DiaryService
                     diary.setImagePaths(addOrRemovePic(images, diary.getDiaryId()));
                 }
                 fileIO.appendFile(filename, diary);
-                
-                //add images (TODO)
                 
                 //done 
                 return new ServiceResult(true, null, "Diary entry created.");
@@ -304,6 +318,7 @@ public class DiaryService
         }
     }
   
+    //image methods
     public List<String> addOrRemovePic(List<File> newImages, String diaryId)
     {
         List<String> imagePaths = new ArrayList<>();

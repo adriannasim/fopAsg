@@ -12,7 +12,6 @@ module com.mycompany {
     requires java.logging;
     requires transitive javafx.graphics;
 
-
     //gson
     requires com.google.gson;
 
