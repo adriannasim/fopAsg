@@ -171,7 +171,11 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
         // Used to control the stop of timeNow
         private volatile boolean stop = false;
 
+        // Used to save the mood
         private String mood;
+
+        // Used to store the images
+        List<File> selectedImageFilesPath = new ArrayList<File>();
 
         /***
          * INITILIZATION OF THE CONTROLLER.
@@ -221,6 +225,12 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
                                                  ex.printStackTrace();
                                          }
                                  });
+
+                                // Get the images
+                                selectedImageFilesPath = diary.getImagePaths().stream().map(File::new).collect(Collectors.toList());
+                               
+                                // Display the images
+                                displayImages(selectedImageFilesPath);
 
                                 // Linked to the existing diary
                                 editor.getActionFactory()
@@ -448,7 +458,7 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
                                                                 ServiceResult result = diaryService.newDiaryEntry(
                                                                                 title.getText(),
                                                                                 LocalDateTime.now(), diaryContent,
-                                                                                Diary.Mood.valueOf(mood));
+                                                                                Diary.Mood.valueOf(mood), selectedImageFilesPath);
 
                                                                 if (result.isSuccessful()) {
                                                                         App.openPopUpAtTop("success-message",
@@ -473,7 +483,7 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
                                                                 ServiceResult result = diaryService.editDiaryEntry(
                                                                                 diary.getDiaryId(), title.getText(),
                                                                                 diary.getDiaryDate(), diaryContent,
-                                                                                Diary.Mood.valueOf(mood));
+                                                                                Diary.Mood.valueOf(mood), selectedImageFilesPath);
                                                                 if (result.isSuccessful()) {
                                                                         App.openPopUpAtTop("success-message",
                                                                                         result.getReturnMessage());
@@ -527,18 +537,19 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
                         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
                         
                         List<File> selectedImageFiles = fileChooser.showOpenMultipleDialog(uploadImageBtn.getScene().getWindow());
-                        List<String> selectedImageFilesPath = diary.getImagePaths();
+                        // List<String> selectedImageFilesPath = diary.getImagePaths();
 
-                        if (!selectedImageFiles.isEmpty())
+                        if (selectedImageFiles != null && !selectedImageFiles.isEmpty())
                         {
                                 for (File file : selectedImageFiles)
                                 {
-                                        selectedImageFilesPath.add(file.getAbsolutePath());
+                                        // selectedImageFilesPath.add(file.getAbsolutePath());
+                                        selectedImageFilesPath.add(file);
                                 }
                         }
 
                         // Use to display the images
-                        displayImages(diary.getImagePaths());
+                        displayImages(selectedImageFilesPath);
                 });
         }
 
@@ -594,14 +605,15 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
          * METHOD TO DISPLAY THE IMAGES IN UI.
          * 
          ***/
-        public void displayImages(List<String> imagePaths) {
+        public void displayImages(List<File> imageFiles) {
                 // Clear existing children
                 images.getChildren().clear();
 
                 // Iterate over each image path
-                for (String path : imagePaths) {
+                for (File file : imageFiles) {
                         // Create an ImageView from the path
-                        ImageView imageView = new ImageView(new Image(path));
+                        ImageView imageView = new ImageView(new Image(file.toURI().toString()));
+                        
 
                         // Image settings
                         imageView.setFitWidth(100);
@@ -612,7 +624,7 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
                         // Open image pop up view
                         imageView.setOnMouseClicked(e -> {
                                 try {
-                                        App.openPopUpImg("pop-up-img", new Image(path));
+                                        App.openPopUpImg("pop-up-img", new Image(file.toURI().toString()));
                                 } catch (IOException ex) {
                                         ex.printStackTrace();
                                 }

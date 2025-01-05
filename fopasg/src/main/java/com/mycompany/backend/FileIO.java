@@ -41,7 +41,7 @@ public class FileIO
         System.out.println("Attempting to create folder at: " + folder.getAbsolutePath());
         
         //create the folder
-        folder.mkdir();
+        folder.mkdirs();
     }
 
     //Load file

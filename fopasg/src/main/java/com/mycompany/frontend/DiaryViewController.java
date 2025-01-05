@@ -1,9 +1,11 @@
 package com.mycompany.frontend;
 
+import java.io.File;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.gluonhq.richtextarea.RichTextArea;
 import com.gluonhq.richtextarea.model.Document;
@@ -96,8 +98,10 @@ public class DiaryViewController extends SharedPaneCharacteristics {
         // Set the mood
         setMoodLabelAndIcon();
 
-        // Display the images uploaded by users
-        displayImages();
+        // Get the images
+        List<File> selectedImageFilesPath = diary.getImagePaths().stream().map(File::new).collect(Collectors.toList());
+        // Display the images
+        displayImages(selectedImageFilesPath);
 
         // Set title
         title.setText(diary.getDiaryTitle());
@@ -156,20 +160,14 @@ public class DiaryViewController extends SharedPaneCharacteristics {
      * METHOD TO DISPLAY THE IMAGES IN UI.
      * 
      ***/
-    public void displayImages() {
-
-        // Sample for illustration purpose (MUST CHANGES !!!!!!!!!!!!!!)
-        List<String> imagePaths = new ArrayList<>();
-        imagePaths.add(getClass().getResource("/com/mycompany/frontend/images/test-img.jpg").toString());
-        imagePaths.add(getClass().getResource("/com/mycompany/frontend/images/italic-icon.png").toString());
-
+    public void displayImages(List<File> imageFiles) {
         // Clear existing children
         images.getChildren().clear();
 
         // Iterate over each image path
-        for (String path : imagePaths) {
+        for (File file : imageFiles) {
             // Create an ImageView from the path
-            ImageView imageView = new ImageView(new Image(path));
+            ImageView imageView = new ImageView(new Image(file.toURI().toString()));
 
             // Image settings
             imageView.setFitWidth(100);
@@ -180,7 +178,7 @@ public class DiaryViewController extends SharedPaneCharacteristics {
             // Open image pop up view
             imageView.setOnMouseClicked(e -> {
                 try {
-                    App.openPopUpImg("pop-up-img", new Image(path));
+                    App.openPopUpImg("pop-up-img", new Image(file.toURI().toString()));
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }

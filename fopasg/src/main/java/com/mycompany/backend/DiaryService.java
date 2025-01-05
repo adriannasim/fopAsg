@@ -367,22 +367,28 @@ public class DiaryService
             //check existing images and updated images by comparing image hashes (to see if user removed any images)
             for (File existingImage : existingImages)
             {
+                boolean matched = false;
                 for (File newImage : newImages)
                 {
                     //if the incoming image is already in the existing image list (means user didnt remove it)
                     if (Files.asByteSource(existingImage).contentEquals(Files.asByteSource(newImage)))
                     {
+                        matched = true;
                         break; //break out of the inner loop to continue checking if other existing images have been deleted or not
                     }
                 }
-                //if no matches (means user deleted it), then delete it from folder
-                fileIO.purgeFile(existingImage.getAbsolutePath());
+                if(!matched){
+                    //if no matches (means user deleted it), then delete it from folder
+                    fileIO.purgeFile(existingImage.getAbsolutePath());
+                }
+                
             }
     
             //rename all the image to diaryId + index and save it into user folder
             for (File newImage : newImages)
             {
-                imagePaths.add(diaryId + "-" + (newImages.indexOf(newImage) + 1) + ".jpg");
+                String username = filename.replaceFirst("[.][^.]+$", "");
+                imagePaths.add("src/main/resources/images/" + username + "/" + diaryId + "-" + (newImages.indexOf(newImage) + 1) + ".jpg");
                 fileIO.addFile(imageFolder, newImage, diaryId + "-" + (newImages.indexOf(newImage) + 1), "jpg");
             }
 
