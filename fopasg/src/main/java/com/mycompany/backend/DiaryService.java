@@ -398,4 +398,32 @@ public class DiaryService
             throw new RuntimeException(e);
         }
     }
+
+    //Mood Tracker
+    public int[] getMoodByDate(LocalDate startDate, LocalDate endDate)
+    {
+        //index: 0 = happy, 1 = normal, 2 = sad
+        int happy = 0, normal = 0, sad = 0;
+        List<Diary> diaries = getAllDiary();
+        for (Diary diary : diaries)
+        {
+            if (diary.getDiaryDate().toLocalDate().isAfter(startDate) && diary.getDiaryDate().toLocalDate().isBefore(endDate))
+            {
+                switch(diary.getMood())
+                {
+                    case HAPPY:
+                        happy++;
+                        break;
+                    case NORMAL:
+                        normal++;
+                        break;
+                    case SAD:
+                        sad++;
+                        break;
+                }
+            }
+        }
+
+        return new int[] {happy, normal, sad};
+    }
 }
