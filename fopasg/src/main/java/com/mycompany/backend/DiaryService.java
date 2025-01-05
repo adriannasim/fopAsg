@@ -3,12 +3,13 @@ package com.mycompany.backend;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.time.LocalDateTime;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
 import com.google.common.io.Files;
 
 
@@ -358,10 +359,28 @@ public class DiaryService
 
     
     // Export diary entries within a range to PDF
-    public ServiceResult exportDiaryToPDF(LocalDateTime startDate, LocalDateTime endDate, String pdfFilename) {
+    public ServiceResult exportDiaryToPDF(LocalDateTime startDate, LocalDateTime endDate, String pdfFilename,String rangeType) {
     try {
         // Fetch all diary entries
         List<Diary> diaryList = getAllDiary();
+
+        LocalDateTime now = LocalDateTime.now();
+
+        switch (rangeType.toLowerCase()) {
+            case "week":
+                startDate = now.minusDays(7);
+                endDate = now;
+                break;
+            case "month":
+                startDate = now.minusMonths(1);
+                endDate = now;
+                break;
+            case "day":
+                break;
+            default:
+                return new ServiceResult(false, null, "Invalid rangeType. Please choose 'week', 'month', 'day', or 'custom'.");
+        }
+
 
             // Filter entries by date range
             List<String> entriesInRange = new ArrayList<>();
