@@ -18,7 +18,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import com.mycompany.backend.DiaryService;
-import com.mycompany.backend.UserService;
 import com.mycompany.backend.UserSession;
 import com.mycompany.backend.Diary;
 

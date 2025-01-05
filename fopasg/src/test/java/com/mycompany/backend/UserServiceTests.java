@@ -2,7 +2,6 @@ package com.mycompany.backend;
 
 import static org.junit.Assert.*;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
@@ -10,12 +9,12 @@ import org.junit.*;
 
 public class UserServiceTests 
 {
-    String filename = "TestUsers.txt";
-    UserService userService = new UserService(filename);
-    FileIO fileIO = new FileIO();
+    static String filename = "TestUsers.txt";
+    static UserService userService = new UserService(filename);
+    static FileIO fileIO = new FileIO();
         
-    @Before
-    public void setup()
+    @BeforeClass
+    public static void setup()
     {
         //create users for test
         userService.userSignUp("TestUsername", "test@gmail.com", "test123");
@@ -23,13 +22,14 @@ public class UserServiceTests
         userService.userSignUp("TestDelete", "testDelete@gmail.com", "test123");
     }
 
-    @After
-    public void cleanUp()
+    @AfterClass
+    public static void cleanUp()
     {
         try 
         {
             //clear entire file
             fileIO.clearFile(filename);
+            fileIO.clearTmpFolder();
         }
         catch (URISyntaxException e)
         {
