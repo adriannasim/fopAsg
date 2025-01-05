@@ -22,7 +22,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Label layoutX="37.0" layoutY="63.0" minWidth="-Infinity" style="-fx-background-color: #ffffff;" text="Entries" textFill="#6a669d">
+            <Label layoutX="37.0" layoutY="63.0" minWidth="-Infinity" style="-fx-background-color: #ffffff;" text="Past Diaries" textFill="#6a669d">
                <font>
                   <Font name="Roboto Bold" size="20.0" />
                </font>

@@ -2,11 +2,14 @@ package com.mycompany.frontend;
 
 import java.io.IOException;
 import java.util.Stack;
+
+import com.mycompany.backend.DiaryService;
+import com.mycompany.backend.UserSession;
+
 import javafx.util.Duration;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -20,9 +23,10 @@ import javafx.scene.layout.AnchorPane;
 
 public class MainMenuController {
 
-    // This used to store the user navigation history, so user can navigate back to
+    // This used to store the user navigation history and current file name, so user can navigate back to
     // previous pages.
-    private static Stack<AnchorPane> anchorPaneHistory = new Stack<>();
+    private static Stack<String> navigationHistory = new Stack<>();
+    private String currentFilename;
 
     /***
      * ELEMENTS WITH FX:ID
@@ -61,18 +65,18 @@ public class MainMenuController {
         // Initial page
         loadNewContent("main-root-pane");
 
-        // Open the mood indicator page when user enter (Call this after enter main menu)
-        // CAN ADD LOGIC of when it should display here...
-        Platform.runLater(() -> {
-            try {
-                App.openPopUp("mood-indicator");
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        });
+        // Get user session
+        String sessionUsername = UserSession.getSession().getUsername();
+
+        // Get user diary
+        DiaryService diaryService = new DiaryService(sessionUsername);
+
+        // Delete < 0 days entries
+        diaryService.clearOldDiaryEntry(sessionUsername);
 
         // When user click on newDiaryBtn, navigate to diary-entry-page
         newDiaryBtn.setOnMouseClicked(e -> {
+            UserSession.getSession().setCurrentDiary(null);
             loadNewContent("diary-entry-page");
         });
 
@@ -122,7 +126,7 @@ public class MainMenuController {
                 debounceTimer.getKeyFrames().add(new KeyFrame(Duration.millis(500), event -> {
                     // SEARCH OPERATION HERE...
                     // Show results in result page
-                    loadNewContent("diary-search-result");
+                    loadNewContent("diary-search-result", query.trim());
                 }));
 
                 debounceTimer.play(); // Start the timer
@@ -140,11 +144,78 @@ public class MainMenuController {
      ***/
     public void loadNewContent(String filename) {
         try {
-            // Save the current state of the rootPane to history
-            AnchorPane currentState = new AnchorPane();
-            currentState.getChildren().setAll(rootPane.getChildren());
-            anchorPaneHistory.push(currentState);
+            // Save the current file name to history
+            if(currentFilename != null){
+                navigationHistory.push(currentFilename);
+            }
 
+            // Load the new content from the FXML file
+            FXMLLoader loader = new FXMLLoader(App.class.getResource(filename + ".fxml"));
+            AnchorPane newContent = loader.load();
+
+            // Get the controller of the loaded FXML
+            Object controller = loader.getController();
+
+            // Check if the controller is an instance of SharedPaneCharacteristics and set
+            // the MainMenuController
+            if (controller instanceof SharedPaneCharacteristics) {
+                SharedPaneCharacteristics sharedController = (SharedPaneCharacteristics) controller;
+                sharedController.setMainMenuController(this); // Pass reference to controller
+            }
+
+            // Replace the children of rootPane with the new content
+            rootPane.getChildren().setAll(newContent.getChildren());
+            currentFilename = filename;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /***
+     * METHOD TO LOAD NEW CONTENT AFTER SEARCH
+     * 
+     ***/
+    public void loadNewContent(String filename, String searchQuery) {
+        try {
+            // Save the current file name to history
+            if(currentFilename != null){
+                navigationHistory.push(currentFilename);
+            }
+
+            // Load the new content from the FXML file
+            FXMLLoader loader = new FXMLLoader(App.class.getResource(filename + ".fxml"));
+            AnchorPane newContent = loader.load();
+
+            // Get the controller of the loaded FXML
+            Object controller = loader.getController();
+
+            // Check if the controller is an instance of SharedPaneCharacteristics and set
+            // the MainMenuController
+            if (controller instanceof SharedPaneCharacteristics) {
+                SharedPaneCharacteristics sharedController = (SharedPaneCharacteristics) controller;
+                sharedController.setMainMenuController(this); // Pass reference to controller
+            }
+
+            //if the controller is SearchResultController, pass the query to it
+            if (controller instanceof SharedPaneCharacteristics) {
+                SearchResultController searchResultController = (SearchResultController) controller;
+                searchResultController.initialize(searchQuery);
+            }
+
+            // Replace the children of rootPane with the new content
+            rootPane.getChildren().setAll(newContent.getChildren());
+            currentFilename = filename;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /***
+     * METHOD TO RELOAD THE CONTENT INTO THE ROOTPANE
+     * 
+     ***/
+    public void reloadContent(String filename) {
+        try {
             // Load the new content from the FXML file
             FXMLLoader loader = new FXMLLoader(App.class.getResource(filename + ".fxml"));
             AnchorPane newContent = loader.load();
@@ -172,12 +243,13 @@ public class MainMenuController {
      * 
      ***/
     public void goBackToPreviousAnchorPane() {
-        if (!anchorPaneHistory.isEmpty()) {
+        if (!navigationHistory.isEmpty()) {
             // Get the previous AnchorPane state
-            AnchorPane previousState = anchorPaneHistory.pop();
+            String previousState = navigationHistory.pop();
 
             // Restore the previous state to the rootPane
-            rootPane.getChildren().setAll(previousState.getChildren());
+            reloadContent(previousState);
+            currentFilename = previousState;
         } else {
             System.out.println("No previous state to go back to.");
         }
