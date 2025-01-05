@@ -33,7 +33,7 @@
                   <Font name="System Bold" size="11.0" />
                </font>
             </Label>
-            <Label layoutX="40.0" layoutY="285.0" text="Password comfirmation">
+            <Label layoutX="40.0" layoutY="285.0" text="Password confirmation">
                <font>
                   <Font name="System Bold" size="11.0" />
                </font>

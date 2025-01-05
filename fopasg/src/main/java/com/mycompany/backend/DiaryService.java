@@ -359,6 +359,8 @@ public class DiaryService
     public List<String> addOrRemovePic(List<File> newImages, String diaryId)
     {
         List<String> imagePaths = new ArrayList<>();
+        List<File> existing = new ArrayList<>();
+        
         try 
         {
             //get existing images in user folder
@@ -373,6 +375,7 @@ public class DiaryService
                     //if the incoming image is already in the existing image list (means user didnt remove it)
                     if (Files.asByteSource(existingImage).contentEquals(Files.asByteSource(newImage)))
                     {
+                        existing.add(existingImage);
                         matched = true;
                         break; //break out of the inner loop to continue checking if other existing images have been deleted or not
                     }
@@ -387,9 +390,33 @@ public class DiaryService
             //rename all the image to diaryId + index and save it into user folder
             for (File newImage : newImages)
             {
+                boolean isAlreadyAdded = false;
+
+                // Check if this image already exists (by comparing byte content with already added files)
+                for (File e : existing)
+                {
+                    if (Files.asByteSource(e).contentEquals(Files.asByteSource(newImage)))
+                    {
+                        isAlreadyAdded = true;
+                        break; // Skip adding this image if it's already in the 'existing' list
+                    }
+                }
+
+                // Use the next available index for new images
                 String username = filename.replaceFirst("[.][^.]+$", "");
-                imagePaths.add("src/main/resources/images/" + username + "/" + diaryId + "-" + (newImages.indexOf(newImage) + 1) + ".jpg");
-                fileIO.addFile(imageFolder, newImage, diaryId + "-" + (newImages.indexOf(newImage) + 1), "jpg");
+                int index = newImages.indexOf(newImage) + 1; // Using index of newImage for unique naming
+                String imagePath = "src/main/resources/images/" + username + "/" + diaryId + "-" + index + ".jpg";
+
+                // Add the image path to the list
+                imagePaths.add(imagePath);
+
+                // If the image hasn't been added before, add it now
+                if (!isAlreadyAdded)
+                {
+                    // Add the new image to the folder
+                    fileIO.addFile(imageFolder, newImage, diaryId + "-" + index, "jpg");  
+                }
+                
             }
 
             //lastly return the list of imagePaths
