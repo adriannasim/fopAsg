@@ -230,7 +230,9 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
                                 });
 
                                 // Get the images
-                                selectedImageFilesPath = diary.getImagePaths().stream().map(File::new)
+                                selectedImageFilesPath = diary.getImagePaths().stream()
+                                                .filter(path -> path != null && !path.equals("null"))
+                                                .map(File::new)
                                                 .collect(Collectors.toList());
 
                                 // Display the images
@@ -614,9 +616,11 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
         public void displayImages(List<File> imageFiles) {
                 // Clear existing children
                 images.getChildren().clear();
+                imageFiles.removeIf(file -> file == null || "null".equals(file.getPath()));
 
                 // Iterate over each image path
                 for (File file : imageFiles) {
+
                         // Create an ImageView from the path
                         ImageView imageView = new ImageView(new Image(file.toURI().toString()));
 
@@ -657,7 +661,8 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
                         // Open image pop up view
                         imageView.setOnMouseClicked(e -> {
                                 try {
-                                        App.openPopUpImg("pop-up-img", new Image(file.toURI().toString()), maxHeight);
+                                        App.openPopUpImg("pop-up-img", new Image(file.toURI().toString()),
+                                                        maxHeight);
                                 } catch (IOException ex) {
                                         ex.printStackTrace();
                                 }

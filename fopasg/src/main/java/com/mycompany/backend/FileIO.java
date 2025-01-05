@@ -240,11 +240,19 @@ public class FileIO
     {
         File file = loadFile(filename);
 
-        // Check if the file exists before attempting to delete it
-        if (!file.exists()) {
-            System.out.println("File \"" + filename + "\" does not exist.");
-            return;  // Exit if file doesn't exist
+        if (file.delete()) 
+        {
+            System.out.println("File \"" + filename + "\" deleted successfully.");
+        } 
+        else 
+        {
+            System.out.println("Failed to delete file \""+ filename + "\". File may not exist or is in use.");
         }
+    }
+
+    public void purgeFileByFullPath(String filename) throws URISyntaxException, FileNotFoundException
+    {
+        File file = new File(filename);
 
         if (file.delete()) 
         {
