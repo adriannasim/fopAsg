@@ -131,7 +131,6 @@ public class UserService
                 //if no matching existing users, then we can create an account
                 User newUser = new User(username, email, password);
                 fileIO.appendFile(filename, newUser);
-                fileIO.createFile(username + ".csv");
                 return new ServiceResult(true, null, "Account created successfully. Please login.");
             }
             catch (IOException e)
