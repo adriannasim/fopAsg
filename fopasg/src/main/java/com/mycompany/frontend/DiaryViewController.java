@@ -13,12 +13,17 @@ import com.mycompany.backend.Diary;
 import com.mycompany.backend.UserSession;
 
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.event.ActionEvent;
+import javafx.scene.Cursor;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
 /***
@@ -160,34 +165,37 @@ public class DiaryViewController extends SharedPaneCharacteristics {
      * METHOD TO DISPLAY THE IMAGES IN UI.
      * 
      ***/
-    public void displayImages(List<File> imageFiles) {
-        // Clear existing children
-        images.getChildren().clear();
+     public void displayImages(List<File> imageFiles) {
+                // Clear existing children
+                images.getChildren().clear();
 
-        // Iterate over each image path
-        for (File file : imageFiles) {
-            // Create an ImageView from the path
-            ImageView imageView = new ImageView(new Image(file.toURI().toString()));
+                // Iterate over each image path
+                for (File file : imageFiles) {
+                        // Create an ImageView from the path
+                        ImageView imageView = new ImageView(new Image(file.toURI().toString()));
 
-            // Image settings
-            imageView.setFitWidth(100);
-            imageView.setFitHeight(100);
-            imageView.setPreserveRatio(true);
-            imageView.setStyle("-fx-cursor: HAND;");
+                        // Image settings
+                        imageView.setFitWidth(100);
+                        imageView.setFitHeight(100);
+                        imageView.setPreserveRatio(true);
+                        imageView.setStyle("-fx-cursor: HAND;");
 
-            // Open image pop up view
-            imageView.setOnMouseClicked(e -> {
-                try {
-                    App.openPopUpImg("pop-up-img", new Image(file.toURI().toString()));
-                } catch (IOException ex) {
-                    ex.printStackTrace();
+                        double maxHeight = imageView.getFitHeight();
+
+                        // Open image pop up view
+                        imageView.setOnMouseClicked(e -> {
+                                try {
+                                        App.openPopUpImg("pop-up-img", new Image(file.toURI().toString()), maxHeight);
+                                } catch (IOException ex) {
+                                        ex.printStackTrace();
+                                }
+                        });
+
+                        // Add ImageView to the container
+                        images.getChildren().add(imageView);
                 }
-            });
-
-            // Add ImageView to the container
-            images.getChildren().add(imageView);
         }
-    }
+
 
     /***
      * METHOD TO SET MOOD LABEL AND ICON

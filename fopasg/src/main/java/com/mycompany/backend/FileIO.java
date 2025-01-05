@@ -240,6 +240,12 @@ public class FileIO
     {
         File file = loadFile(filename);
 
+        // Check if the file exists before attempting to delete it
+        if (!file.exists()) {
+            System.out.println("File \"" + filename + "\" does not exist.");
+            return;  // Exit if file doesn't exist
+        }
+
         if (file.delete()) 
         {
             System.out.println("File \"" + filename + "\" deleted successfully.");

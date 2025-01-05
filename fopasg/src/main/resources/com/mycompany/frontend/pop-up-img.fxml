@@ -1,20 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 
-<Pane fx:id="imgContainer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #000000;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.frontend.helper.PopUpImgController">
+<Pane fx:id="imgContainer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.frontend.helper.PopUpImgController">
    <children>
       <ImageView fx:id="img" fitHeight="400.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="crossIcon" fitHeight="13.0" fitWidth="11.0" layoutX="568.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@images/close-icon.png" />
-         </image>
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor>
-      </ImageView>
+      <VBox layoutX="557.0" layoutY="22.0" style="-fx-background-color: red;">
+         <children>
+            <ImageView fx:id="crossIcon" fitHeight="13.0" fitWidth="11.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@images/close-icon.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ImageView>
+         </children>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+      </VBox>
    </children>
 </Pane>
