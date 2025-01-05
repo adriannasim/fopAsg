@@ -103,6 +103,7 @@ public class DiaryServiceTests
             ServiceResult result = diaryService.exportDiaryToPDF(startDate, endDate, pdfFilename);
 
             // Verify the operation was successful
+            System.out.println(result.getReturnMessage());
             assertTrue(result.isSuccessful());
 
             // Use the correct method to access the message

@@ -2,9 +2,7 @@ package com.mycompany.backend;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -133,27 +131,10 @@ public class DiaryService
     }
     
     // Export diary entries within a range to PDF
-    public ServiceResult exportDiaryToPDF(LocalDateTime startDate, LocalDateTime endDate, String pdfFilename,String rangeType) {
-        try {
-            // Fetch all diary entries
-            List<Diary> diaryList = getAllDiary();
-
-            // Adjust start and end dates based on range type
-            switch (rangeType.toLowerCase()) {
-                case "week":
-                    startDate = startDate.with(TemporalAdjusters.previousOrSame(LocalDate.of(startDate.getYear(), startDate.getMonth(), startDate.getDayOfMonth()).getDayOfWeek()));
-                    endDate = startDate.plusDays(6);
-                    break;
-                case "month":
-                    startDate = startDate.with(TemporalAdjusters.firstDayOfMonth());
-                    endDate = startDate.with(TemporalAdjusters.lastDayOfMonth());
-                    break;
-                case "day":
-                default:
-                    // No adjustment needed for "day"
-                    break;
-            }
-
+public ServiceResult exportDiaryToPDF(LocalDateTime startDate, LocalDateTime endDate, String pdfFilename) {
+    try {
+        // Fetch all diary entries
+        List<Diary> diaryList = getAllDiary();
 
             // Filter entries by date range
             List<String> entriesInRange = new ArrayList<>();
@@ -171,12 +152,11 @@ public class DiaryService
             // Export filtered entries to PDF using FileIO
             fileIO.exportToPDFUsingPDFBox(pdfFilename, entriesInRange); // Replace with `exportToPDFUsingIText` if preferred
 
-            return new ServiceResult(true, null, "Diary entries exported to PDF successfully.");
-        
-        } catch (Exception e) {
-            return new ServiceResult(false, null, "Error exporting diary entries to PDF: " + e.getMessage());
-        }
+        return new ServiceResult(true, null, "Diary entries exported to PDF successfully.");
+    } catch (Exception e) {
+        return new ServiceResult(false, null, "Error exporting diary entries to PDF: " + e.getMessage());
     }
+}
 
 // Helper method to format a diary entry for PDF export
 private String formatDiaryEntryForExport(Diary diary) {

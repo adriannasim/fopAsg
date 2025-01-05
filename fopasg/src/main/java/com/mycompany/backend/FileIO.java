@@ -88,33 +88,30 @@ public class FileIO
     }
 
     public void exportToPDFUsingPDFBox(String pdfFilename, List<String> content) throws IOException {
-    try (PDDocument document = new PDDocument()) {
-        PDPage page = new PDPage();
-        document.addPage(page);
+        try (PDDocument document = new PDDocument()) {
+            PDPage page = new PDPage();
+            document.addPage(page);
 
-        try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
-            contentStream.setFont(PDType1Font.HELVETICA, 12);
-            contentStream.beginText();
-            contentStream.setLeading(14.5f);
-            contentStream.newLineAtOffset(50, 750);
+            try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
+                contentStream.setFont(PDType1Font.HELVETICA, 12);
+                contentStream.beginText();
+                contentStream.setLeading(14.5f);
+                contentStream.newLineAtOffset(50, 750);
 
-            for (String line : content) {
-                contentStream.showText(line);
-                contentStream.newLine();
+                for (String line : content) {
+                    contentStream.showText(line);
+                    contentStream.newLine();
+                }
+
+                contentStream.endText();
             }
 
-            contentStream.endText();
+            document.save(pdfFilename);
+            System.out.println("PDF created successfully using PDFBox: " + pdfFilename);
+        } catch (Exception e) {
+            throw new IOException("Error creating PDF with PDFBox: " + e.getMessage(), e);
         }
-
-        document.save(pdfFilename);
-        System.out.println("PDF created successfully using PDFBox: " + pdfFilename);
-    } catch (Exception e) {
-        throw new IOException("Error creating PDF with PDFBox: " + e.getMessage(), e);
     }
-}
-
-
-    
 
     //Append
     public void appendFile(String filename, Object dataToAdd) throws IOException, URISyntaxException
