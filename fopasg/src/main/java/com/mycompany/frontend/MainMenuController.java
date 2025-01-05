@@ -72,7 +72,6 @@ public class MainMenuController {
         DiaryService diaryService = new DiaryService(sessionUsername);
 
         // Delete < 0 days entries
-        diaryService.getAllDiary();
         diaryService.clearOldDiaryEntry(sessionUsername);
 
         // When user click on newDiaryBtn, navigate to diary-entry-page
