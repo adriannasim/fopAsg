@@ -104,7 +104,7 @@ public class DiaryViewController extends SharedPaneCharacteristics {
         setMoodLabelAndIcon();
 
         // Get the images
-        List<File> selectedImageFilesPath = diary.getImagePaths().stream().map(File::new).collect(Collectors.toList());
+        List<File> selectedImageFilesPath = diary.getImagePaths().stream().filter(path -> path != null && !path.equals("null")).map(File::new).collect(Collectors.toList());
         // Display the images
         displayImages(selectedImageFilesPath);
 

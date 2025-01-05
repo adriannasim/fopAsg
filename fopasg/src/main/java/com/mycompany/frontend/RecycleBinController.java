@@ -53,7 +53,8 @@ public class RecycleBinController extends SharedPaneCharacteristics {
 
         // Get user diary
         DiaryService diaryService = new DiaryService(sessionUsername);
-        List<Diary> diaries = diaryService.getAllDiary();
+        List<Diary> diaries = diaryService.getAllDiariesInBin();
+        
         // filter deleted diries
         diaries = diaries.stream().filter(diary -> diary.getDeletionDate() != null).collect(Collectors.toList());
 
