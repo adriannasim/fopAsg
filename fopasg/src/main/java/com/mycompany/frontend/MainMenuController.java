@@ -126,7 +126,7 @@ public class MainMenuController {
                 debounceTimer.getKeyFrames().add(new KeyFrame(Duration.millis(500), event -> {
                     // SEARCH OPERATION HERE...
                     // Show results in result page
-                    loadNewContent("diary-search-result");
+                    loadNewContent("diary-search-result", query.trim());
                 }));
 
                 debounceTimer.play(); // Start the timer
@@ -145,7 +145,7 @@ public class MainMenuController {
     public void loadNewContent(String filename) {
         try {
             // Save the current file name to history
-            if(currentFilename!=null){
+            if(currentFilename != null){
                 navigationHistory.push(currentFilename);
             }
 
@@ -161,6 +161,45 @@ public class MainMenuController {
             if (controller instanceof SharedPaneCharacteristics) {
                 SharedPaneCharacteristics sharedController = (SharedPaneCharacteristics) controller;
                 sharedController.setMainMenuController(this); // Pass reference to controller
+            }
+
+            // Replace the children of rootPane with the new content
+            rootPane.getChildren().setAll(newContent.getChildren());
+            currentFilename = filename;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /***
+     * METHOD TO LOAD NEW CONTENT AFTER SEARCH
+     * 
+     ***/
+    public void loadNewContent(String filename, String searchQuery) {
+        try {
+            // Save the current file name to history
+            if(currentFilename != null){
+                navigationHistory.push(currentFilename);
+            }
+
+            // Load the new content from the FXML file
+            FXMLLoader loader = new FXMLLoader(App.class.getResource(filename + ".fxml"));
+            AnchorPane newContent = loader.load();
+
+            // Get the controller of the loaded FXML
+            Object controller = loader.getController();
+
+            // Check if the controller is an instance of SharedPaneCharacteristics and set
+            // the MainMenuController
+            if (controller instanceof SharedPaneCharacteristics) {
+                SharedPaneCharacteristics sharedController = (SharedPaneCharacteristics) controller;
+                sharedController.setMainMenuController(this); // Pass reference to controller
+            }
+
+            //if the controller is SearchResultController, pass the query to it
+            if (controller instanceof SharedPaneCharacteristics) {
+                SearchResultController searchResultController = (SearchResultController) controller;
+                searchResultController.initialize(searchQuery);
             }
 
             // Replace the children of rootPane with the new content

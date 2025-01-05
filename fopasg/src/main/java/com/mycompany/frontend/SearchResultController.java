@@ -1,8 +1,11 @@
 package com.mycompany.frontend;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
+
+import com.mycompany.backend.Diary;
+import com.mycompany.backend.DiaryService;
+import com.mycompany.backend.UserSession;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -27,25 +30,17 @@ public class SearchResultController extends SharedPaneCharacteristics{
     @FXML
     private FlowPane diaryItemsFlowPane; // Each diary item Flow Pane
 
-
-    /*** Below two classes are used  as sample for illustration purpose. MUST CHANGE accrodingly. */
-    // A class representing a diary item (CHANGE LATER!!!!!!!!!!!!!!!!!!!!!)
-    static class DiaryItem {
-        String name;
-        String date;
-
-        public DiaryItem(String name, String date) {
-            this.name = name;
-            this.date = date;
-        }
-    }
-
+    /***
+     * VARIABLES
+     * 
+     ***/
+    private DiaryService diaryService = new DiaryService(UserSession.getSession().getUsername());
 
     /*** INITILIZATION OF THE CONTROLLER
      * 
      * ***/
     @FXML
-    public void initialize() {
+    public void initialize(String searchQuery) {
 
         // Inherit Super Class's initialization
         super.initialize(); 
@@ -53,30 +48,29 @@ public class SearchResultController extends SharedPaneCharacteristics{
         diaryItemsFlowPane.setHgap(10);
         diaryItemsFlowPane.setVgap(10);
 
-
-        // Sample data for diary items used for illustration purpose only (MUST CHANGE!!!!!!!!!!!!!!!!!!!)
-        List<DiaryItem> diaryItems = new ArrayList<>();
-        diaryItems.add(new DiaryItem("Diary 1", "1 December 2024"));
-        diaryItems.add(new DiaryItem("Diary 2","2 December 2024"));
-        diaryItems.add(new DiaryItem("Diary 3", "1 December 2024"));
-        diaryItems.add(new DiaryItem("Diary 4", "3 December 2024"));
-
+        //If no searchQuery, list all diaries
+        List<Diary> diaries;
+        if (searchQuery.equals("") || searchQuery == null)
+        {
+            diaries = diaryService.getAllDiary();
+        }
+        //else search diaries by title using the query given
+        else
+        {
+            diaries = diaryService.searchDiariesByTitle(searchQuery);
+        }
                   
         // Loop through the list and create a Pane for each diary item
-        for (DiaryItem item : diaryItems) {
-            Pane diaryItemPane = createDiaryItemPane(item);
+        for (Diary diary : diaries) {
+            Pane diaryItemPane = createDiaryItemPane(diary);
             diaryItemsFlowPane.getChildren().add(diaryItemPane); // Add the pane to the FlowPane
         }
     }
 
-
     /*** METHOD TO CREATE DIARYITEMPANE FOR EACH OF THE ENTRIES
      * 
      * ***/
-    /*** METHOD TO CREATE DIARYITEMPANE FOR EACH OF THE ENTRIES
-     * 
-     * ***/
-    private Pane createDiaryItemPane(DiaryItem item) {
+    private Pane createDiaryItemPane(Diary item) {
         Pane pane = new Pane();
         pane.setPrefSize(195.0, 65.0);
         pane.setStyle("-fx-background-color: #F1F1F1;");
@@ -90,7 +84,7 @@ public class SearchResultController extends SharedPaneCharacteristics{
         imageView.setLayoutY(15.0);
 
         // Title Label
-        Label titleLabel = new Label(item.name);
+        Label titleLabel = new Label(item.getDiaryTitle());
         titleLabel.setLayoutX(74.0);
         titleLabel.setLayoutY(23.0);
         titleLabel.setStyle("-fx-background-color: #F1F1F1;");
@@ -98,7 +92,7 @@ public class SearchResultController extends SharedPaneCharacteristics{
         titleLabel.setFont(javafx.scene.text.Font.font("Roboto Bold", 15));
 
         // Date Label
-        Label dateLabel = new Label(item.date);
+        Label dateLabel = new Label(item.getDiaryDate().toLocalDate().toString());
         dateLabel.setLayoutX(120.0);
         dateLabel.setLayoutY(10.0);
         dateLabel.setStyle("-fx-background-color: #F1F1F1;");
@@ -173,7 +167,11 @@ public class SearchResultController extends SharedPaneCharacteristics{
     private void handleDelete() {
         // Show a delete confirmation page
         try {
-            App.openConfirmationPopUp("Are you sure you want to delete this entry?", "Entry has been deleted.", "Entry failed to delete.");
+            App.openConfirmationPopUp("Confirm to delete this entry?",
+                () -> diaryService.moveEntryToBin(UserSession.getSession().getCurrentDiary())); 
+
+            mainMenuController.reloadContent("diary-search-result");
+            //App.openConfirmationPopUp("Are you sure you want to delete this entry?", "Entry has been deleted.", "Entry failed to delete.");
         } catch (IOException ex) {
             ex.printStackTrace();
         }

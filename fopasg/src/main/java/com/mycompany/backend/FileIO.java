@@ -15,7 +15,7 @@ public class FileIO
         File file;
         if (filename.toLowerCase().contains("test"))
         {
-            file = new File((System.getProperty("user.dir").contains("fopasg") ? "" : "fopasg/") + "src/test/resources/" + filename);
+            file = new File((System.getProperty("user.dir").contains("fopasg") ? "" : "fopasg/") + "src/test/resources/tmp/" + filename);
         }
         else
         {
@@ -32,7 +32,7 @@ public class FileIO
         File folder;
         if (folderName.toLowerCase().contains("test"))
         {
-            folder = new File((System.getProperty("user.dir").contains("fopasg") ? "" : "fopasg/") + "src/test/resources/" + folderName);
+            folder = new File((System.getProperty("user.dir").contains("fopasg") ? "" : "fopasg/") + "src/test/resources/tmp/" + folderName);
         }
         else
         {
@@ -48,9 +48,14 @@ public class FileIO
     public File loadFile(String filename) throws URISyntaxException, FileNotFoundException
     {
         File file;
-        if (filename.toLowerCase().contains("test"))
+        if (filename.equals("TestUsers.txt") || filename.equals("testApple.jpg") || filename.equals("testBanana.jpg")
+            || filename.equals("testGrape.jpg") || filename.equals("testOrange.jpg"))
         {
             file = new File((System.getProperty("user.dir").contains("fopasg") ? "" : "fopasg/") + "src/test/resources/" + filename);
+        }
+        else if (filename.toLowerCase().contains("test"))
+        {
+            file = new File((System.getProperty("user.dir").contains("fopasg") ? "" : "fopasg/") + "src/test/resources/tmp/" + filename);
         }
         else
         {
@@ -84,11 +89,14 @@ public class FileIO
         }
 
         //get files that matches the key
-        for (File file : filePath.listFiles())
+        if (filePath.listFiles() != null) 
         {
-            if (file.getName().startsWith(key))
+            for (File file : filePath.listFiles())
             {
-                files.add(file);
+                if (file.getName().startsWith(key))
+                {
+                    files.add(file);
+                }
             }
         }
 
@@ -153,16 +161,13 @@ public class FileIO
     }
 
     //Add files
-    public void addFile(String folderToAdd, File file, String filenameToSaveAs, String fileType) throws IOException
+    public void addFile(String folderToAdd, File file, String filenameToSaveAs, String fileType) throws IOException, URISyntaxException
     {
-        File destination = new File(folderToAdd, filenameToSaveAs + "." + fileType);
+        File destination = new File(loadFile(folderToAdd), filenameToSaveAs + "." + fileType);
 
         //copy file to destination
-        try(FileOutputStream fos = new FileOutputStream(destination))
-        {
-            Files.copy(file, fos);
-        }
-
+        FileOutputStream fos = new FileOutputStream(destination);
+        Files.copy(file, fos);
     }
 
     //Edit
@@ -242,6 +247,23 @@ public class FileIO
         else 
         {
             System.out.println("Failed to delete file \""+ filename + "\". File may not exist or is in use.");
+        }
+    }
+
+    //Clear tmp folder
+    public void clearTmpFolder() throws URISyntaxException, IOException
+    {
+        //load folder
+        File folder = new File((System.getProperty("user.dir").contains("fopasg") ? "" : "fopasg/") + "src/test/resources/tmp");
+        if (folder.listFiles() != null)
+        {
+            for (File file : folder.listFiles())
+            {
+                if (!file.delete() || folder.getName().equals("images"))
+                {
+                    continue;
+                }
+            }
         }
     }
 }

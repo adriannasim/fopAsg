@@ -13,6 +13,7 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -35,6 +36,7 @@ import com.mycompany.backend.DiaryService;
 import com.mycompany.backend.ServiceResult;
 import com.mycompany.backend.UserSession;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -519,8 +521,24 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
 
                 // When user want to add image, then will display the images
                 uploadImageBtn.setOnMouseClicked(event -> {
+                        //open file chooser
+                        FileChooser fileChooser = new FileChooser();
+                        fileChooser.setTitle("Choose image(s) to be uploaded");
+                        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
+                        
+                        List<File> selectedImageFiles = fileChooser.showOpenMultipleDialog(uploadImageBtn.getScene().getWindow());
+                        List<String> selectedImageFilesPath = diary.getImagePaths();
+
+                        if (!selectedImageFiles.isEmpty())
+                        {
+                                for (File file : selectedImageFiles)
+                                {
+                                        selectedImageFilesPath.add(file.getAbsolutePath());
+                                }
+                        }
+
                         // Use to display the images
-                        displayImages();
+                        displayImages(diary.getImagePaths());
                 });
         }
 
@@ -576,13 +594,7 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
          * METHOD TO DISPLAY THE IMAGES IN UI.
          * 
          ***/
-        public void displayImages() {
-
-                // Sample for illustration purpose (MUST CHANGES !!!!!!!!!!!!!!)
-                List<String> imagePaths = new ArrayList<>();
-                imagePaths.add(getClass().getResource("/com/mycompany/frontend/images/test-img.jpg").toString());
-                imagePaths.add(getClass().getResource("/com/mycompany/frontend/images/italic-icon.png").toString());
-
+        public void displayImages(List<String> imagePaths) {
                 // Clear existing children
                 images.getChildren().clear();
 

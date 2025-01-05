@@ -18,20 +18,18 @@ public class DiaryService
     private String filename;
     private String imageFolder;
 
-    
-
     public DiaryService(String username)
     {
         //diary entries file will be saved as username
         filename = username + ".csv";
         //user image folder
-        imageFolder = username;
+        imageFolder = "images/" + username;
     }
 
     //get all diary entries for the user
     public List<Diary> getAllDiary()
     {   
-        
+        Diary diaryToBeAdded;
         List<Diary> diaryList = new ArrayList<>();
         try 
         {
@@ -48,7 +46,46 @@ public class DiaryService
                 // {
                 //     // diaryList.add(new Diary(filename, diaryInfo[0], diaryInfo[1], LocalDate.parse(diaryInfo[2]), diaryInfo[3], Diary.Mood.valueOf(diaryInfo[4])));
                 // }
-                diaryList.add(parseDiary(line, filename));
+                diaryToBeAdded = parseDiary(line, filename);
+                if (diaryToBeAdded.getDeletionDate() == null)
+                {
+                    diaryList.add(diaryToBeAdded);
+                }
+            }
+
+            //done
+            return diaryList;
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException(e);
+        }
+        catch (URISyntaxException e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    //get diaries in recycle bin
+    public List<Diary> getAllDiariesInBin()
+    {   
+        Diary diaryToBeAdded;
+        List<Diary> diaryList = new ArrayList<>();
+        try 
+        {
+            if (!fileIO.loadFile(filename).exists())
+            {
+                    fileIO.createFile(filename);   
+            }
+            List<String> data = fileIO.readFile(filename);
+
+            for (String line : data)
+            {
+                diaryToBeAdded = parseDiary(line, filename);
+                if (diaryToBeAdded.getDeletionDate() != null)
+                {
+                    diaryList.add(diaryToBeAdded);
+                }
             }
 
             //done
@@ -110,7 +147,7 @@ public class DiaryService
         return diary;
     }
 
-    //get diary by title (Search)
+    //get diary by title
     public Diary getDiaryByTitle(String diaryTitle)
     {
         List<Diary> diaries = getAllDiary();
@@ -127,7 +164,7 @@ public class DiaryService
     }
 
     //get a list of diary by search matches (Search)
-    public List<Diary> SearchDiariesByTitle(String searchInput)
+    public List<Diary> searchDiariesByTitle(String searchInput)
     {
         List<Diary> diaries = getAllDiary();
         List<Diary> searchResult = new ArrayList<>();
