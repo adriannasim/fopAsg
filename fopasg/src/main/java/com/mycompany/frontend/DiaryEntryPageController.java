@@ -191,6 +191,12 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
                 // Place the editor (rich text area) into Pane textarea
                 textarea.getChildren().add(editor);
 
+                textarea.setOnKeyPressed(event -> {
+                        if (event.getCode().toString().equals("SPACE")) {
+                                event.consume(); // Consume Spacebar event to prevent scrolling
+                        }
+                });
+
                 // Set the editor same width and height with the textarea container
                 editor.prefWidthProperty().bind(textarea.widthProperty());
                 editor.prefHeightProperty().bind(textarea.heightProperty());
