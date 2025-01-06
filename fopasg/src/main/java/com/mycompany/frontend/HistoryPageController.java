@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -111,7 +110,7 @@ public class HistoryPageController extends SharedPaneCharacteristics {
          * Export button click action
          * 
          ***/
-        exportButton.setOnMouseClicked(e -> {
+        exportButton.setOnMouseClicked(_ -> {
             exportOptions.setVisible(true);
             exportOptions2.setVisible(false);
         });
@@ -133,32 +132,32 @@ public class HistoryPageController extends SharedPaneCharacteristics {
         });
 
         // When user chosen to pick entries to export
-        basedOnPickedEntries.setOnMouseClicked(e -> {
+        basedOnPickedEntries.setOnMouseClicked(_ -> {
             exportOptions.setVisible(false);
             // Operation here
         });
 
         // When user chosen to pick by date range to export
-        basedOnDateRange.setOnMouseClicked(e -> {
+        basedOnDateRange.setOnMouseClicked(_ -> {
             exportOptions2.setVisible(true);
             exportOptions.setVisible(false);
             // Operation here
         });
 
         // When user want export by day
-        basedOnDay.setOnMouseClicked(e -> {
+        basedOnDay.setOnMouseClicked(_ -> {
             mainMenuController.loadNewContent("export-by-day");
             exportOptions2.setVisible(false);
         });
 
         // When user want export by week
-        basedOnWeek.setOnMouseClicked(e -> {
+        basedOnWeek.setOnMouseClicked(_ -> {
             mainMenuController.loadNewContent("export-by-week");
             exportOptions2.setVisible(false);
         });
 
         // When user want export by month
-        basedOnMonth.setOnMouseClicked(e -> {
+        basedOnMonth.setOnMouseClicked(_ -> {
             mainMenuController.loadNewContent("export-by-month");
             exportOptions2.setVisible(false);
         });
@@ -309,29 +308,29 @@ public class HistoryPageController extends SharedPaneCharacteristics {
 
         // Hover effect for dynamically created pane
         pane.setOnMouseEntered(
-                e -> hoverPane.setStyle("-fx-background-color: rgba(30,30,30,0.7); visibility: visible;"));
-        pane.setOnMouseExited(e -> hoverPane.setStyle("-fx-background-color: rgba(30,30,30,0.7); visibility: hidden;"));
+                _ -> hoverPane.setStyle("-fx-background-color: rgba(30,30,30,0.7); visibility: visible;"));
+        pane.setOnMouseExited(_ -> hoverPane.setStyle("-fx-background-color: rgba(30,30,30,0.7); visibility: hidden;"));
 
         // Event handler for edit icon
-        editIcon.setOnMouseClicked(e -> {
+        editIcon.setOnMouseClicked(_ -> {
             // Perform the edit action here
             handleEdit(item);
         });
 
         // Event handler for delete icon
-        deleteIcon.setOnMouseClicked(e -> {
+        deleteIcon.setOnMouseClicked(_ -> {
             // Perform the delete action here
             handleDelete(item);
         });
 
         // Event handler for view icon
-        viewIcon.setOnMouseClicked(e -> {
+        viewIcon.setOnMouseClicked(_ -> {
             // Perform the view action here
             handleView(item);
         });
 
         // Here used to handle entries selection when user want to export into PDF
-        pane.setOnMouseClicked(e -> {
+        pane.setOnMouseClicked(_ -> {
             if (pane.getStyle().contains("-fx-border-color: #6A669D;")) {
                 // Unselect
                 pane.setStyle("-fx-background-color: #F1F1F1; -fx-border-color: transparent;");

@@ -27,7 +27,7 @@ public class PopUpImgController {
      ***/
     public void initialize() {
         // Add a click event to the cross icon
-        crossIcon.setOnMouseClicked(event -> closeMessageWindow());
+        crossIcon.setOnMouseClicked(_ -> closeMessageWindow());
     }
 
     /***

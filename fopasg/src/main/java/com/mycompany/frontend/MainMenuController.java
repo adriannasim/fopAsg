@@ -75,33 +75,33 @@ public class MainMenuController {
         diaryService.clearOldDiaryEntry(sessionUsername);
 
         // When user click on newDiaryBtn, navigate to diary-entry-page
-        newDiaryBtn.setOnMouseClicked(e -> {
+        newDiaryBtn.setOnMouseClicked(_ -> {
             UserSession.getSession().setCurrentDiary(null);
             loadNewContent("diary-entry-page");
         });
 
         // When user click on recycleBinBtn, navigate to diary-recycle-bin
-        recycleBinBtn.setOnMouseClicked(e -> {
+        recycleBinBtn.setOnMouseClicked(_ -> {
             loadNewContent("diary-recycle-bin");
         });
 
         // When user click on historyBtn, navigate to diary-history-page
-        historyBtn.setOnMouseClicked(e -> {
+        historyBtn.setOnMouseClicked(_ -> {
             loadNewContent("diary-history-page");
         });
 
         // When user click on moodTrackerBtn, navigate to mood-tracker
-        moodTrackerBtn.setOnMouseClicked(e -> {
+        moodTrackerBtn.setOnMouseClicked(_ -> {
             loadNewContent("mood-tracker");
         });
 
         // When user click on settingsBtn, navigate to profile
-        settingsBtn.setOnMouseClicked(e -> {
+        settingsBtn.setOnMouseClicked(_ -> {
             loadNewContent("profile-page");
         });
 
         // When user click on logoutBtn, navigate to login
-        logoutBtn.setOnMouseClicked(e->{
+        logoutBtn.setOnMouseClicked(_ -> {
             try{
                 // LOGOUT OPERATION HERE...
                 App.switchScene("login-page");
@@ -115,7 +115,7 @@ public class MainMenuController {
         debounceTimer.setCycleCount(1);
 
         // This is used to ensure we only execute the search task when user stop typing for 500ms
-        searchBar.setOnKeyReleased(e -> {
+        searchBar.setOnKeyReleased(_ -> {
             String query = searchBar.getText();
             if (query != null && !query.isEmpty() && !query.equals("")) {
                 // Reset and schedule the debounce timer
@@ -123,7 +123,7 @@ public class MainMenuController {
                 debounceTimer.getKeyFrames().clear(); // Clear existing keyframes
 
                 // Add a new delayed task
-                debounceTimer.getKeyFrames().add(new KeyFrame(Duration.millis(500), event -> {
+                debounceTimer.getKeyFrames().add(new KeyFrame(Duration.millis(500), _ -> {
                     // SEARCH OPERATION HERE...
                     // Show results in result page
                     loadNewContent("diary-search-result", query.trim());

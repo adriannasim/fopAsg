@@ -95,20 +95,20 @@ public class ProfilePageController extends SharedPaneCharacteristics {
         password.setEditable(false);
 
         // Unless user click on edit icon
-        emailEdit.setOnMouseClicked(e -> {
+        emailEdit.setOnMouseClicked(_ -> {
             email.setEditable(true);
             email.setStyle("-fx-background-color: #F1F1F1;");
             email.requestFocus();
         });
 
-        passwordEdit.setOnMouseClicked(e -> {
+        passwordEdit.setOnMouseClicked(_ -> {
             password.setEditable(true);
             password.setStyle("-fx-background-color: #F1F1F1;");
             password.requestFocus();
         });
 
         // Check for password strength & Validate password format
-        password.setOnKeyTyped(e -> {
+        password.setOnKeyTyped(_ -> {
             // Weak password
             if (password.getText().length() < 6) { // Less than 6 characters
                 password.setStyle("-fx-background-color: #FF9696;");
@@ -133,7 +133,7 @@ public class ProfilePageController extends SharedPaneCharacteristics {
         });
 
         // When user click on submit button
-        submitBtn.setOnMouseClicked(e -> {
+        submitBtn.setOnMouseClicked(_ -> {
 
             // If user not entered the details, display error message accordingly
             // 1. email

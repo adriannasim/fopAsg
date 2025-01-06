@@ -49,7 +49,7 @@ public class App extends Application {
      ***/
     @Override
     public void start(Stage stage) throws IOException {
-        this.stage = stage;
+        App.stage = stage;
         // Landing page here
         Scene initialScene = new Scene(loadFXML("login-page").getRoot(), 900, 600);
         stage.setScene(initialScene);
@@ -308,7 +308,7 @@ public class App extends Application {
         // After 3 seconds, close the pop-up
         javafx.animation.PauseTransition pause = new javafx.animation.PauseTransition(
                 javafx.util.Duration.seconds(3));
-        pause.setOnFinished(e -> messageBoxStage.close());
+        pause.setOnFinished(_ -> messageBoxStage.close());
         pause.play();
     }
 

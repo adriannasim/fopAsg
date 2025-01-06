@@ -18,7 +18,7 @@ public abstract class SharedPaneCharacteristics {
     @FXML
     public void initialize() {
         /*** GO BACK FUNCTION ***/
-        backButton.setOnMouseClicked(e -> {
+        backButton.setOnMouseClicked(_ -> {
              if (mainMenuController != null) {
                 mainMenuController.goBackToPreviousAnchorPane();
             }

@@ -10,7 +10,6 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
@@ -97,7 +96,7 @@ public class SignupController {
         anchorPane.getChildren().add(confirmPassword);
 
         // When user submit sign up form
-        submitBtn.setOnMouseClicked(e -> {
+        submitBtn.setOnMouseClicked(_ -> {
             // If user not entered the details, display error message accordingly
             // 1. email
             if (email.getText().isEmpty()){
@@ -167,7 +166,7 @@ public class SignupController {
         });
 
         // Check for password strength & Validate password format
-        password.setOnKeyTyped(e -> {
+        password.setOnKeyTyped(_ -> {
             // Weak password
             if (password.getText().length() < 6) { // Less than 6 characters
                 password.setStyle("-fx-background-color: #FF9696;");

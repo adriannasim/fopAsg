@@ -50,13 +50,13 @@ public class PopUpBoxController {
     public void initialize() {
 
         // Handle the 'Yes' button click.
-        yesButton.setOnAction(event -> {
+        yesButton.setOnAction(_ -> {
             handleYesButtonClick();
             
         });
 
         // Handle the 'No' button click.
-        noButton.setOnAction(event -> {
+        noButton.setOnAction(_ -> {
             // Simply close the pop-up, no further action.
             Stage stage = (Stage) noButton.getScene().getWindow();
             stage.close();
