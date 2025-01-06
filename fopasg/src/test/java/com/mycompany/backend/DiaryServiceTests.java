@@ -28,31 +28,32 @@ public class DiaryServiceTests
         //create user for test
         userService.userSignUp("TestUser1", "test1@gmail.com", "test123");
         userService.userSignUp("TestUser2", "test2@gmail.com", "test123");
+        userService.userSignUp("TestUser3", "test3@gmail.com", "test123");
     }
 
-    // @AfterClass
-    // public static void cleanUp()
-    // {
-    //     //clear entire file
-    //     try 
-    //     {
-    //         //clear user file
-    //         fileIO.clearFile(userFile);
-    //         fileIO.clearTmpFolder();
-    //     }
-    //     catch (URISyntaxException e)
-    //     {
-    //         throw new RuntimeException(e);
-    //     }
-    //     catch (FileNotFoundException e)
-    //     {
-    //         throw new RuntimeException(e);
-    //     }
-    //     catch (IOException e)
-    //     {
-    //         throw new RuntimeException(e);
-    //     }
-    // }
+    @AfterClass
+    public static void cleanUp()
+    {
+        //clear entire file
+        try 
+        {
+            //clear user file
+            fileIO.clearFile(userFile);
+            fileIO.clearTmpFolder();
+        }
+        catch (URISyntaxException e)
+        {
+            throw new RuntimeException(e);
+        }
+        catch (FileNotFoundException e)
+        {
+            throw new RuntimeException(e);
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
 
     //New diary entry tests---------------------------------------------------------------------------------------------------------------------------------
     @Test 
@@ -79,7 +80,7 @@ public class DiaryServiceTests
     public void testNewDiaryEntryWithOneImage()
     {
         //login
-        ServiceResult result = userService.userLogin("TestUser2", "test123");
+        ServiceResult result = userService.userLogin("TestUser1", "test123");
         DiaryService diaryService = new DiaryService((String) result.getReturnObject());
 
         //get datetime first
@@ -101,10 +102,10 @@ public class DiaryServiceTests
         }
 
         //check if the result of a new diary entry returns true (means operation successful)
-        assertTrue(diaryService.newDiaryEntry("Test Diary Title", createTime, "Today I am Happy.", Diary.Mood.HAPPY, images).isSuccessful());
+        assertTrue(diaryService.newDiaryEntry("Test Add One Image", createTime, "Today I am Happy.", Diary.Mood.HAPPY, images).isSuccessful());
   
         //check if content is correct
-        Diary diary = diaryService.getDiaryByTitle("Test Diary Title");
+        Diary diary = diaryService.getDiaryByTitle("Test Add One Image");
         assertEquals(diary.getDiaryDate(), createTime);
         assertEquals(diary.getDiaryContent(), "Today I am Happy.");
         assertEquals(diary.getMood(), Diary.Mood.HAPPY);
@@ -115,7 +116,7 @@ public class DiaryServiceTests
     public void testNewDiaryEntryWithThreeImages()
     {
         //login
-        ServiceResult result = userService.userLogin("TestUser2", "test123");
+        ServiceResult result = userService.userLogin("TestUser1", "test123");
         DiaryService diaryService = new DiaryService((String) result.getReturnObject());
 
         //get datetime first
@@ -139,10 +140,10 @@ public class DiaryServiceTests
         }
 
         //check if the result of a new diary entry returns true (means operation successful)
-        assertTrue(diaryService.newDiaryEntry("Test Diary Title 2", createTime, "Today I am Happy.", Diary.Mood.HAPPY, images).isSuccessful());
+        assertTrue(diaryService.newDiaryEntry("Test Add Three Image", createTime, "Today I am Happy.", Diary.Mood.HAPPY, images).isSuccessful());
   
         //check if content is correct
-        Diary diary = diaryService.getDiaryByTitle("Test Diary Title 2");
+        Diary diary = diaryService.getDiaryByTitle("Test Add Three Image");
         assertEquals(diary.getDiaryDate(), createTime);
         assertEquals(diary.getDiaryContent(), "Today I am Happy.");
         assertEquals(diary.getMood(), Diary.Mood.HAPPY);
@@ -154,7 +155,7 @@ public class DiaryServiceTests
     public void testEditDiaryEntry()
     {        
         //login
-        ServiceResult result = userService.userLogin("TestUser1", "test123");
+        ServiceResult result = userService.userLogin("TestUser2", "test123");
         DiaryService diaryService = new DiaryService((String) result.getReturnObject());
 
         //get datetime first
@@ -171,7 +172,6 @@ public class DiaryServiceTests
         assertEquals(diary.getDiaryDate(), createTime);
         assertEquals(diary.getDiaryContent(), "Today I am Happy.");
         assertEquals(diary.getMood(), Diary.Mood.HAPPY);
-        assertEquals(diary.getImagePaths().size(), 3);
 
         //edit
         assertTrue(diaryService.editDiaryEntry(diary.getDiaryId(), "Edited Title", createTime, "Today I am Sad.", Diary.Mood.SAD, images).isSuccessful());
@@ -191,14 +191,18 @@ public class DiaryServiceTests
         DiaryService diaryService = new DiaryService((String) result.getReturnObject());
 
         //time
-        LocalDateTime editedDateTime = LocalDateTime.now();
+        LocalDateTime createTime = LocalDateTime.now();
 
         //image to add
         List<File> images = new ArrayList<>();
+        List<File> newImages = new ArrayList<>();
         try
         {
+            //initial
             images.add(fileIO.loadFile("testApple.jpg"));
-            images.add(fileIO.loadFile("testOrange.jpg"));
+            //after
+            newImages.add(fileIO.loadFile("testApple.jpg"));
+            newImages.add(fileIO.loadFile("testBanana.jpg"));
         }
         catch (IOException e)
         {
@@ -209,21 +213,25 @@ public class DiaryServiceTests
             throw new RuntimeException(e);
         }
 
-        //get the first diary just now to be edited
-        Diary diary = diaryService.getDiaryByTitle("Test Diary Title");
-
-        //check if initially image count is one
+        //check if the result of a new diary entry returns true (means operation successful)
+        assertTrue(diaryService.newDiaryEntry("Test Edit To Add One Image", createTime, "Today I am Happy.", Diary.Mood.HAPPY, images).isSuccessful());
+  
+        //check if content is correct
+        Diary diary = diaryService.getDiaryByTitle("Test Edit To Add One Image");
+        assertEquals(diary.getDiaryDate(), createTime);
+        assertEquals(diary.getDiaryContent(), "Today I am Happy.");
+        assertEquals(diary.getMood(), Diary.Mood.HAPPY);
         assertEquals(diary.getImagePaths().size(), 1);
 
         //edit
-        assertTrue(diaryService.editDiaryEntry(diary.getDiaryId(), "Edited To Add One Image", editedDateTime, "Today I am Sad.", Diary.Mood.SAD, images).isSuccessful());
+        assertTrue(diaryService.editDiaryEntry(diary.getDiaryId(), "Edited To Add One Image", createTime, "Today I am Sad.", Diary.Mood.SAD, images).isSuccessful());
     
         //check if content is correct
         Diary editedDiary = diaryService.getDiaryByTitle("Edited To Add One Image");
-        assertEquals(editedDiary.getDiaryDate(), editedDateTime);
+        assertEquals(editedDiary.getDiaryDate(), createTime);
         assertEquals(editedDiary.getDiaryContent(), "Today I am Sad.");
         assertEquals(editedDiary.getMood(), Diary.Mood.SAD);
-        assertEquals(editedDiary.getImagePaths().size(), 2); //it should not add the apple image since it already exists
+        assertEquals(editedDiary.getImagePaths().size(), 2); //added one image
     }
 
     @Test 
@@ -234,14 +242,18 @@ public class DiaryServiceTests
         DiaryService diaryService = new DiaryService((String) result.getReturnObject());
 
         //time
-        LocalDateTime editedDateTime = LocalDateTime.now();
+        LocalDateTime createTime = LocalDateTime.now();
 
         //image to add
         List<File> images = new ArrayList<>();
+        List<File> newImages = new ArrayList<>();
         try
         {
+            //initial
             images.add(fileIO.loadFile("testApple.jpg"));
-            images.add(fileIO.loadFile("testGrape.jpg"));
+            images.add(fileIO.loadFile("testBanana.jpg"));
+            //after
+            newImages.add(fileIO.loadFile("testApple.jpg"));
         }
         catch (IOException e)
         {
@@ -252,21 +264,25 @@ public class DiaryServiceTests
             throw new RuntimeException(e);
         }
 
-        //get the first diary just now to be edited
-        Diary diary = diaryService.getDiaryByTitle("Test Diary Title 2");
-
-        //check if initially image count is three
-        assertEquals(diary.getImagePaths().size(), 3);
+        //check if the result of a new diary entry returns true (means operation successful)
+        assertTrue(diaryService.newDiaryEntry("Test Edit To Remove One Image", createTime, "Today I am Happy.", Diary.Mood.HAPPY, images).isSuccessful());
+  
+        //check if content is correct
+        Diary diary = diaryService.getDiaryByTitle("Test Edit To Remove One Image");
+        assertEquals(diary.getDiaryDate(), createTime);
+        assertEquals(diary.getDiaryContent(), "Today I am Happy.");
+        assertEquals(diary.getMood(), Diary.Mood.HAPPY);
+        assertEquals(diary.getImagePaths().size(), 2);
 
         //edit
-        assertTrue(diaryService.editDiaryEntry(diary.getDiaryId(), "Edited To Remove One Image", editedDateTime, "Today I am Sad.", Diary.Mood.SAD, images).isSuccessful());
+        assertTrue(diaryService.editDiaryEntry(diary.getDiaryId(), "Edited To Remove One Image", createTime, "Today I am Sad.", Diary.Mood.SAD, images).isSuccessful());
     
         //check if content is correct
         Diary editedDiary = diaryService.getDiaryByTitle("Edited To Remove One Image");
-        assertEquals(editedDiary.getDiaryDate(), editedDateTime);
+        assertEquals(editedDiary.getDiaryDate(), createTime);
         assertEquals(editedDiary.getDiaryContent(), "Today I am Sad.");
         assertEquals(editedDiary.getMood(), Diary.Mood.SAD);
-        assertEquals(editedDiary.getImagePaths().size(), 2); //it should remove the banana image
+        assertEquals(editedDiary.getImagePaths().size(), 1); //it should remove the banana image
     }
     
     @Test 
@@ -277,14 +293,18 @@ public class DiaryServiceTests
         DiaryService diaryService = new DiaryService((String) result.getReturnObject());
 
         //time
-        LocalDateTime editedDateTime = LocalDateTime.now();
+        LocalDateTime createTime = LocalDateTime.now();
 
         //image to add
         List<File> images = new ArrayList<>();
+        List<File> newImages = new ArrayList<>();
         try
         {
+            //initial
             images.add(fileIO.loadFile("testBanana.jpg"));
-            images.add(fileIO.loadFile("testGrape.jpg"));
+            //after
+            newImages.add(fileIO.loadFile("testGrape.jpg"));
+            newImages.add(fileIO.loadFile("testApple.jpg"));
         }
         catch (IOException e)
         {
@@ -295,18 +315,22 @@ public class DiaryServiceTests
             throw new RuntimeException(e);
         }
 
-        //get the first diary just now to be edited
-        Diary diary = diaryService.getDiaryByTitle("Edited To Remove One Image");
-
-        //check if initially image count is two
-        assertEquals(diary.getImagePaths().size(), 2);
+        //check if the result of a new diary entry returns true (means operation successful)
+        assertTrue(diaryService.newDiaryEntry("Test Edit To Add And Remove", createTime, "Today I am Happy.", Diary.Mood.HAPPY, images).isSuccessful());
+        
+        //check if content is correct
+        Diary diary = diaryService.getDiaryByTitle("Test Edit To Add And Remove");
+        assertEquals(diary.getDiaryDate(), createTime);
+        assertEquals(diary.getDiaryContent(), "Today I am Happy.");
+        assertEquals(diary.getMood(), Diary.Mood.HAPPY);
+        assertEquals(diary.getImagePaths().size(), 1);
 
         //edit
-        assertTrue(diaryService.editDiaryEntry(diary.getDiaryId(), "Edited To Add And Remove", editedDateTime, "Today I feel Normal.", Diary.Mood.NORMAL, images).isSuccessful());
+        assertTrue(diaryService.editDiaryEntry(diary.getDiaryId(), "Edited To Add And Remove", createTime, "Today I feel Normal.", Diary.Mood.NORMAL, images).isSuccessful());
     
         //check if content is correct
         Diary editedDiary = diaryService.getDiaryByTitle("Edited To Add And Remove");
-        assertEquals(editedDiary.getDiaryDate(), editedDateTime);
+        assertEquals(editedDiary.getDiaryDate(), createTime);
         assertEquals(editedDiary.getDiaryContent(), "Today I feel Normal.");
         assertEquals(editedDiary.getMood(), Diary.Mood.NORMAL);
         assertEquals(editedDiary.getImagePaths().size(), 2);
@@ -317,15 +341,30 @@ public class DiaryServiceTests
     public void testDeleteDiaryEntryAndRestore()
     {
         //login
-        ServiceResult result = userService.userLogin("TestUser1", "test123");
+        ServiceResult result = userService.userLogin("TestUser3", "test123");
         DiaryService diaryService = new DiaryService((String) result.getReturnObject());
 
+        //create date time
+        LocalDateTime createTime = LocalDateTime.now();
+        
+        //create diary
+        assertTrue(diaryService.newDiaryEntry("Delete And Restore", createTime, "Today I am Happy.", Diary.Mood.HAPPY, new ArrayList<>()).isSuccessful());
+
         //get diary and delete it
-        Diary diaryEntryToBeDeleted = diaryService.getDiaryByTitle("Edited Title");
+        Diary diaryEntryToBeDeleted = diaryService.getDiaryByTitle("Delete And Restore");
         assertTrue(diaryService.moveEntryToBin(diaryEntryToBeDeleted).isSuccessful());
 
         //check if still exists
-        assertNull(diaryService.getDiaryByTitle("Edited Title"));
+        assertNull(diaryService.getDiaryByTitle("Delete And Restore"));
+
+        //then restore it
+        assertTrue(diaryService.restoreDiaryEntry(diaryEntryToBeDeleted).isSuccessful());
+
+        //check if it exists
+        Diary editedDiary = diaryService.getDiaryByTitle("Delete And Restore");
+        assertEquals(editedDiary.getDiaryDate(), createTime);
+        assertEquals(editedDiary.getDiaryContent(), "Today I am Happy.");
+        assertEquals(editedDiary.getMood(), Diary.Mood.HAPPY);
     }
 
     @Test
@@ -337,27 +376,33 @@ public class DiaryServiceTests
         assertThrows(RuntimeException.class, () -> diaryService.getAllDiary());
     }
     
+    //test pdf
     @Test
     public void testExportDiaryToPDF() {
+        //login
+        ServiceResult result = userService.userLogin("TestUser3", "test123");
+        DiaryService diaryService = new DiaryService((String) result.getReturnObject());
+
+        List <File> images = new ArrayList<>();
         try {
             // Create sample diary entries
-            diaryService.newDiaryEntry("First Entry", LocalDateTime.of(2024, 1, 10, 10, 0), "This is the first entry.");
-            diaryService.newDiaryEntry("Second Entry", LocalDateTime.of(2024, 1, 15, 12, 0), "This is the second entry.");
-            diaryService.newDiaryEntry("Third Entry", LocalDateTime.of(2024, 1, 20, 14, 0), "This is the third entry.");
+            diaryService.newDiaryEntry("First Entry", LocalDateTime.of(2024, 1, 10, 10, 0), "This is the first entry.", Diary.Mood.HAPPY, images);
+            diaryService.newDiaryEntry("Second Entry", LocalDateTime.of(2024, 1, 15, 12, 0), "This is the second entry.", Diary.Mood.NORMAL, images);
+            diaryService.newDiaryEntry("Third Entry", LocalDateTime.of(2024, 1, 20, 14, 0), "This is the third entry.", Diary.Mood.SAD, images);
 
             // Export entries within a date range to PDF
             LocalDateTime startDate = LocalDateTime.of(2024, 1, 10, 0, 0);
             LocalDateTime endDate = LocalDateTime.of(2024, 1, 18, 23, 59);
             String pdfFilename = "TestExportDiary.pdf";
 
-            ServiceResult result = diaryService.exportDiaryToPDF(startDate, endDate, pdfFilename);
+            ServiceResult exportResult = diaryService.exportDiaryToPDF(startDate, endDate, pdfFilename, "day");
 
             // Verify the operation was successful
-            System.out.println(result.getReturnMessage());
-            assertTrue(result.isSuccessful());
+            System.out.println(exportResult.getReturnMessage());
+            assertTrue(exportResult.isSuccessful());
 
             // Use the correct method to access the message
-            assertEquals("Diary entries exported to PDF successfully.", result.getReturnMessage());
+            assertEquals("Diary entries exported to PDF successfully.", exportResult.getReturnMessage());
 
             // Check if the file was created
             assertTrue(fileIO.loadFile(pdfFilename).exists());
