@@ -6,6 +6,7 @@ import com.mycompany.backend.ServiceResult;
 import com.mycompany.backend.UserService;
 import com.mycompany.frontend.helper.TogglePasswordField;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
@@ -73,6 +74,10 @@ public class SignupController {
      ***/
     @FXML
     public void initialize() {
+        //set pointer to username textbox
+        Platform.runLater(() -> username.requestFocus());
+
+        email.setFocusTraversable(true);
 
         // Add in togglePasswordFields that can have password visibility toggle functions
         TogglePasswordField password = new TogglePasswordField();

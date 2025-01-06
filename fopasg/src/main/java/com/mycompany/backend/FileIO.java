@@ -17,16 +17,6 @@ import com.google.common.io.Files;
 
 public class FileIO 
 {
-    private String encryptionPassword = "jsdhaodhiu902137u21hesjak";
-    BasicTextEncryptor textEncryptor;
-
-    public FileIO ()
-    {
-        //for file encryption
-        textEncryptor = new BasicTextEncryptor();
-        textEncryptor.setPassword(encryptionPassword);
-    }
-
     //Create file
     public void createFile(String filename) throws IOException
     {
@@ -139,7 +129,7 @@ public class FileIO
             String data;
             while ((data = br.readLine()) != null) 
             {
-                dataArr.add(textEncryptor.decrypt(data));
+                dataArr.add(data);
             }
         }
         return dataArr;
@@ -157,7 +147,7 @@ public class FileIO
                 {
                     bw.newLine();
                 }
-                bw.write(textEncryptor.encrypt(line));
+                bw.write(line);
             }
         }
     }
@@ -200,7 +190,7 @@ public class FileIO
             {
                 bw.newLine();
             }
-            bw.write(textEncryptor.encrypt(dataToAdd.toString()));
+            bw.write(dataToAdd.toString());
         }
     }
 
