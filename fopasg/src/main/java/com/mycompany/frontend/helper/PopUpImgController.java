@@ -46,4 +46,12 @@ public class PopUpImgController {
     public void setImage(Image img) {
         this.img.setImage(img);
     }
+
+    /***
+     * METHOD TO SET THE HEIGHT.
+     * 
+     ***/
+    public void setHeight(double height) {
+        this.imgContainer.setMaxHeight(height);
+    }
 }

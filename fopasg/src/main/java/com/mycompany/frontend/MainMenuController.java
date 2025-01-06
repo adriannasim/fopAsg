@@ -117,7 +117,7 @@ public class MainMenuController {
         // This is used to ensure we only execute the search task when user stop typing for 500ms
         searchBar.setOnKeyReleased(e -> {
             String query = searchBar.getText();
-            if (query != null && !query.isEmpty()) {
+            if (query != null && !query.isEmpty() && !query.equals("")) {
                 // Reset and schedule the debounce timer
                 debounceTimer.stop(); // Stop ongoing timer
                 debounceTimer.getKeyFrames().clear(); // Clear existing keyframes

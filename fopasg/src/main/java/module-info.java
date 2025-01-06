@@ -14,6 +14,8 @@ module com.mycompany {
 
     //gson
     requires com.google.gson;
+    //pdf box
+    requires org.apache.pdfbox;
 
     //guava
     requires com.google.common;

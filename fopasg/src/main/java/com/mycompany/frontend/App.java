@@ -239,12 +239,13 @@ public class App extends Application {
      * METHOD TO SHOW A POP UP IMAGE AT CENTER.
      * 
      ***/
-    public static void openPopUpImg(String filename, Image img) throws IOException {
+    public static void openPopUpImg(String filename, Image img, double maxHeight) throws IOException {
         FXMLLoader loader = loadFXML(filename);
         Parent root = loader.getRoot();
         // Get controller to set the image
         PopUpImgController controller = loader.getController();
         controller.setImage(img);
+        controller.setHeight(maxHeight);
 
         Stage popupStage = new Stage();
         popupStage.initStyle(StageStyle.UNDECORATED);

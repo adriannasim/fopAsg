@@ -3,13 +3,15 @@ package com.mycompany.backend;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.time.LocalDateTime;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
 import com.google.common.io.Files;
+
 
 
 public class DiaryService
@@ -240,10 +242,10 @@ public class DiaryService
             {
                 Diary diary = new Diary(filename, diaryId, diaryTitle, diaryDate, diaryContent, mood);
                 //add images if imagePaths is not empty
-                if (!images.isEmpty())
-                {
+                // if (!images.isEmpty())
+                // {
                     diary.setImagePaths(addOrRemovePic(images, diary.getDiaryId()));
-                }
+                // }
                 fileIO.editFile(filename, diary, diaryId);
                 
                 //done
@@ -354,48 +356,243 @@ public class DiaryService
             throw new RuntimeException(e);
         }
     }
-  
-    //image methods
-    public List<String> addOrRemovePic(List<File> newImages, String diaryId)
-    {
-        List<String> imagePaths = new ArrayList<>();
-        try 
-        {
-            //get existing images in user folder
-            List<File> existingImages = fileIO.loadFiles(imageFolder, diaryId);
+
     
-            //check existing images and updated images by comparing image hashes (to see if user removed any images)
-            for (File existingImage : existingImages)
-            {
-                for (File newImage : newImages)
-                {
-                    //if the incoming image is already in the existing image list (means user didnt remove it)
-                    if (Files.asByteSource(existingImage).contentEquals(Files.asByteSource(newImage)))
-                    {
-                        break; //break out of the inner loop to continue checking if other existing images have been deleted or not
-                    }
+    // Export diary entries within a range to PDF
+    public ServiceResult exportDiaryToPDF(LocalDateTime startDate, LocalDateTime endDate, String pdfFilename, String rangeType) {
+    try {
+        // Fetch all diary entries
+        List<Diary> diaryList = getAllDiary();
+
+        LocalDateTime now = LocalDateTime.now();
+
+        switch (rangeType.toLowerCase()) {
+            case "week":
+                startDate = now.minusDays(7);
+                endDate = now;
+                break;
+            case "month":
+                startDate = now.minusMonths(1);
+                endDate = now;
+                break;
+            case "day":
+                break;
+            default:
+                return new ServiceResult(false, null, "Invalid rangeType. Please choose 'week', 'month', 'day', or 'custom'.");
+        }
+
+
+            // Filter entries by date range
+            List<String> entriesInRange = new ArrayList<>();
+            for (Diary diary : diaryList) {
+                if (!diary.getDiaryDate().isBefore(startDate) && !diary.getDiaryDate().isAfter(endDate)) {
+                    // Format each diary entry for PDF export
+                    entriesInRange.add(formatDiaryEntryForExport(diary));
                 }
-                //if no matches (means user deleted it), then delete it from folder
-                fileIO.purgeFile(existingImage.getAbsolutePath());
-            }
-    
-            //rename all the image to diaryId + index and save it into user folder
-            for (File newImage : newImages)
-            {
-                imagePaths.add(diaryId + "-" + (newImages.indexOf(newImage) + 1) + ".jpg");
-                fileIO.addFile(imageFolder, newImage, diaryId + "-" + (newImages.indexOf(newImage) + 1), "jpg");
             }
 
-            //lastly return the list of imagePaths
+            if (entriesInRange.isEmpty()) {
+                return new ServiceResult(false, null, "No diary entries found in the specified date range.");
+            }
+
+            // Export filtered entries to PDF using FileIO
+            fileIO.exportToPDFUsingPDFBox(pdfFilename, entriesInRange); // Replace with `exportToPDFUsingIText` if preferred
+      
+            return new ServiceResult(true, null, "Diary entries exported to PDF successfully.");
+        } catch (Exception e) {
+            return new ServiceResult(false, null, "Error exporting diary entries to PDF: " + e.getMessage());
+        }
+    }
+
+    // Helper method to format a diary entry for PDF export
+    private String formatDiaryEntryForExport(Diary diary) {
+        return "Title: " + diary.getDiaryTitle() + "\n" +
+              "Date: " + diary.getDiaryDate() + "\n" +
+              "Content:\n" + diary.getDiaryContent() + "\n" +
+              "----------------------------------------";
+    }   
+    
+
+  
+    //image methods
+    // public List<String> addOrRemovePic(List<File> newImages, String diaryId)
+    // {
+    //     List<String> imagePaths = new ArrayList<>();
+    //     List<File> existing = new ArrayList<>();
+        
+    //     try 
+    //     {
+    //         //get existing images in user folder
+    //         List<File> existingImages = fileIO.loadFiles(imageFolder, diaryId);
+    
+    //         //check existing images and updated images by comparing image hashes (to see if user removed any images)
+    //         for (File existingImage : existingImages)
+    //         {
+    //             boolean matched = false;
+    //             for (File newImage : newImages)
+    //             {
+    //                 //if the incoming image is already in the existing image list (means user didnt remove it)
+    //                 if (Files.asByteSource(existingImage).contentEquals(Files.asByteSource(newImage)))
+    //                 {
+    //                     existing.add(existingImage);
+    //                     matched = true;
+    //                     break; //break out of the inner loop to continue checking if other existing images have been deleted or not
+    //                 }
+    //             }
+    //             if(!matched){
+    //                 //if no matches (means user deleted it), then delete it from folder
+    //                 fileIO.purgeFileByFullPath(existingImage.getAbsolutePath());
+    //             }
+                
+    //         }
+    
+    //         //rename all the image to diaryId + index and save it into user folder
+    //         for (File newImage : newImages)
+    //         {
+    //             boolean isAlreadyAdded = false;
+
+    //             // Check if this image already exists (by comparing byte content with already added files)
+    //             for (File e : existing)
+    //             {
+    //                 if (Files.asByteSource(e).contentEquals(Files.asByteSource(newImage)))
+    //                 {
+    //                     isAlreadyAdded = true;
+    //                     break; // Skip adding this image if it's already in the 'existing' list
+    //                 }
+    //             }
+
+    //             // Use the next available index for new images
+    //             String username = filename.replaceFirst("[.][^.]+$", "");
+    //             int index = newImages.indexOf(newImage) + 1; // Using index of newImage for unique naming
+    //             String imagePath = "src/main/resources/images/" + username + "/" + diaryId + "-" + index + ".jpg";
+
+    //             // imagePaths.add(diaryId + "-" + (newImages.indexOf(newImage) + 1) + ".jpg");
+
+    //             // Add the image path to the list
+    //             imagePaths.add(imagePath);
+
+    //             // If the image hasn't been added before, add it now
+    //             if (!isAlreadyAdded)
+    //             {
+    //                 // Add the new image to the folder
+    //                 fileIO.addFile(imageFolder, newImage, diaryId + "-" + index, "jpg");  
+    //                 // fileIO.addFile(imageFolder, newImage, diaryId + "-" + (newImages.indexOf(newImage) + 1), "jpg");
+            
+    //             }
+                
+    //         }
+
+    //         //lastly return the list of imagePaths
+    //         return imagePaths;
+    //     }
+    //     catch (IOException e)
+    //     {
+    //         throw new RuntimeException(e);
+    //     }
+    //     catch (URISyntaxException e)
+    //     {
+    //         throw new RuntimeException(e);
+    //     }
+    // }
+
+    public List<String> addOrRemovePic(List<File> newImages, String diaryId) {
+        
+        List<String> imagePaths = new ArrayList<>();
+        List<File> existing = new ArrayList<>();
+            
+        try {
+            // Get existing images in user folder
+            List<File> existingImages = fileIO.loadFiles(imageFolder, diaryId);
+
+            // Delete all existing files if current newImages is empty
+            if (newImages == null || newImages.isEmpty()) {
+                for (File existingImage : existingImages) {
+                    fileIO.purgeFileByFullPath(existingImage.getAbsolutePath());
+                }
+                return imagePaths; // Return empty list since all images were deleted
+            }
+            
+            // First pass: Mark which existing images to keep
+            for (File existingImage : existingImages) {
+                boolean matched = false;
+                for (File newImage : newImages) {
+                    if (Files.asByteSource(existingImage).contentEquals(Files.asByteSource(newImage))) {
+                        existing.add(existingImage);
+                        matched = true;
+                        break;
+                    }
+                }
+                if (!matched) {
+                    // Delete file if it's not in new images
+                    fileIO.purgeFileByFullPath(existingImage.getAbsolutePath());
+                }
+            }
+    
+            // Second pass: Add new images, reusing existing indices where possible
+            int newIndex = 1; // Start from 1 if no existing images found
+            if (!existing.isEmpty()) {
+                // Find the highest existing index and continue from there
+                newIndex = existing.size() + 1;
+            }
+    
+            for (File newImage : newImages) {
+                boolean isAlreadyAdded = false;
+                String currentIndex = null;
+    
+                // Check if image already exists
+                for (File e : existing) {
+                    if (Files.asByteSource(e).contentEquals(Files.asByteSource(newImage))) {
+                        // Extract index from existing file name
+                        String fileName = e.getName();
+                        currentIndex = fileName.substring(fileName.lastIndexOf('-') + 1, fileName.lastIndexOf('.'));
+                        isAlreadyAdded = true;
+                        break;
+                    }
+                }
+    
+                String username = filename.replaceFirst("[.][^.]+$", "");
+                String index = isAlreadyAdded ? currentIndex : String.valueOf(newIndex);
+                String imagePath = "src/main/resources/images/" + username + "/" + diaryId + "-" + index + ".jpg";
+                
+                imagePaths.add(imagePath);
+    
+                if (!isAlreadyAdded) {
+                    fileIO.addFile(imageFolder, newImage, diaryId + "-" + index, "jpg");
+                    newIndex++;
+                }
+            }
+    
             return imagePaths;
-        }
-        catch (IOException e)
-        {
+        } catch (IOException | URISyntaxException e) {
             throw new RuntimeException(e);
         }
-        catch (URISyntaxException e)
+    }
+  
+    //Mood Tracker
+    public int[] getMoodByDate(LocalDate startDate, LocalDate endDate)
+    {
+        //index: 0 = happy, 1 = normal, 2 = sad
+        int happy = 0, normal = 0, sad = 0;
+        List<Diary> diaries = getAllDiary();
+        for (Diary diary : diaries)
         {
-            throw new RuntimeException(e);
+            if (diary.getDiaryDate().toLocalDate().isAfter(startDate) && diary.getDiaryDate().toLocalDate().isBefore(endDate))
+            {
+                switch(diary.getMood())
+                {
+                    case HAPPY:
+                        happy++;
+                        break;
+                    case NORMAL:
+                        normal++;
+                        break;
+                    case SAD:
+                        sad++;
+                        break;
+                }
+            }
         }
+
+        return new int[] {happy, normal, sad};
     }
 }
