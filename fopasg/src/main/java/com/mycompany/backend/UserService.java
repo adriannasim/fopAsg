@@ -2,13 +2,19 @@ package com.mycompany.backend;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.security.MessageDigest;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
+
+import org.jasypt.util.password.StrongPasswordEncryptor;
+
 
 public class UserService
 {
-    private FileIO fileIO = new FileIO();
     private String filename;
+    private FileIO fileIO = new FileIO();
+    StrongPasswordEncryptor passwordEncryptor = new StrongPasswordEncryptor();
 
     //if no arg passing through constructor, default to Users.txt
     public UserService() {
@@ -80,7 +86,7 @@ public class UserService
                 if (userInfo[0].equals(loginInfo) || userInfo[1].equals(loginInfo))
                 {
                     //then check password
-                    if (userInfo[2].equals(password))
+                    if (passwordEncryptor.checkPassword(password, userInfo[2]))
                     {
                         //login successful
                         return new ServiceResult(true, userInfo[0], "Logged in successfully. Welcome " + userInfo[0] + ".");
@@ -129,7 +135,7 @@ public class UserService
                 }
                 
                 //if no matching existing users, then we can create an account
-                User newUser = new User(username, email, password);
+                User newUser = new User(username, email, passwordEncryptor.encryptPassword(password));
                 fileIO.appendFile(filename, newUser);
                 fileIO.createFile(username + ".csv");
                 return new ServiceResult(true, null, "Account created successfully. Please login.");

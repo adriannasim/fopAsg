@@ -10,12 +10,23 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import java.io.IOException;
 import java.util.List;
 
+import org.jasypt.util.text.BasicTextEncryptor;
 
 import com.google.common.io.Files;
 
 
 public class FileIO 
 {
+    private String encryptionPassword = "jsdhaodhiu902137u21hesjak";
+    BasicTextEncryptor textEncryptor;
+
+    public FileIO ()
+    {
+        //for file encryption
+        textEncryptor = new BasicTextEncryptor();
+        textEncryptor.setPassword(encryptionPassword);
+    }
+
     //Create file
     public void createFile(String filename) throws IOException
     {
@@ -128,7 +139,7 @@ public class FileIO
             String data;
             while ((data = br.readLine()) != null) 
             {
-                dataArr.add(data);
+                dataArr.add(textEncryptor.decrypt(data));
             }
         }
         return dataArr;
@@ -146,7 +157,7 @@ public class FileIO
                 {
                     bw.newLine();
                 }
-                bw.write(line);
+                bw.write(textEncryptor.encrypt(line));
             }
         }
     }
@@ -189,7 +200,7 @@ public class FileIO
             {
                 bw.newLine();
             }
-            bw.write(dataToAdd.toString());
+            bw.write(textEncryptor.encrypt(dataToAdd.toString()));
         }
     }
 
@@ -306,9 +317,12 @@ public class FileIO
         {
             for (File file : folder.listFiles())
             {
-                if (!file.delete() || folder.getName().equals("images"))
+                if (!file.getName().equals("images"))
                 {
-                    continue;
+                    if (!file.delete())
+                    {
+                        continue;
+                    }
                 }
             }
         }

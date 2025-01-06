@@ -37,7 +37,7 @@ public class DiaryService
         {
             if (!fileIO.loadFile(filename).exists())
             {
-                    fileIO.createFile(filename);   
+                fileIO.createFile(filename);   
             }
             List<String> data = fileIO.readFile(filename);
 

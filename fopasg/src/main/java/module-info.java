@@ -20,13 +20,13 @@ module com.mycompany {
     //guava
     requires com.google.common;
 
+    requires jasypt;
+
     opens com.mycompany.frontend to javafx.fxml;
     opens com.mycompany.frontend.helper to javafx.fxml;
     opens com.mycompany.frontend.exportOptions to javafx.fxml;
 
-
-    opens com.mycompany.backend to com.google.gson, com.google.common;
-
+    opens com.mycompany.backend to com.google.gson, com.google.common, jasypt;
 
     exports com.mycompany.frontend;
     exports com.mycompany.backend;

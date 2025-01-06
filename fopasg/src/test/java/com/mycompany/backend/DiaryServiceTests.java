@@ -30,29 +30,29 @@ public class DiaryServiceTests
         userService.userSignUp("TestUser2", "test2@gmail.com", "test123");
     }
 
-    @AfterClass
-    public static void cleanUp()
-    {
-        //clear entire file
-        try 
-        {
-            //clear user file
-            fileIO.clearFile(userFile);
-            fileIO.clearTmpFolder();
-        }
-        catch (URISyntaxException e)
-        {
-            throw new RuntimeException(e);
-        }
-        catch (FileNotFoundException e)
-        {
-            throw new RuntimeException(e);
-        }
-        catch (IOException e)
-        {
-            throw new RuntimeException(e);
-        }
-    }
+    // @AfterClass
+    // public static void cleanUp()
+    // {
+    //     //clear entire file
+    //     try 
+    //     {
+    //         //clear user file
+    //         fileIO.clearFile(userFile);
+    //         fileIO.clearTmpFolder();
+    //     }
+    //     catch (URISyntaxException e)
+    //     {
+    //         throw new RuntimeException(e);
+    //     }
+    //     catch (FileNotFoundException e)
+    //     {
+    //         throw new RuntimeException(e);
+    //     }
+    //     catch (IOException e)
+    //     {
+    //         throw new RuntimeException(e);
+    //     }
+    // }
 
     //New diary entry tests---------------------------------------------------------------------------------------------------------------------------------
     @Test 
