@@ -14,6 +14,8 @@ module com.mycompany {
 
     //gson
     requires com.google.gson;
+    //pdf box
+    requires org.apache.pdfbox;
 
     //guava
     requires com.google.common;
@@ -22,7 +24,9 @@ module com.mycompany {
     opens com.mycompany.frontend.helper to javafx.fxml;
     opens com.mycompany.frontend.exportOptions to javafx.fxml;
 
+
     opens com.mycompany.backend to com.google.gson, com.google.common;
+
 
     exports com.mycompany.frontend;
     exports com.mycompany.backend;

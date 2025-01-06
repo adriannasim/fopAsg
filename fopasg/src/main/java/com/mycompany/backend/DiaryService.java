@@ -3,13 +3,15 @@ package com.mycompany.backend;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.time.LocalDateTime;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
 import com.google.common.io.Files;
+
 
 
 public class DiaryService
@@ -354,6 +356,63 @@ public class DiaryService
             throw new RuntimeException(e);
         }
     }
+
+    
+    // Export diary entries within a range to PDF
+    public ServiceResult exportDiaryToPDF(LocalDateTime startDate, LocalDateTime endDate, String pdfFilename, String rangeType) {
+    try {
+        // Fetch all diary entries
+        List<Diary> diaryList = getAllDiary();
+
+        LocalDateTime now = LocalDateTime.now();
+
+        switch (rangeType.toLowerCase()) {
+            case "week":
+                startDate = now.minusDays(7);
+                endDate = now;
+                break;
+            case "month":
+                startDate = now.minusMonths(1);
+                endDate = now;
+                break;
+            case "day":
+                break;
+            default:
+                return new ServiceResult(false, null, "Invalid rangeType. Please choose 'week', 'month', 'day', or 'custom'.");
+        }
+
+
+            // Filter entries by date range
+            List<String> entriesInRange = new ArrayList<>();
+            for (Diary diary : diaryList) {
+                if (!diary.getDiaryDate().isBefore(startDate) && !diary.getDiaryDate().isAfter(endDate)) {
+                    // Format each diary entry for PDF export
+                    entriesInRange.add(formatDiaryEntryForExport(diary));
+                }
+            }
+
+            if (entriesInRange.isEmpty()) {
+                return new ServiceResult(false, null, "No diary entries found in the specified date range.");
+            }
+
+            // Export filtered entries to PDF using FileIO
+            fileIO.exportToPDFUsingPDFBox(pdfFilename, entriesInRange); // Replace with `exportToPDFUsingIText` if preferred
+      
+            return new ServiceResult(true, null, "Diary entries exported to PDF successfully.");
+        } catch (Exception e) {
+            return new ServiceResult(false, null, "Error exporting diary entries to PDF: " + e.getMessage());
+        }
+    }
+
+    // Helper method to format a diary entry for PDF export
+    private String formatDiaryEntryForExport(Diary diary) {
+        return "Title: " + diary.getDiaryTitle() + "\n" +
+              "Date: " + diary.getDiaryDate() + "\n" +
+              "Content:\n" + diary.getDiaryContent() + "\n" +
+              "----------------------------------------";
+    }   
+    
+
   
     //image methods
     public List<String> addOrRemovePic(List<File> newImages, String diaryId)
@@ -398,7 +457,7 @@ public class DiaryService
             throw new RuntimeException(e);
         }
     }
-
+  
     //Mood Tracker
     public int[] getMoodByDate(LocalDate startDate, LocalDate endDate)
     {
