@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
+import org.jasypt.util.password.StrongPasswordEncryptor;
 import org.junit.*;
 
 public class UserServiceTests 
@@ -12,6 +13,7 @@ public class UserServiceTests
     static String filename = "TestUsers.txt";
     static UserService userService = new UserService(filename);
     static FileIO fileIO = new FileIO();
+    StrongPasswordEncryptor passwordEncryptor = new StrongPasswordEncryptor();
         
     @BeforeClass
     public static void setup()
@@ -52,7 +54,7 @@ public class UserServiceTests
         
         //check if the returned user from the txt file is the same as the one we signed up
         assertEquals("test1@gmail.com", user.getEmail());
-        assertEquals("test123", user.getPassword());
+        assertTrue(passwordEncryptor.checkPassword("test123", user.getPassword()));
     }
 
     @Test
