@@ -359,7 +359,7 @@ public class DiaryService
 
     
     // Export diary entries within a range to PDF
-    public ServiceResult exportDiaryToPDF(LocalDateTime startDate, LocalDateTime endDate, String pdfFilename,String rangeType) {
+    public ServiceResult exportDiaryToPDF(LocalDateTime startDate, LocalDateTime endDate, String pdfFilename, String rangeType) {
     try {
         // Fetch all diary entries
         List<Diary> diaryList = getAllDiary();
@@ -397,7 +397,7 @@ public class DiaryService
 
             // Export filtered entries to PDF using FileIO
             fileIO.exportToPDFUsingPDFBox(pdfFilename, entriesInRange); // Replace with `exportToPDFUsingIText` if preferred
-
+      
             return new ServiceResult(true, null, "Diary entries exported to PDF successfully.");
         } catch (Exception e) {
             return new ServiceResult(false, null, "Error exporting diary entries to PDF: " + e.getMessage());
@@ -457,5 +457,32 @@ public class DiaryService
             throw new RuntimeException(e);
         }
     }
+  
+    //Mood Tracker
+    public int[] getMoodByDate(LocalDate startDate, LocalDate endDate)
+    {
+        //index: 0 = happy, 1 = normal, 2 = sad
+        int happy = 0, normal = 0, sad = 0;
+        List<Diary> diaries = getAllDiary();
+        for (Diary diary : diaries)
+        {
+            if (diary.getDiaryDate().toLocalDate().isAfter(startDate) && diary.getDiaryDate().toLocalDate().isBefore(endDate))
+            {
+                switch(diary.getMood())
+                {
+                    case HAPPY:
+                        happy++;
+                        break;
+                    case NORMAL:
+                        normal++;
+                        break;
+                    case SAD:
+                        sad++;
+                        break;
+                }
+            }
+        }
 
+        return new int[] {happy, normal, sad};
+    }
 }
