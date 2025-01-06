@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -550,6 +551,7 @@ public class DiaryService
                     }
                 }
 
+                Collections.sort(indexes); 
                 for (int index:indexes){
                     if (newIndex == index){
                         newIndex++;
