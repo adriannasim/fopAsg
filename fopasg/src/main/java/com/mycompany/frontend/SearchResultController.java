@@ -1,6 +1,7 @@
 package com.mycompany.frontend;
 
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import com.mycompany.backend.Diary;
@@ -13,6 +14,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 
 /*** 
  * THIS CONTROLLER CLASS IS USED FOR diary-history-page.fxml 
@@ -65,6 +67,13 @@ public class SearchResultController extends SharedPaneCharacteristics{
             Pane diaryItemPane = createDiaryItemPane(diary);
             diaryItemsFlowPane.getChildren().add(diaryItemPane); // Add the pane to the FlowPane
         }
+
+        // If there is no diary entry
+        if (diaries.isEmpty()) {
+            Text emptyMsg = new Text();
+            emptyMsg.setText("No diary entry matched the search queries.");
+            diaryItemsFlowPane.getChildren().add(emptyMsg);
+        }
     }
 
     /*** METHOD TO CREATE DIARYITEMPANE FOR EACH OF THE ENTRIES
@@ -92,7 +101,8 @@ public class SearchResultController extends SharedPaneCharacteristics{
         titleLabel.setFont(javafx.scene.text.Font.font("Roboto Bold", 15));
 
         // Date Label
-        Label dateLabel = new Label(item.getDiaryDate().toLocalDate().toString());
+         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd MMMM yyyy");
+        Label dateLabel = new Label(item.getDiaryDate().toLocalDate().format(dateFormatter));
         dateLabel.setLayoutX(120.0);
         dateLabel.setLayoutY(10.0);
         dateLabel.setStyle("-fx-background-color: #F1F1F1;");
@@ -143,54 +153,62 @@ public class SearchResultController extends SharedPaneCharacteristics{
         // Event handler for edit icon
         editIcon.setOnMouseClicked(e -> {
             // Perform the edit action here 
-            handleEdit();
+            handleEdit(item);
         });
 
         // Event handler for delete icon
         deleteIcon.setOnMouseClicked(e -> {
             // Perform the delete action here
-            handleDelete();
+            handleDelete(item);
         });
 
         // Event handler for view icon
         viewIcon.setOnMouseClicked(e -> {
             // Perform the view action here 
-            handleView(); 
+            handleView(item); 
         });
 
         return pane;
     }
 
-    /*** METHOD TO HANDLE THE DELETE ACTION
+     /***
+     * METHOD TO HANDLE THE DELETE ACTION
      * 
-     * ***/
-    private void handleDelete() {
-        // Show a delete confirmation page
+     ***/
+    private void handleDelete(Diary diary) {
+        // Set current diary to refer
+        UserSession.getSession().setCurrentDiary(diary);
         try {
+            // show a confimation pop up
             App.openConfirmationPopUp("Confirm to delete this entry?",
-                () -> diaryService.moveEntryToBin(UserSession.getSession().getCurrentDiary())); 
-
-            mainMenuController.reloadContent("diary-search-result");
-            //App.openConfirmationPopUp("Are you sure you want to delete this entry?", "Entry has been deleted.", "Entry failed to delete.");
+                    () -> diaryService.moveEntryToBin(UserSession.getSession().getCurrentDiary()));
+            mainMenuController.reloadContent("diary-history-page");
         } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
 
-    /*** METHOD TO HANDLE THE EDIT ACTION
+    /***
+     * METHOD TO HANDLE THE EDIT ACTION
      * 
-     * ***/
-    private void handleEdit() {
+     ***/
+    private void handleEdit(Diary diary) {
+        // Set current diary to refer
+        UserSession.getSession().setCurrentDiary(diary);
         // Show a edit page
         mainMenuController.loadNewContent("diary-entry-page");
     }
 
-    /*** METHOD TO HANDLE THE VIEW ACTION
+    /***
+     * METHOD TO HANDLE THE VIEW ACTION
      * 
-     * ***/
-    private void handleView() {
+     ***/
+    private void handleView(Diary diary) {
+        // Set current diary to refer
+        UserSession.getSession().setCurrentDiary(diary);
         // Show a view page
         mainMenuController.loadNewContent("diary-view-page");
     }
+
 
 }

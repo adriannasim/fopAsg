@@ -1,12 +1,15 @@
 package com.mycompany.frontend;
 
 import javafx.fxml.FXML;
-
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ToggleButton;
@@ -171,7 +174,11 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
         // Used to control the stop of timeNow
         private volatile boolean stop = false;
 
+        // Used to save the mood
         private String mood;
+
+        // Used to store the images
+        List<File> selectedImageFilesPath = new ArrayList<File>();
 
         /***
          * INITILIZATION OF THE CONTROLLER.
@@ -198,29 +205,38 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
                 // If there is a diary to refer to
                 if (diary != null) {
                         try {
-                                 // Get the mood
-                                 mood = diary.getMood().toString();
+                                // Get the mood
+                                mood = diary.getMood().toString();
 
-                                 // Set the mood
-                                 setMoodLabelAndIcon();
+                                // Set the mood
+                                setMoodLabelAndIcon();
 
-                                 moodIcon.setOnMouseClicked(e -> {
-                                         try {
-                                                 mood = App.openMoodIndicator();
-                                                 setMoodLabelAndIcon();
-                                         } catch (IOException ex) {
-                                                 ex.printStackTrace();
-                                         }
-                                 });
+                                moodIcon.setOnMouseClicked(e -> {
+                                        try {
+                                                mood = App.openMoodIndicator();
+                                                setMoodLabelAndIcon();
+                                        } catch (IOException ex) {
+                                                ex.printStackTrace();
+                                        }
+                                });
 
-                                 moodLabel.setOnMouseClicked(e -> {
-                                         try {
-                                                 mood = App.openMoodIndicator();
-                                                 setMoodLabelAndIcon();
-                                         } catch (IOException ex) {
-                                                 ex.printStackTrace();
-                                         }
-                                 });
+                                moodLabel.setOnMouseClicked(e -> {
+                                        try {
+                                                mood = App.openMoodIndicator();
+                                                setMoodLabelAndIcon();
+                                        } catch (IOException ex) {
+                                                ex.printStackTrace();
+                                        }
+                                });
+
+                                // Get the images
+                                selectedImageFilesPath = diary.getImagePaths().stream()
+                                                .filter(path -> path != null && !path.equals("null"))
+                                                .map(File::new)
+                                                .collect(Collectors.toList());
+
+                                // Display the images
+                                displayImages(selectedImageFilesPath);
 
                                 // Linked to the existing diary
                                 editor.getActionFactory()
@@ -448,7 +464,8 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
                                                                 ServiceResult result = diaryService.newDiaryEntry(
                                                                                 title.getText(),
                                                                                 LocalDateTime.now(), diaryContent,
-                                                                                Diary.Mood.valueOf(mood));
+                                                                                Diary.Mood.valueOf(mood),
+                                                                                selectedImageFilesPath);
 
                                                                 if (result.isSuccessful()) {
                                                                         App.openPopUpAtTop("success-message",
@@ -473,7 +490,8 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
                                                                 ServiceResult result = diaryService.editDiaryEntry(
                                                                                 diary.getDiaryId(), title.getText(),
                                                                                 diary.getDiaryDate(), diaryContent,
-                                                                                Diary.Mood.valueOf(mood));
+                                                                                Diary.Mood.valueOf(mood),
+                                                                                selectedImageFilesPath);
                                                                 if (result.isSuccessful()) {
                                                                         App.openPopUpAtTop("success-message",
                                                                                         result.getReturnMessage());
@@ -521,24 +539,25 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
 
                 // When user want to add image, then will display the images
                 uploadImageBtn.setOnMouseClicked(event -> {
-                        //open file chooser
+                        // open file chooser
                         FileChooser fileChooser = new FileChooser();
                         fileChooser.setTitle("Choose image(s) to be uploaded");
-                        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
-                        
-                        List<File> selectedImageFiles = fileChooser.showOpenMultipleDialog(uploadImageBtn.getScene().getWindow());
-                        List<String> selectedImageFilesPath = diary.getImagePaths();
+                        fileChooser.getExtensionFilters().addAll(
+                                        new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
 
-                        if (!selectedImageFiles.isEmpty())
-                        {
-                                for (File file : selectedImageFiles)
-                                {
-                                        selectedImageFilesPath.add(file.getAbsolutePath());
+                        List<File> selectedImageFiles = fileChooser
+                                        .showOpenMultipleDialog(uploadImageBtn.getScene().getWindow());
+                        // List<String> selectedImageFilesPath = diary.getImagePaths();
+
+                        if (selectedImageFiles != null && !selectedImageFiles.isEmpty()) {
+                                for (File file : selectedImageFiles) {
+                                        // selectedImageFilesPath.add(file.getAbsolutePath());
+                                        selectedImageFilesPath.add(file);
                                 }
                         }
 
                         // Use to display the images
-                        displayImages(diary.getImagePaths());
+                        displayImages(selectedImageFilesPath);
                 });
         }
 
@@ -594,14 +613,16 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
          * METHOD TO DISPLAY THE IMAGES IN UI.
          * 
          ***/
-        public void displayImages(List<String> imagePaths) {
+        public void displayImages(List<File> imageFiles) {
                 // Clear existing children
                 images.getChildren().clear();
+                imageFiles.removeIf(file -> file == null || "null".equals(file.getPath()));
 
                 // Iterate over each image path
-                for (String path : imagePaths) {
+                for (File file : imageFiles) {
+
                         // Create an ImageView from the path
-                        ImageView imageView = new ImageView(new Image(path));
+                        ImageView imageView = new ImageView(new Image(file.toURI().toString()));
 
                         // Image settings
                         imageView.setFitWidth(100);
@@ -609,17 +630,46 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
                         imageView.setPreserveRatio(true);
                         imageView.setStyle("-fx-cursor: HAND;");
 
+                        double maxHeight = imageView.getFitHeight();
+
+                        // Create an 'X' button to remove the image
+                        Button closeButton = new Button("X");
+                        closeButton.setVisible(false);
+                        closeButton.setCursor(Cursor.HAND);
+                        closeButton.setStyle("-fx-background-color: red; -fx-text-fill: white;");
+                        closeButton.setOnAction(e -> {
+                                // Remove the image from the image list
+                                imageFiles.remove(file);
+
+                                // Refresh the image display after removing the image
+                                displayImages(imageFiles);
+                        });
+
+                        // Create an HBox to hold the image and close button
+                        HBox imageContainer = new HBox(5, imageView, closeButton);
+                        imageContainer.setAlignment(Pos.CENTER);
+                        imageContainer.setPadding(new Insets(0, 0, 10, 0));
+
+                        imageContainer.setOnMouseEntered(e -> {
+                                closeButton.setVisible(true);
+                        });
+
+                        imageContainer.setOnMouseExited(e -> {
+                                closeButton.setVisible(false);
+                        });
+
                         // Open image pop up view
                         imageView.setOnMouseClicked(e -> {
                                 try {
-                                        App.openPopUpImg("pop-up-img", new Image(path));
+                                        App.openPopUpImg("pop-up-img", new Image(file.toURI().toString()),
+                                                        maxHeight);
                                 } catch (IOException ex) {
                                         ex.printStackTrace();
                                 }
                         });
 
                         // Add ImageView to the container
-                        images.getChildren().add(imageView);
+                        images.getChildren().add(imageContainer);
                 }
         }
 

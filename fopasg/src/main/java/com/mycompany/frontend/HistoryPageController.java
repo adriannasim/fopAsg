@@ -169,8 +169,6 @@ public class HistoryPageController extends SharedPaneCharacteristics {
         // Get user diary
         DiaryService diaryService = new DiaryService(sessionUsername);
         List<Diary> diaryList = diaryService.getAllDiary();
-        // filter not deleted diries
-        diaryList = diaryList.stream().filter(diary -> diary.getDeletionDate()==null).collect(Collectors.toList());
 
         // Group the diary based on date
         List<DiaryGroup> groupedDiaryItems = new ArrayList<>();

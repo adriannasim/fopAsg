@@ -48,7 +48,7 @@ public class FileIO
         System.out.println("Attempting to create folder at: " + folder.getAbsolutePath());
         
         //create the folder
-        folder.mkdir();
+        folder.mkdirs();
     }
 
     //Load file
@@ -272,6 +272,20 @@ public class FileIO
     public void purgeFile(String filename) throws URISyntaxException, FileNotFoundException
     {
         File file = loadFile(filename);
+
+        if (file.delete()) 
+        {
+            System.out.println("File \"" + filename + "\" deleted successfully.");
+        } 
+        else 
+        {
+            System.out.println("Failed to delete file \""+ filename + "\". File may not exist or is in use.");
+        }
+    }
+
+    public void purgeFileByFullPath(String filename) throws URISyntaxException, FileNotFoundException
+    {
+        File file = new File(filename);
 
         if (file.delete()) 
         {

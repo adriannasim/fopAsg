@@ -1,9 +1,11 @@
 package com.mycompany.frontend;
 
+import java.io.File;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.gluonhq.richtextarea.RichTextArea;
 import com.gluonhq.richtextarea.model.Document;
@@ -11,12 +13,17 @@ import com.mycompany.backend.Diary;
 import com.mycompany.backend.UserSession;
 
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.event.ActionEvent;
+import javafx.scene.Cursor;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
 /***
@@ -96,8 +103,10 @@ public class DiaryViewController extends SharedPaneCharacteristics {
         // Set the mood
         setMoodLabelAndIcon();
 
-        // Display the images uploaded by users
-        displayImages();
+        // Get the images
+        List<File> selectedImageFilesPath = diary.getImagePaths().stream().filter(path -> path != null && !path.equals("null")).map(File::new).collect(Collectors.toList());
+        // Display the images
+        displayImages(selectedImageFilesPath);
 
         // Set title
         title.setText(diary.getDiaryTitle());
@@ -156,40 +165,37 @@ public class DiaryViewController extends SharedPaneCharacteristics {
      * METHOD TO DISPLAY THE IMAGES IN UI.
      * 
      ***/
-    public void displayImages() {
+     public void displayImages(List<File> imageFiles) {
+                // Clear existing children
+                images.getChildren().clear();
 
-        // Sample for illustration purpose (MUST CHANGES !!!!!!!!!!!!!!)
-        List<String> imagePaths = new ArrayList<>();
-        imagePaths.add(getClass().getResource("/com/mycompany/frontend/images/test-img.jpg").toString());
-        imagePaths.add(getClass().getResource("/com/mycompany/frontend/images/italic-icon.png").toString());
+                // Iterate over each image path
+                for (File file : imageFiles) {
+                        // Create an ImageView from the path
+                        ImageView imageView = new ImageView(new Image(file.toURI().toString()));
 
-        // Clear existing children
-        images.getChildren().clear();
+                        // Image settings
+                        imageView.setFitWidth(100);
+                        imageView.setFitHeight(100);
+                        imageView.setPreserveRatio(true);
+                        imageView.setStyle("-fx-cursor: HAND;");
 
-        // Iterate over each image path
-        for (String path : imagePaths) {
-            // Create an ImageView from the path
-            ImageView imageView = new ImageView(new Image(path));
+                        double maxHeight = imageView.getFitHeight();
 
-            // Image settings
-            imageView.setFitWidth(100);
-            imageView.setFitHeight(100);
-            imageView.setPreserveRatio(true);
-            imageView.setStyle("-fx-cursor: HAND;");
+                        // Open image pop up view
+                        imageView.setOnMouseClicked(e -> {
+                                try {
+                                        App.openPopUpImg("pop-up-img", new Image(file.toURI().toString()), maxHeight);
+                                } catch (IOException ex) {
+                                        ex.printStackTrace();
+                                }
+                        });
 
-            // Open image pop up view
-            imageView.setOnMouseClicked(e -> {
-                try {
-                    App.openPopUpImg("pop-up-img", new Image(path));
-                } catch (IOException ex) {
-                    ex.printStackTrace();
+                        // Add ImageView to the container
+                        images.getChildren().add(imageView);
                 }
-            });
-
-            // Add ImageView to the container
-            images.getChildren().add(imageView);
         }
-    }
+
 
     /***
      * METHOD TO SET MOOD LABEL AND ICON
