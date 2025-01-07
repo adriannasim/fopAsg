@@ -20,7 +20,7 @@ public class TogglePasswordFieldSkin extends TextFieldSkin {
         show.setPrefSize(20, 20);
         show.setStyle("-fx-background-color: #ffffff; -fx-background-radius: 10;");
         show.setPadding(new Insets(0));
-        show.selectedProperty().addListener((obs, old, selected) -> {
+        show.selectedProperty().addListener((_, _, _) -> {
             // Resetting the text to invalidate the text property so that it will call the
             // maskText method.
             String txt = textField.getText();

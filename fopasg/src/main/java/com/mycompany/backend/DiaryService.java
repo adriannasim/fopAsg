@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -574,6 +575,7 @@ public class DiaryService
         
         List<String> imagePaths = new ArrayList<>();
         List<File> existing = new ArrayList<>();
+        List<Integer> indexes = new ArrayList<>();
             
         try {
             // Get existing images in user folder
@@ -594,6 +596,9 @@ public class DiaryService
                     if (Files.asByteSource(existingImage).contentEquals(Files.asByteSource(newImage))) {
                         existing.add(existingImage);
                         matched = true;
+                        String fileName = existingImage.getName();
+                        int currentIndex = Integer.parseInt(fileName.substring(fileName.lastIndexOf('-') + 1, fileName.lastIndexOf('.')));
+                        indexes.add(currentIndex);
                         break;
                     }
                 }
@@ -605,10 +610,6 @@ public class DiaryService
     
             // Second pass: Add new images, reusing existing indices where possible
             int newIndex = 1; // Start from 1 if no existing images found
-            if (!existing.isEmpty()) {
-                // Find the highest existing index and continue from there
-                newIndex = existing.size() + 1;
-            }
     
             for (File newImage : newImages) {
                 boolean isAlreadyAdded = false;
@@ -621,6 +622,15 @@ public class DiaryService
                         String fileName = e.getName();
                         currentIndex = fileName.substring(fileName.lastIndexOf('-') + 1, fileName.lastIndexOf('.'));
                         isAlreadyAdded = true;
+                        break;
+                    }
+                }
+
+                Collections.sort(indexes); 
+                for (int index:indexes){
+                    if (newIndex == index){
+                        newIndex++;
+                    } else {
                         break;
                     }
                 }

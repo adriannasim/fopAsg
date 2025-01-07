@@ -75,14 +75,6 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button fx:id="backButton" layoutX="38.0" layoutY="40.0" mnemonicParsing="false" style="-fx-background-color: #ffffff;" text="Back" textFill="#8f8f8f">
-               <font>
-                  <Font name="Roboto" size="12.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
             <Text fx:id="passwordMsg" layoutX="139.0" layoutY="380.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-background-color: #ffffff;">
                <font>
                   <Font name="Roboto Bold" size="10.0" />
@@ -90,5 +82,13 @@
             </Text>
          </children>
       </Pane>
+      <Button fx:id="backButton" layoutX="28.0" layoutY="30.0" mnemonicParsing="false" style="-fx-background-color: #ffffff;" text="Back" textFill="#8f8f8f">
+         <font>
+            <Font name="Roboto" size="12.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
    </children>
 </AnchorPane>

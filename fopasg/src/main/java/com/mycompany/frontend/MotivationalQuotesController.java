@@ -25,7 +25,7 @@ public class MotivationalQuotesController {
     @FXML
     public void initialize() {
         // Handle the 'Close' button click
-        closeBtn.setOnAction(event -> {
+        closeBtn.setOnAction(_ -> {
             // Close the pop-up
             Stage stage = (Stage) closeBtn.getScene().getWindow();
             stage.close();

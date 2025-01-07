@@ -217,7 +217,7 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
                                 // Set the mood
                                 setMoodLabelAndIcon();
 
-                                moodIcon.setOnMouseClicked(e -> {
+                                moodIcon.setOnMouseClicked(_ -> {
                                         try {
                                                 mood = App.openMoodIndicator();
                                                 setMoodLabelAndIcon();
@@ -226,7 +226,7 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
                                         }
                                 });
 
-                                moodLabel.setOnMouseClicked(e -> {
+                                moodLabel.setOnMouseClicked(_ -> {
                                         try {
                                                 mood = App.openMoodIndicator();
                                                 setMoodLabelAndIcon();
@@ -283,7 +283,7 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
                                         // Set the mood
                                         setMoodLabelAndIcon();
 
-                                        moodIcon.setOnMouseClicked(e -> {
+                                        moodIcon.setOnMouseClicked(_ -> {
                                                 try {
                                                         mood = App.openMoodIndicator();
                                                         setMoodLabelAndIcon();
@@ -292,7 +292,7 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
                                                 }
                                         });
 
-                                        moodLabel.setOnMouseClicked(e -> {
+                                        moodLabel.setOnMouseClicked(_ -> {
                                                 try {
                                                         mood = App.openMoodIndicator();
                                                         setMoodLabelAndIcon();
@@ -432,7 +432,7 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
 
                 // Listen to any changes on the editor contents (user add, modify or delete the
                 // contents in the rich text area)
-                editor.textLengthProperty().addListener((o, ov, nv) -> {
+                editor.textLengthProperty().addListener((_, _, nv) -> {
                         // Update character count
                         charCount.setText(String.valueOf(nv));
 
@@ -447,7 +447,7 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
                 });
 
                 // When user want to save the diary content
-                submitBtn.setOnMouseClicked(e -> {
+                submitBtn.setOnMouseClicked(_ -> {
                         title.getStyleClass().remove("error");
                         titleMsg.setText("");
                         textarea.getStyleClass().remove("error");
@@ -544,7 +544,7 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
                 });
 
                 // When user want to add image, then will display the images
-                uploadImageBtn.setOnMouseClicked(event -> {
+                uploadImageBtn.setOnMouseClicked(_ -> {
                         // open file chooser
                         FileChooser fileChooser = new FileChooser();
                         fileChooser.setTitle("Choose image(s) to be uploaded");
@@ -643,7 +643,7 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
                         closeButton.setVisible(false);
                         closeButton.setCursor(Cursor.HAND);
                         closeButton.setStyle("-fx-background-color: red; -fx-text-fill: white;");
-                        closeButton.setOnAction(e -> {
+                        closeButton.setOnAction(_ -> {
                                 // Remove the image from the image list
                                 imageFiles.remove(file);
 
@@ -656,16 +656,16 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
                         imageContainer.setAlignment(Pos.CENTER);
                         imageContainer.setPadding(new Insets(0, 0, 10, 0));
 
-                        imageContainer.setOnMouseEntered(e -> {
+                        imageContainer.setOnMouseEntered(_ -> {
                                 closeButton.setVisible(true);
                         });
 
-                        imageContainer.setOnMouseExited(e -> {
+                        imageContainer.setOnMouseExited(_ -> {
                                 closeButton.setVisible(false);
                         });
 
                         // Open image pop up view
-                        imageView.setOnMouseClicked(e -> {
+                        imageView.setOnMouseClicked(_ -> {
                                 try {
                                         App.openPopUpImg("pop-up-img", new Image(file.toURI().toString()),
                                                         maxHeight);

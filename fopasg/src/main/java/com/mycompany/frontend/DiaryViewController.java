@@ -3,7 +3,6 @@ package com.mycompany.frontend;
 import java.io.File;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,17 +12,12 @@ import com.mycompany.backend.Diary;
 import com.mycompany.backend.UserSession;
 
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.event.ActionEvent;
-import javafx.scene.Cursor;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
 /***
@@ -105,6 +99,7 @@ public class DiaryViewController extends SharedPaneCharacteristics {
 
         // Get the images
         List<File> selectedImageFilesPath = diary.getImagePaths().stream().filter(path -> path != null && !path.equals("null")).map(File::new).collect(Collectors.toList());
+        
         // Display the images
         displayImages(selectedImageFilesPath);
 
@@ -134,7 +129,7 @@ public class DiaryViewController extends SharedPaneCharacteristics {
         time.setText(diary.getDiaryDate().format(timeFormatter));
 
         // Listen to the document change event for viewer
-        viewer.documentProperty().addListener((o, ov, nv) -> {
+        viewer.documentProperty().addListener((_, _, nv) -> {
             // If there is a document for viewer
             if (nv != null) {
                 // Set character count
@@ -183,7 +178,7 @@ public class DiaryViewController extends SharedPaneCharacteristics {
                         double maxHeight = imageView.getFitHeight();
 
                         // Open image pop up view
-                        imageView.setOnMouseClicked(e -> {
+                        imageView.setOnMouseClicked(_ -> {
                                 try {
                                         App.openPopUpImg("pop-up-img", new Image(file.toURI().toString()), maxHeight);
                                 } catch (IOException ex) {

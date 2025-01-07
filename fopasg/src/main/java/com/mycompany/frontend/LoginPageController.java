@@ -2,7 +2,6 @@ package com.mycompany.frontend;
 
 import java.io.IOException;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -73,7 +72,7 @@ public class LoginPageController extends SharedPaneCharacteristics {
         pane.getChildren().add(password);
 
         // When user want to sign up, open sign up page
-        signUpBtn.setOnMouseClicked(e -> {
+        signUpBtn.setOnMouseClicked(_ -> {
             try {
                 App.openPopUpSignUp("sign-up");
             } catch (IOException ex) {
@@ -82,7 +81,7 @@ public class LoginPageController extends SharedPaneCharacteristics {
         });
 
         // When user want to login, process the user details
-        submitBtn.setOnMouseClicked(e -> {
+        submitBtn.setOnMouseClicked(_ -> {
             try {
                 // pass the username and password input by user to the service
                 ServiceResult result = userService.userLogin(username.getText(), password.getText());

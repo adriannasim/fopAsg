@@ -38,13 +38,15 @@ public class MoodTrackerController extends SharedPaneCharacteristics{
     @FXML
     public void initialize()
     {
+        super.initialize();
+        
         //set default values
         start.setValue(LocalDate.now().minusMonths(1));
         end.setValue(LocalDate.now());
 
         //attach listeners so that the bar chart will be generated dynamically when there's an input
-        start.valueProperty().addListener((observable, oldValue, newValue) -> generateBarChart());
-        end.valueProperty().addListener((observable, oldValue, newValue) -> generateBarChart());
+        start.valueProperty().addListener((_, _, _) -> generateBarChart());
+        end.valueProperty().addListener((_, _, _) -> generateBarChart());
 
         //generate bar chart
         generateBarChart();

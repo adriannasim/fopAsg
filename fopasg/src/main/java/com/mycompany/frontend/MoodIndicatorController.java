@@ -1,7 +1,5 @@
 package com.mycompany.frontend;
 
-import java.io.IOException;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
@@ -38,9 +36,9 @@ public class MoodIndicatorController {
      ***/
     @FXML
     public void initialize() {
-        final String opt;
+        
         // Handle the 'Happy' button click
-        happyBtn.setOnAction(event -> {
+        happyBtn.setOnAction(_ -> {
             // Close the pop-up
             Stage stage = (Stage) happyBtn.getScene().getWindow();
             stage.close();
@@ -56,7 +54,7 @@ public class MoodIndicatorController {
         });
 
         // Handle the 'Normal' button click
-        normalBtn.setOnAction(event -> {
+        normalBtn.setOnAction(_ -> {
             // Close the pop-up
             Stage stage = (Stage) normalBtn.getScene().getWindow();
             stage.close();
@@ -72,7 +70,7 @@ public class MoodIndicatorController {
         });
 
         // Handle the 'Sad' button click
-        sadBtn.setOnAction(event -> {
+        sadBtn.setOnAction(_ -> {
             // Close the pop-up
             Stage stage = (Stage) sadBtn.getScene().getWindow();
             stage.close();

@@ -154,23 +154,23 @@ public class RecycleBinController extends SharedPaneCharacteristics {
 
         // Hover effect for dynamically created pane
         pane.setOnMouseEntered(
-                e -> hoverPane.setStyle("-fx-background-color: rgba(30,30,30,0.7); visibility: visible;"));
-        pane.setOnMouseExited(e -> hoverPane.setStyle("-fx-background-color: rgba(30,30,30,0.7); visibility: hidden;"));
+                _ -> hoverPane.setStyle("-fx-background-color: rgba(30,30,30,0.7); visibility: visible;"));
+        pane.setOnMouseExited(_ -> hoverPane.setStyle("-fx-background-color: rgba(30,30,30,0.7); visibility: hidden;"));
 
         // Event handler for restore icon
-        restoreIcon.setOnMouseClicked(e -> {
+        restoreIcon.setOnMouseClicked(_ -> {
             // Perform the restore action here
             handleRestore(diary);
         });
 
         // Event handler for delete icon
-        deleteIcon.setOnMouseClicked(e -> {
+        deleteIcon.setOnMouseClicked(_ -> {
             // Perform the delete action here
             handleDelete(diary);
         });
 
         // Event handler for view icon
-        viewIcon.setOnMouseClicked(e -> {
+        viewIcon.setOnMouseClicked(_ -> {
             // Perform the view action here
             handleView(diary);
         });
