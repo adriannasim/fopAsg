@@ -68,6 +68,9 @@ public class SignupController {
 
     private boolean isConfirmPasswordMatched = false;
 
+    private TogglePasswordField password;
+    private TogglePasswordField confirmPassword;
+
     /***
      * INITILIZATION OF THE CONTROLLER
      * 
@@ -77,10 +80,8 @@ public class SignupController {
         //set pointer to username textbox
         Platform.runLater(() -> username.requestFocus());
 
-        email.setFocusTraversable(true);
-
         // Add in togglePasswordFields that can have password visibility toggle functions
-        TogglePasswordField password = new TogglePasswordField();
+        password = new TogglePasswordField();
         password.setLayoutX(40.0);
         password.setLayoutY(243.0);
         password.setPrefHeight(26.0);
@@ -88,13 +89,17 @@ public class SignupController {
         password.setStyle("-fx-background-color: #D9D9D9");
         anchorPane.getChildren().add(password);
 
-        TogglePasswordField confirmPassword = new TogglePasswordField();
+        confirmPassword = new TogglePasswordField();
         confirmPassword.setLayoutX(40.0);
         confirmPassword.setLayoutY(305.0);
         confirmPassword.setPrefHeight(26.0);
         confirmPassword.setPrefWidth(219.0);
         confirmPassword.setStyle("-fx-background-color: #D9D9D9");
         anchorPane.getChildren().add(confirmPassword);
+
+
+        //custom tab to focus
+        setFocusTraversal();
 
         // When user submit sign up form
         submitBtn.setOnMouseClicked(e -> {
@@ -163,7 +168,6 @@ public class SignupController {
                     ex.printStackTrace();
                 }
             }
-
         });
 
         // Check for password strength & Validate password format
@@ -208,4 +212,40 @@ public class SignupController {
         return (password.equals(passwordConfirmation));
     }
 
-}
+    private void setFocusTraversal() {
+        username.setOnKeyPressed(e -> {
+            if (e.getCode() == javafx.scene.input.KeyCode.TAB) {
+                email.requestFocus();
+                e.consume();
+            }
+        });
+
+        email.setOnKeyPressed(e -> {
+            if (e.getCode() == javafx.scene.input.KeyCode.TAB) {
+                password.requestFocus();
+                e.consume();
+            }
+        });
+
+        password.setOnKeyPressed(e -> {
+            if (e.getCode() == javafx.scene.input.KeyCode.TAB) {
+                confirmPassword.requestFocus();
+                e.consume();
+            }
+        });
+
+        confirmPassword.setOnKeyPressed(e -> {
+            if (e.getCode() == javafx.scene.input.KeyCode.TAB) {
+                submitBtn.requestFocus();
+                e.consume();
+            }
+        });
+
+        submitBtn.setOnKeyPressed(e -> {
+            if (e.getCode() == javafx.scene.input.KeyCode.TAB) {
+                username.requestFocus();
+                e.consume();
+            }
+        });
+    }
+} 

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -357,50 +358,123 @@ public class DiaryService
         }
     }
 
-    
-    // Export diary entries within a range to PDF
-    public ServiceResult exportDiaryToPDF(LocalDateTime startDate, LocalDateTime endDate, String pdfFilename, String rangeType) {
-    try {
-        // Fetch all diary entries
-        List<Diary> diaryList = getAllDiary();
-
-        LocalDateTime now = LocalDateTime.now();
-
-        switch (rangeType.toLowerCase()) {
-            case "week":
-                startDate = now.minusDays(7);
-                endDate = now;
-                break;
-            case "month":
-                startDate = now.minusMonths(1);
-                endDate = now;
-                break;
-            case "day":
-                break;
-            default:
-                return new ServiceResult(false, null, "Invalid rangeType. Please choose 'week', 'month', 'day', or 'custom'.");
+    //Export diary to pdf
+    public ServiceResult exportDiaryToPDF(List<Diary> diaries, String pdfFilename)
+    {
+        List<String> entries = new ArrayList<>();
+        //format diary
+        for (Diary diary : diaries)
+        {
+            entries.add(formatDiaryEntryForExport(diary));
         }
 
+        if (!entries.isEmpty())
+        {
+            try
+            {
+                fileIO.exportToPDFUsingPDFBox(pdfFilename + ".pdf", entries);
+                return new ServiceResult(true, null, "Diary entries exported to PDF successfully.");
+            }
+            catch (IOException e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
+        else
+        {
+            return new ServiceResult(false, null, "Failed to export diary entries to PDF.");
 
+        }
+    }
+    
+    // Export diary entries within a date range to PDF
+    public ServiceResult exportDiaryToPDF(LocalDate startDate, LocalDate endDate, String pdfFilename) {
+        List<Diary> filteredDiaries = new ArrayList<>();
+        try {
+            //Fetch all diary entries
+            List<Diary> diaryList = getAllDiary();
+            
             // Filter entries by date range
-            List<String> entriesInRange = new ArrayList<>();
             for (Diary diary : diaryList) {
-                if (!diary.getDiaryDate().isBefore(startDate) && !diary.getDiaryDate().isAfter(endDate)) {
-                    // Format each diary entry for PDF export
-                    entriesInRange.add(formatDiaryEntryForExport(diary));
+                if (diary.getDiaryDate().toLocalDate().isAfter(startDate) && diary.getDiaryDate().toLocalDate().isBefore(endDate)) {
+                    filteredDiaries.add(diary);
                 }
             }
 
-            if (entriesInRange.isEmpty()) {
-                return new ServiceResult(false, null, "No diary entries found in the specified date range.");
+            if (!diaryList.isEmpty())
+            {
+                return exportDiaryToPDF(filteredDiaries, pdfFilename);
             }
-
-            // Export filtered entries to PDF using FileIO
-            fileIO.exportToPDFUsingPDFBox(pdfFilename, entriesInRange); // Replace with `exportToPDFUsingIText` if preferred
-      
-            return new ServiceResult(true, null, "Diary entries exported to PDF successfully.");
+            else
+            {
+                return new ServiceResult(false, null, "No diary entries found within the specified date range.");
+            }
         } catch (Exception e) {
-            return new ServiceResult(false, null, "Error exporting diary entries to PDF: " + e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    //export diary entries by month and year
+    public ServiceResult exportDiaryToPDF(Month month, int year, String pdfFilename) 
+    {
+        List<Diary> filteredDiaries = new ArrayList<>();
+        try 
+        {
+            // Fetch all diary entries
+            List<Diary> diaryList = getAllDiary();
+
+            // Filter entries
+            for (Diary diary : diaryList) 
+            {
+                if (diary.getDiaryDate().getMonth() == month  && diary.getDiaryDate().getYear() == year) 
+                {
+                    filteredDiaries.add(diary);
+                }
+            }
+            if (!diaryList.isEmpty())
+            {
+                return exportDiaryToPDF(filteredDiaries, pdfFilename);
+            }
+            else
+            {
+                return new ServiceResult(false, null, "No diary entries found within the specified date range.");
+            }
+        } 
+        catch (Exception e) 
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    //export diary entries by start date and weeks
+    public ServiceResult exportDiaryToPDF(LocalDate startDate, int weeks, String pdfFilename) 
+    {
+        List<Diary> filteredDiaries = new ArrayList<>();
+        try 
+        {
+            // Fetch all diary entries
+            List<Diary> diaryList = getAllDiary();
+
+            // Filter entries
+            for (Diary diary : diaryList) 
+            {
+                if (diary.getDiaryDate().toLocalDate().isAfter(startDate) && diary.getDiaryDate().toLocalDate().isBefore(startDate.plusWeeks(weeks))) 
+                {
+                    filteredDiaries.add(diary);
+                }
+            }
+            if (!diaryList.isEmpty())
+            {
+                return exportDiaryToPDF(filteredDiaries, pdfFilename);
+            }
+            else
+            {
+                return new ServiceResult(false, null, "No diary entries found within the specified date range.");
+            }
+        } 
+        catch (Exception e) 
+        {
+            throw new RuntimeException(e);
         }
     }
 
@@ -408,8 +482,9 @@ public class DiaryService
     private String formatDiaryEntryForExport(Diary diary) {
         return "Title: " + diary.getDiaryTitle() + "\n" +
               "Date: " + diary.getDiaryDate() + "\n" +
+              "Mood:\n" + diary.getMood() + "\n" +
               "Content:\n" + diary.getDiaryContent() + "\n" +
-              "----------------------------------------";
+              "----------------------------------------" + "\n";
     }   
     
 

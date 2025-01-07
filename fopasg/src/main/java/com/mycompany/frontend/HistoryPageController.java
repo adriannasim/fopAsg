@@ -66,7 +66,9 @@ public class HistoryPageController extends SharedPaneCharacteristics {
      * VARIABLES
      * 
      ***/
-    private DiaryService diaryService = new DiaryService(UserSession.getSession().getUsername());
+    private DiaryService diaryService;
+    private List<Diary> diariesSelected = new ArrayList<>();
+    String sessionUsername;
 
     // A class representing a diary group by date (CHANGE
     // LATER!!!!!!!!!!!!!!!!!!!!!)
@@ -107,6 +109,12 @@ public class HistoryPageController extends SharedPaneCharacteristics {
         // Inherit Super Class's initialization
         super.initialize();
 
+        // Get user session
+        sessionUsername = UserSession.getSession().getUsername();
+
+        //initialise diary service
+        diaryService = new DiaryService(sessionUsername);
+
         /***
          * Export button click action
          * 
@@ -136,6 +144,7 @@ public class HistoryPageController extends SharedPaneCharacteristics {
         basedOnPickedEntries.setOnMouseClicked(e -> {
             exportOptions.setVisible(false);
             // Operation here
+            diaryService.exportDiaryToPDF(diariesSelected, "Diaries-" + sessionUsername);
         });
 
         // When user chosen to pick by date range to export
@@ -163,11 +172,7 @@ public class HistoryPageController extends SharedPaneCharacteristics {
             exportOptions2.setVisible(false);
         });
 
-        // Get user session
-        String sessionUsername = UserSession.getSession().getUsername();
-
         // Get user diary
-        DiaryService diaryService = new DiaryService(sessionUsername);
         List<Diary> diaryList = diaryService.getAllDiary();
 
         // Group the diary based on date
@@ -336,10 +341,12 @@ public class HistoryPageController extends SharedPaneCharacteristics {
                 // Unselect
                 pane.setStyle("-fx-background-color: #F1F1F1; -fx-border-color: transparent;");
                 // Add logic here...
+                diariesSelected.remove(item);
             } else {
                 // Select
                 pane.setStyle("-fx-background-color: #F1F1F1; -fx-border-color: #6A669D; -fx-border-width: 2px;");
                 // Add logic here...
+                diariesSelected.add(item);
             }
         });
 

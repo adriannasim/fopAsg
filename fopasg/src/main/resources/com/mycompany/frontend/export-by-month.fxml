@@ -3,44 +3,44 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Spinner?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="472.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.frontend.exportOptions.ExportByMonthController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="472.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.frontend.exportOptions.ExportByDayController">
    <children>
       <Pane prefHeight="472.0" prefWidth="700.0" style="-fx-background-color: #ffffff;">
          <children>
-            <Label layoutX="37.0" layoutY="63.0" text="Export by A Month" textFill="#6a669d">
+            <Label layoutX="37.0" layoutY="63.0" text="Export by Month" textFill="#6a669d">
                <font>
                   <Font name="Roboto Bold" size="20.0" />
                </font>
             </Label>
-            <DatePicker fx:id="month" layoutX="37.0" layoutY="153.0" prefHeight="25.0" prefWidth="117.0">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </DatePicker>
-            <TilePane layoutX="79.0" layoutY="201.0" prefHeight="231.0" prefWidth="526.0" />
-            <Button layoutX="192.0" layoutY="151.0" mnemonicParsing="false" prefWidth="124.0" style="-fx-background-color: #9ABF80; -fx-background-radius: 20px;" text="Export" textFill="WHITE">
-               <font>
-                  <Font name="Roboto Bold" size="15.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-               <padding>
-                  <Insets bottom="5.0" left="40.0" right="40.0" top="5.0" />
-               </padding>
-            </Button>
-            <Label layoutX="37.0" layoutY="103.0" text="Select a month to export the diary(s)." textFill="#8f8f8f">
+            <Label layoutX="37.0" layoutY="103.0" text="Select a date to export the diary(s)." textFill="#8f8f8f">
                <font>
                   <Font name="Roboto" size="12.0" />
                </font>
             </Label>
+            <Label layoutX="98.0" layoutY="155.0" text="Month:" />
+            <ComboBox id="month" editable="true" layoutX="146.0" layoutY="151.0" prefHeight="25.0" prefWidth="117.0" promptText="Choose Month" />
+            <Label layoutX="292.0" layoutY="155.0" text="Year:" />
+            <Spinner id="year" editable="true" layoutX="328.0" layoutY="151.0" prefHeight="25.0" prefWidth="117.0" />
+            <Button id="exportBtn" layoutX="481.0" layoutY="148.0" mnemonicParsing="false" prefWidth="124.0" style="-fx-background-color: #9ABF80; -fx-background-radius: 20px;" text="Export" textFill="WHITE">
+               <font>
+                  <Font name="Roboto Bold" size="15.0" />
+               </font>
+               <padding>
+                  <Insets bottom="5.0" left="40.0" right="40.0" top="5.0" />
+               </padding>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <TilePane layoutX="79.0" layoutY="201.0" prefHeight="231.0" prefWidth="526.0" />
          </children>
       </Pane>
       <Button fx:id="backButton" layoutX="28.0" layoutY="30.0" mnemonicParsing="false" style="-fx-background-color: #ffffff;" text="Back" textFill="#8f8f8f">

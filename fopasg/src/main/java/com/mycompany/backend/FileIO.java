@@ -7,7 +7,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import java.io.IOException;
+
 import java.util.List;
 
 import org.jasypt.util.text.BasicTextEncryptor;
@@ -153,6 +153,9 @@ public class FileIO
     }
 
     public void exportToPDFUsingPDFBox(String pdfFilename, List<String> content) throws IOException {
+        //Get the user's Downloads directory
+        File downloadsDir = new File(System.getProperty("user.home") + File.separator + "Downloads");
+
         try (PDDocument document = new PDDocument()) {
             PDPage page = new PDPage();
             document.addPage(page);
@@ -171,7 +174,7 @@ public class FileIO
                 contentStream.endText();
             }
 
-            document.save(pdfFilename);
+            document.save(new File(downloadsDir, pdfFilename));
             System.out.println("PDF created successfully using PDFBox: " + pdfFilename);
         } catch (Exception e) {
             throw new IOException("Error creating PDF with PDFBox: " + e.getMessage(), e);
