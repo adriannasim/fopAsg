@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 
 import com.mycompany.backend.ServiceResult;
 import com.mycompany.backend.UserService;
@@ -50,6 +51,19 @@ public class LoginPageController extends SharedPaneCharacteristics {
     @FXML
     private Button signUpBtn;
 
+    @FXML
+    private Text usernameMsg;
+
+    @FXML
+    private Text passwordMsg;
+
+    /***
+     * VARIABLES
+     * 
+     ***/
+    boolean isUsernameValid = false;
+    boolean isPasswordValid = false;
+    
     /***
      * INITILIZATION OF THE CONTROLLER
      * 
@@ -98,21 +112,42 @@ public class LoginPageController extends SharedPaneCharacteristics {
     //Login Method
     private void login()
     {
-        try {
-            // pass the username and password input by user to the service
-            ServiceResult result = userService.userLogin(username.getText(), password.getText());
-    
-            // If successfully logged in
-            if (result.getReturnObject() != null) {
-                App.openPopUpAtTop("success-message", result.getReturnMessage());
-                UserSession.getSession().setUsername(username.getText());
-                App.switchScene("main-menu");
-            } else {
-                // pop up fail msg
-                App.openPopUpAtTop("error-message", result.getReturnMessage());
+        // If user not entered the details, display error message accordingly
+        // 1. email/username
+        if (username.getText().isEmpty()){
+            usernameMsg.setText("Please enter your username/email.");
+            isUsernameValid = false;
+        } else {
+            usernameMsg.setText("");
+            isUsernameValid = true;
+        }
+        // 2. password
+        if (password.getText().isEmpty()){
+            passwordMsg.setText("Please enter your password.");
+            isPasswordValid = false;
+        } else {
+            passwordMsg.setText("");
+            isPasswordValid = true;
+        }
+
+        if (isUsernameValid && isPasswordValid)
+        {
+            try {
+                // pass the username and password input by user to the service
+                ServiceResult result = userService.userLogin(username.getText(), password.getText());
+        
+                // If successfully logged in
+                if (result.getReturnObject() != null) {
+                    App.openPopUpAtTop("success-message", result.getReturnMessage());
+                    UserSession.getSession().setUsername(username.getText());
+                    App.switchScene("main-menu");
+                } else {
+                    // pop up fail msg
+                    App.openPopUpAtTop("error-message", result.getReturnMessage());
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
             }
-        } catch (IOException ex) {
-            ex.printStackTrace();
         }
     }
 

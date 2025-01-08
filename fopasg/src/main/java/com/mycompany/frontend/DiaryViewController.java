@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import com.gluonhq.richtextarea.RichTextArea;
 import com.gluonhq.richtextarea.model.Document;
 import com.mycompany.backend.Diary;
@@ -105,7 +103,6 @@ public class DiaryViewController extends SharedPaneCharacteristics {
         setMoodLabelAndIcon();
 
         // Get the images
-        //List<File> selectedImageFilesPath = diary.getImagePaths().stream().filter(path -> path != null && !path.equals("null")).map(File::new).collect(Collectors.toList());
         try
         {
             List<File> selectedImageFilesPath = (fileIO.loadFiles("images/" + username, diary.getDiaryId()));
@@ -236,5 +233,4 @@ public class DiaryViewController extends SharedPaneCharacteristics {
                 break;
         }
     }
-
 }
