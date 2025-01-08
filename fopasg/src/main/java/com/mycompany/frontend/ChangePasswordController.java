@@ -6,6 +6,7 @@ import com.mycompany.backend.UserService;
 import com.mycompany.backend.UserSession;
 import com.mycompany.frontend.helper.TogglePasswordField;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
@@ -83,6 +84,9 @@ public class ChangePasswordController extends SharedPaneCharacteristics {
         confirmNewPassword.setPrefWidth(453);
         confirmNewPassword.setStyle("-fx-background-color: #D9D9D9");
         pane.getChildren().add(confirmNewPassword);
+
+        //set pointer to oldPassword textbox
+        Platform.runLater(() -> oldPassword.requestFocus());
 
         // Check for password strength & Validate password format
         newPassword.setOnKeyTyped(_ -> {
