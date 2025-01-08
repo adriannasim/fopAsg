@@ -10,7 +10,7 @@ public class StyledText {
     private final String text;
     private final String fontFamily;
     private final float fontSize;
-    private final String backgroundColor; // Not directly supported by PDFBox
+    private final String backgroundColor; 
     private final String foregroundColor;
     private final boolean italic;
     private final boolean bold;
@@ -19,6 +19,7 @@ public class StyledText {
     private final boolean bulletedList;
     private final boolean numberedList;
 
+    // Constructor
     public StyledText(String text, String fontFamily, float fontSize, String foregroundColor,
             String backgroundColor, boolean italic, boolean bold,
             boolean strikethrough, boolean underline, boolean bulletedList, boolean numberedList) {
@@ -80,16 +81,23 @@ public class StyledText {
         return numberedList;
     }
 
-    public PDFont getPDFont() {
-        // Attempt to fetch the font from the dynamic font map
+    @SuppressWarnings("exports")
+    public PDFont getPDFont() throws IOException {
         try {
-            PDFont font = DynamicFontLoader.getPDFont(fontFamily, bold, italic);
-            return font;
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-
-        return PDType1Font.HELVETICA;
+            if (bold && italic) {
+                return PDType1Font.HELVETICA_BOLD_OBLIQUE;
+            } else if (bold) {
+                return PDType1Font.HELVETICA_BOLD;
+            } else if (italic) {
+                return PDType1Font.HELVETICA_OBLIQUE;
+            } else {
+                return PDType1Font.HELVETICA;
+            }
+        } catch (Exception e) {
+            System.err.println("Error loading font: " + e.getMessage());
+            // Fall back to Helvetica as the default font in case of any errors
+            return PDType1Font.HELVETICA;
+        } 
     }
 
     public float[] parseColor(String color) {
@@ -146,6 +154,5 @@ public class StyledText {
     private int clamp(int value) {
         return Math.max(0, Math.min(value, 255));
     }
-    
-    
+     
 }

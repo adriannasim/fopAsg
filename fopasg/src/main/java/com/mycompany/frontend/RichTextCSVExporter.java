@@ -472,14 +472,4 @@ public class RichTextCSVExporter {
         return styledTexts;
     }
 
-    // Helper method to convert color to RGB string format
-    private static String convertColorToRGB(Color color) {
-        if (color == null)
-            return "";
-        return String.format("%d,%d,%d",
-                color.getRed(),
-                color.getGreen(),
-                color.getBlue());
-    }
-
 }
