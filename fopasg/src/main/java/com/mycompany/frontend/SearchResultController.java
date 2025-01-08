@@ -96,7 +96,8 @@ public class SearchResultController extends SharedPaneCharacteristics{
         Label titleLabel = new Label(item.getDiaryTitle());
         titleLabel.setLayoutX(74.0);
         titleLabel.setLayoutY(23.0);
-        titleLabel.setStyle("-fx-background-color: #F1F1F1;");
+        titleLabel.setStyle(
+                "-fx-background-color: #F1F1F1; -fx-max-width: 100px; -fx-wrap-text: false; overflow: hidden; text-overflow: ellipsis; display: inline-block;");
         titleLabel.setTextFill(javafx.scene.paint.Color.web("#9abf80"));
         titleLabel.setFont(javafx.scene.text.Font.font("Roboto Bold", 15));
 

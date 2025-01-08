@@ -188,7 +188,6 @@ public class FileIO {
                     String prefix = null;
                     if (styledText.isBulletedList()) {
                         prefix = "• ";
-                        System.out.println("Bulleted list: " + styledText);
                     }
 
                     // Contents
@@ -203,6 +202,7 @@ public class FileIO {
                             contentStream.newLineAtOffset(0, -LINE_HEIGHT);
                             xPosition = MARGIN; // Reset to margin
                             currentWidth = 0; // Reset line width
+                            yPosition -= LINE_HEIGHT;
                             continue; // Skip further processing
                         } else {
                             // Count word width
@@ -212,8 +212,6 @@ public class FileIO {
 
                             // If adding this word would exceed line width
                             if (currentWidth > 0 && newWidth > MAX_LINE_WIDTH) {
-                                // Check y position
-                                yPosition -= LINE_HEIGHT;
                                 // Approach to bottom
                                 if (yPosition <= 50) {
                                     // Open a new page
@@ -246,7 +244,6 @@ public class FileIO {
                                 contentStream.showText(indexCount + ". " + words[i].toString());
                                 indexCount++;
                                 contentStream.newLineAtOffset(-indentation, 0);
-                                yPosition -= LINE_HEIGHT;
                             } else {
                                 // Reset the numberedList index count
                                 indexCount = 1;
@@ -255,20 +252,22 @@ public class FileIO {
                                     contentStream.newLineAtOffset(indentation, 0);
                                     contentStream.showText(prefix + words[i].toString());
                                     contentStream.newLineAtOffset(-indentation, 0);
-                                    yPosition -= LINE_HEIGHT;
                                 }
                                 // Show text only 
                                 else {
                                     contentStream.showText(words[i].toString());
                                 }
                             }
+                            
                         }
                     }
                 }
+    
                 contentStream.endText();
 
                 // Ensure there's enough space below text for images
-                yPosition -= 50f; // Add padding 
+                yPosition -= 20f; // Add the padding
+                
                 if (yPosition < 50) { // If there's no space for images, start a new page
                     contentStream.close();
                     PDPage newPage = new PDPage();
@@ -282,7 +281,6 @@ public class FileIO {
                         diaryIds.get(q));
                 final float IMAGE_MAX_WIDTH = 495f; 
                 final float IMAGE_MAX_HEIGHT = 280f; 
-                final float START_Y_POSITION = 750f;
                 final float IMAGE_SPACING = 20f; 
 
                 // Loop through the list to display each images
@@ -307,14 +305,14 @@ public class FileIO {
                     }
 
                     // Ensure yPosition doesn't go off the page
-                    if (yPosition - height < 50) { 
+                    if ((yPosition - height) < 50) { 
                         contentStream.close();
 
                         // Add a new page
                         PDPage newPage = new PDPage();
                         document.addPage(newPage);
                         contentStream = new PDPageContentStream(document, newPage);
-                        yPosition = START_Y_POSITION; 
+                        yPosition = 750f; 
                     }
 
                     // Draw the image
