@@ -2,6 +2,7 @@ package com.mycompany.frontend;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -9,6 +10,7 @@ import java.util.stream.Collectors;
 import com.gluonhq.richtextarea.RichTextArea;
 import com.gluonhq.richtextarea.model.Document;
 import com.mycompany.backend.Diary;
+import com.mycompany.backend.FileIO;
 import com.mycompany.backend.UserSession;
 
 import javafx.fxml.FXML;
@@ -67,6 +69,7 @@ public class DiaryViewController extends SharedPaneCharacteristics {
      ***/
     // Initialize the place user view their diary content
     private final RichTextArea viewer = new RichTextArea();
+    FileIO fileIO;
 
     private String mood;
 
@@ -75,8 +78,10 @@ public class DiaryViewController extends SharedPaneCharacteristics {
      * 
      ***/
     public void initialize() {
-
         super.initialize();
+
+        //fileIO to load file
+        fileIO = new FileIO();
 
         // Place the viewer (rich text area) into Pane textarea
         textarea.getChildren().add(viewer);
@@ -91,6 +96,8 @@ public class DiaryViewController extends SharedPaneCharacteristics {
         // Set current diary to refer
         Diary diary = UserSession.getSession().getCurrentDiary();
 
+        String username = UserSession.getSession().getUsername();
+        
         // Get the mood
         mood = diary.getMood().toString();
 
@@ -98,10 +105,22 @@ public class DiaryViewController extends SharedPaneCharacteristics {
         setMoodLabelAndIcon();
 
         // Get the images
-        List<File> selectedImageFilesPath = diary.getImagePaths().stream().filter(path -> path != null && !path.equals("null")).map(File::new).collect(Collectors.toList());
-        
-        // Display the images
-        displayImages(selectedImageFilesPath);
+        //List<File> selectedImageFilesPath = diary.getImagePaths().stream().filter(path -> path != null && !path.equals("null")).map(File::new).collect(Collectors.toList());
+        try
+        {
+            List<File> selectedImageFilesPath = (fileIO.loadFiles("images/" + username, diary.getDiaryId()));
+
+            // Display the images
+            displayImages(selectedImageFilesPath);
+        }
+        catch (IOException ex)
+        {
+            ex.printStackTrace();
+        }
+        catch (URISyntaxException ex)
+        {
+            ex.printStackTrace();
+        }
 
         // Set title
         title.setText(diary.getDiaryTitle());
@@ -161,35 +180,35 @@ public class DiaryViewController extends SharedPaneCharacteristics {
      * 
      ***/
      public void displayImages(List<File> imageFiles) {
-                // Clear existing children
-                images.getChildren().clear();
+        // Clear existing children
+        images.getChildren().clear();
 
-                // Iterate over each image path
-                for (File file : imageFiles) {
-                        // Create an ImageView from the path
-                        ImageView imageView = new ImageView(new Image(file.toURI().toString()));
+        // Iterate over each image path
+        for (File file : imageFiles) {
+            // Create an ImageView from the path
+            ImageView imageView = new ImageView(new Image(file.toURI().toString()));
 
-                        // Image settings
-                        imageView.setFitWidth(100);
-                        imageView.setFitHeight(100);
-                        imageView.setPreserveRatio(true);
-                        imageView.setStyle("-fx-cursor: HAND;");
+            // Image settings
+            imageView.setFitWidth(100);
+            imageView.setFitHeight(100);
+            imageView.setPreserveRatio(true);
+            imageView.setStyle("-fx-cursor: HAND;");
 
-                        double maxHeight = imageView.getFitHeight();
+            double maxHeight = imageView.getFitHeight();
 
-                        // Open image pop up view
-                        imageView.setOnMouseClicked(_ -> {
-                                try {
-                                        App.openPopUpImg("pop-up-img", new Image(file.toURI().toString()), maxHeight);
-                                } catch (IOException ex) {
-                                        ex.printStackTrace();
-                                }
-                        });
+            // Open image pop up view
+            imageView.setOnMouseClicked(_ -> {
+                    try {
+                            App.openPopUpImg("pop-up-img", new Image(file.toURI().toString()), maxHeight);
+                    } catch (IOException ex) {
+                            ex.printStackTrace();
+                    }
+            });
 
-                        // Add ImageView to the container
-                        images.getChildren().add(imageView);
-                }
+            // Add ImageView to the container
+            images.getChildren().add(imageView);
         }
+    }
 
 
     /***

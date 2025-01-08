@@ -36,11 +36,13 @@ import com.gluonhq.richtextarea.model.TextDecoration;
 
 import com.mycompany.backend.Diary;
 import com.mycompany.backend.DiaryService;
+import com.mycompany.backend.FileIO;
 import com.mycompany.backend.ServiceResult;
 import com.mycompany.backend.UserSession;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -145,7 +147,8 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
          * VARIABLES.
          * 
          ***/
-
+        FileIO fileIO;
+        
         // Initialize the text contents with empty string
         String text = "";
 
@@ -187,6 +190,8 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
         public void initialize() {
 
                 super.initialize();
+
+                fileIO = new FileIO();
 
                 // Place the editor (rich text area) into Pane textarea
                 textarea.getChildren().add(editor);
@@ -236,13 +241,28 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
                                 });
 
                                 // Get the images
-                                selectedImageFilesPath = diary.getImagePaths().stream()
-                                                .filter(path -> path != null && !path.equals("null"))
-                                                .map(File::new)
-                                                .collect(Collectors.toList());
+                                try
+                                {
+                                        selectedImageFilesPath = (fileIO.loadFiles("images/" + UserSession.getSession().getUsername(), diary.getDiaryId()));
 
-                                // Display the images
-                                displayImages(selectedImageFilesPath);
+                                        // Display the images
+                                        displayImages(selectedImageFilesPath);
+                                }
+                                catch (IOException ex)
+                                {
+                                        ex.printStackTrace();
+                                }
+                                catch (URISyntaxException ex)
+                                {
+                                        ex.printStackTrace();
+                                }
+                                // selectedImageFilesPath = diary.getImagePaths().stream()
+                                //                 .filter(path -> path != null && !path.equals("null"))
+                                //                 .map(File::new)
+                                //                 .collect(Collectors.toList());
+
+                                // // Display the images
+                                // displayImages(selectedImageFilesPath);
 
                                 // Linked to the existing diary
                                 editor.getActionFactory()

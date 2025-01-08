@@ -12,8 +12,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-import com.gluonhq.richtextarea.model.TextDecoration;
-import com.gluonhq.richtextarea.model.Document;
 import com.google.common.io.Files;
 
 import com.mycompany.frontend.RichTextCSVExporter;
@@ -705,9 +703,9 @@ public class DiaryService
                     }
                 }
     
-                String username = filename.replaceFirst("[.][^.]+$", "");
+                //String username = filename.replaceFirst("[.][^.]+$", "");
                 String index = isAlreadyAdded ? currentIndex : String.valueOf(newIndex);
-                String imagePath = "src/main/resources/images/" + username + "/" + diaryId + "-" + index + ".jpg";
+                String imagePath = diaryId + "-" + index + ".jpg";
                 
                 imagePaths.add(imagePath);
     
