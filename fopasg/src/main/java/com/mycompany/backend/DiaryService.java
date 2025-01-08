@@ -271,6 +271,7 @@ public class DiaryService {
             {
                 if (parseDiary(line, filename).getDeletionDate() 
                     != null && parseDiary(line, filename).getDeletionDate().until(LocalDate.now(), ChronoUnit.DAYS) >= 30) //if more or equal than 30
+                {
 
                     fileIO.deleteLineFile(filename, parseDiary(line, filename).getDiaryId());
                 }
