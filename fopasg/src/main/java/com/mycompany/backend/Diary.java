@@ -25,7 +25,7 @@ public class Diary
     public Diary() 
     {
         this.deletionDate = null;
-        this.imagePaths = new ArrayList();
+        this.imagePaths = new ArrayList<>();
     }
 
     public Diary(String username, String diaryId, String diaryTitle, LocalDateTime diaryDate, String diaryContent, Mood mood)

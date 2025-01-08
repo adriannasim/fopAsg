@@ -5,6 +5,7 @@ module com.mycompany {
     requires java.base;
     requires org.fxmisc.richtext;
     requires com.gluonhq.richtextarea;
+    
     requires com.gluonhq.emoji;
     requires org.kordamp.ikonli.lineawesome;
     requires org.kordamp.ikonli.javafx;

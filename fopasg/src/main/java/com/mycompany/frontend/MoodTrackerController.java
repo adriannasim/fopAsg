@@ -112,7 +112,7 @@ public class MoodTrackerController extends SharedPaneCharacteristics{
     //apply the colour to each nodes once it is created
     private void applyStyleToDataNode(XYChart.Data<String, Number> data, String style) 
     {
-        data.nodeProperty().addListener((observable, oldNode, newNode) -> 
+        data.nodeProperty().addListener((_, _, newNode) -> 
         {
             if (newNode != null) 
             {

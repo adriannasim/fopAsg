@@ -12,12 +12,10 @@ import com.gluonhq.richtextarea.model.TableDecoration;
 
 import java.io.IOException;
 
-import javafx.scene.paint.Color;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.List;
 import java.util.ArrayList;
