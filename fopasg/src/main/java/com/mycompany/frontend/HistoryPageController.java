@@ -143,7 +143,7 @@ public class HistoryPageController extends SharedPaneCharacteristics {
         basedOnPickedEntries.setOnMouseClicked(_ -> {
             exportOptions.setVisible(false);
             // Operation here
-            diaryService.exportDiaryToPDF(diariesSelected, "Diaries-" + sessionUsername);
+            diaryService.exportDiaryToPDF(diariesSelected, "Diaries_" + LocalDate.now() + "-" + sessionUsername);
         });
 
         // When user chosen to pick by date range to export

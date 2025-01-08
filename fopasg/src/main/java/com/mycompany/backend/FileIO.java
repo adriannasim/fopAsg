@@ -152,6 +152,7 @@ public class FileIO
         }
     }
 
+    //Export to PDFBOX
     public void exportToPDFUsingPDFBox(String pdfFilename, List<String> content) throws IOException {
         //Get the user's Downloads directory
         File downloadsDir = new File(System.getProperty("user.home") + File.separator + "Downloads");

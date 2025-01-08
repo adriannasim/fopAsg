@@ -36,7 +36,7 @@ public class LoginPageController extends SharedPaneCharacteristics {
                                 // get the value
 
     @FXML
-    private PasswordField password; // This will store the user input for password, use password.getText() to get
+    private TogglePasswordField password; // This will store the user input for password, use password.getText() to get
                                     // the value
 
     @FXML
@@ -57,10 +57,9 @@ public class LoginPageController extends SharedPaneCharacteristics {
      ***/
     @FXML
     public void initialize() {
-
         // Add in togglePasswordFields that can have password visibility toggle
         // functions
-        TogglePasswordField password = new TogglePasswordField();
+        password = new TogglePasswordField();
         password.setLayoutX(87.0);
         password.setLayoutY(273.0);
         password.setPrefHeight(38.0);
@@ -70,6 +69,9 @@ public class LoginPageController extends SharedPaneCharacteristics {
         password.setFont(Font.font("Roboto", FontWeight.BOLD, 12));
         password.setStyle("-fx-background-color:#6ABC6A; -fx-background-radius: 50; -fx-text-inner-color: #ffffff;");
         pane.getChildren().add(password);
+
+        //custom traversal
+        setFocusTraversal();
 
         // When user want to sign up, open sign up page
         signUpBtn.setOnMouseClicked(_ -> {
@@ -101,4 +103,33 @@ public class LoginPageController extends SharedPaneCharacteristics {
         });
     }
 
+    private void setFocusTraversal() {
+        username.setOnKeyPressed(e -> {
+            if (e.getCode() == javafx.scene.input.KeyCode.TAB) {
+                password.requestFocus();
+                e.consume();
+            }
+        });
+
+        password.setOnKeyPressed(e -> {
+            if (e.getCode() == javafx.scene.input.KeyCode.TAB) {
+                submitBtn.requestFocus();
+                e.consume();
+            }
+        });
+
+        submitBtn.setOnKeyPressed(e -> {
+            if (e.getCode() == javafx.scene.input.KeyCode.TAB) {
+                signUpBtn.requestFocus();
+                e.consume();
+            }
+        });
+
+        signUpBtn.setOnKeyPressed(e -> {
+            if (e.getCode() == javafx.scene.input.KeyCode.TAB) {
+                username.requestFocus();
+                e.consume();
+            }
+        });
+    }
 }

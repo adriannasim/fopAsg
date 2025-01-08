@@ -24,7 +24,7 @@ import java.util.ArrayList;
  * 
  ***/
 
-class RichTextCSVExporter {
+public class RichTextCSVExporter {
 
     /***
      * SOME FORMAT DELIMETERS.
@@ -217,7 +217,7 @@ class RichTextCSVExporter {
      * HELPER METHOD TO UNESCAPE SOME SPECIAL CHARACTERS.
      * 
      ***/
-    private static String unescapeCSV(String value) {
+    public static String unescapeCSV(String value) {
         if (value == null || value.isEmpty()) {
             return "";
         }
@@ -242,7 +242,7 @@ class RichTextCSVExporter {
      * HELPER METHOD TO DECODE THE TEXTDECORATION.
      * 
      ***/
-    private static TextDecoration decodeTextDecorations(String encoded) {
+    public static TextDecoration decodeTextDecorations(String encoded) {
         if (encoded == null || encoded.isEmpty()) {
             return null;
         }
@@ -350,7 +350,7 @@ class RichTextCSVExporter {
      * HELPER METHOD TO SAFELY SPLIT CSV BY DELIMETER ",".
      * 
      ***/
-    private static String[] splitCSVLine(String line) {
+    public static String[] splitCSVLine(String line) {
         List<String> columns = new ArrayList<>();
         int start = 0;
         boolean insideQuotes = false;

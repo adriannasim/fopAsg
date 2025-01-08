@@ -9,12 +9,18 @@ import java.time.Month;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
+import com.gluonhq.richtextarea.model.TextDecoration;
 import com.google.common.io.Files;
 
+import com.mycompany.frontend.RichTextCSVExporter;
 
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 
 public class DiaryService
 {
@@ -364,27 +370,26 @@ public class DiaryService
     {
         List<String> entries = new ArrayList<>();
         //format diary
-        for (Diary diary : diaries)
+        try
         {
-            entries.add(formatDiaryEntryForExport(diary));
-        }
+            for (Diary diary : diaries)
+            {
+                entries.addAll(formatDiaryEntryForExport(diary));
+            }
 
-        if (!entries.isEmpty())
-        {
-            try
+            if (!entries.isEmpty())
             {
                 fileIO.exportToPDFUsingPDFBox(pdfFilename + ".pdf", entries);
                 return new ServiceResult(true, null, "Diary entries exported to PDF successfully.");
             }
-            catch (IOException e)
+            else
             {
-                throw new RuntimeException(e);
+                return new ServiceResult(false, null, "Failed to export diary entries to PDF.");
             }
         }
-        else
+        catch (IOException e)
         {
-            return new ServiceResult(false, null, "Failed to export diary entries to PDF.");
-
+            throw new RuntimeException(e);
         }
     }
     
@@ -438,7 +443,7 @@ public class DiaryService
             }
             else
             {
-                return new ServiceResult(false, null, "No diary entries found within the specified date range.");
+                return new ServiceResult(false, null, "No diary entries found within the specified month.");
             }
         } 
         catch (Exception e) 
@@ -470,7 +475,7 @@ public class DiaryService
             }
             else
             {
-                return new ServiceResult(false, null, "No diary entries found within the specified date range.");
+                return new ServiceResult(false, null, "No diary entries found within the specified week range.");
             }
         } 
         catch (Exception e) 
@@ -478,17 +483,17 @@ public class DiaryService
             throw new RuntimeException(e);
         }
     }
-
-    // Helper method to format a diary entry for PDF export
-    private String formatDiaryEntryForExport(Diary diary) {
-        return "Title: " + diary.getDiaryTitle() + "\n" +
-              "Date: " + diary.getDiaryDate() + "\n" +
-              "Mood:\n" + diary.getMood() + "\n" +
-              "Content:\n" + diary.getDiaryContent() + "\n" +
-              "----------------------------------------" + "\n";
-    }   
     
-
+    //format diary for export
+    private List<String> formatDiaryEntryForExport(Diary diary) throws IOException{
+        List<String> formattedEntry = new ArrayList<>();
+        formattedEntry.add("Title: " + diary.getDiaryTitle());
+        formattedEntry.add("Date: " + diary.getDiaryDate().toLocalDate());
+        formattedEntry.add("Mood: " + diary.getMood());
+        formattedEntry.add("Content: " + RichTextCSVExporter.importFromCSV(diary.getDiaryContent()).getText());
+        formattedEntry.add("----------------------------------------");
+        return formattedEntry;
+    }
   
     //image methods
     // public List<String> addOrRemovePic(List<File> newImages, String diaryId)
