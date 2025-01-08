@@ -573,11 +573,9 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
 
                         List<File> selectedImageFiles = fileChooser
                                         .showOpenMultipleDialog(uploadImageBtn.getScene().getWindow());
-                        // List<String> selectedImageFilesPath = diary.getImagePaths();
 
                         if (selectedImageFiles != null && !selectedImageFiles.isEmpty()) {
                                 for (File file : selectedImageFiles) {
-                                        // selectedImageFilesPath.add(file.getAbsolutePath());
                                         selectedImageFilesPath.add(file);
                                 }
                         }
@@ -585,6 +583,9 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
                         // Use to display the images
                         displayImages(selectedImageFilesPath);
                 });
+
+                //set pointer to title textbox
+                Platform.runLater(() -> title.requestFocus());
         }
 
         /***
@@ -646,7 +647,6 @@ public class DiaryEntryPageController extends SharedPaneCharacteristics {
 
                 // Iterate over each image path
                 for (File file : imageFiles) {
-
                         // Create an ImageView from the path
                         ImageView imageView = new ImageView(new Image(file.toURI().toString()));
 

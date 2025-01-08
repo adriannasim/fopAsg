@@ -36,6 +36,7 @@ public class MoodTrackerController extends SharedPaneCharacteristics{
     * 
     ***/
     private DiaryService diaryService = new DiaryService(UserSession.getSession().getUsername());
+    NumberAxis yAxis;
 
     @FXML
     public void initialize()
@@ -47,12 +48,12 @@ public class MoodTrackerController extends SharedPaneCharacteristics{
         end.setValue(LocalDate.now());
 
         //configure bar chart's y axis
-        NumberAxis yAxis = (NumberAxis) barChart.getYAxis();
+        yAxis = (NumberAxis) barChart.getYAxis();
         yAxis.setTickUnit(1);
         yAxis.setMinorTickCount(0);
         yAxis.setAutoRanging(false);
         yAxis.setLowerBound(0);
-        yAxis.setUpperBound(3);
+        yAxis.setUpperBound(5); //default
 
         //attach listeners so that the bar chart will be generated dynamically when there's an input
         start.valueProperty().addListener((_, _, _) -> generateBarChart());
@@ -85,6 +86,15 @@ public class MoodTrackerController extends SharedPaneCharacteristics{
 
         //get mood counts from service
         int[] moodCounts = diaryService.getMoodByDate(startDate, endDate);
+
+        //get max count to set the upperbound of y
+        int maxCount = 0;
+        for (int count : moodCounts) {
+            if (count > maxCount) {
+                maxCount = count;
+            }
+        }
+        yAxis.setUpperBound(maxCount + 2);
 
         //create data series for the bar chart
         XYChart.Series<String, Number> series = new XYChart.Series<>();
