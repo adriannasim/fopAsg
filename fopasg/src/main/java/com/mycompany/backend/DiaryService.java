@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+import com.gluonhq.richtextarea.model.Document;
 import com.google.common.io.Files;
 
 import com.mycompany.frontend.RichTextCSVExporter;
@@ -362,7 +363,7 @@ public class DiaryService
     //Export diary to pdf
     public ServiceResult exportDiaryToPDF(List<Diary> diaries, String pdfFilename)
     {
-        List<String> entries = new ArrayList<>();
+        List<StyledText> entries = new ArrayList<>();
         //format diary
         try
         {
@@ -478,16 +479,85 @@ public class DiaryService
         }
     }
     
-    //format diary for export
-    private List<String> formatDiaryEntryForExport(Diary diary) throws IOException{
-        List<String> formattedEntry = new ArrayList<>();
-        formattedEntry.add("Title: " + diary.getDiaryTitle());
-        formattedEntry.add("Date: " + diary.getDiaryDate().toLocalDate());
-        formattedEntry.add("Mood: " + diary.getMood());
-        formattedEntry.add("Content: " + RichTextCSVExporter.importFromCSV(diary.getDiaryContent()).getText());
-        formattedEntry.add("----------------------------------------");
+    // //format diary for export
+    // private List<String> formatDiaryEntryForExport(Diary diary) throws IOException{
+    //     List<String> formattedEntry = new ArrayList<>();
+    //     formattedEntry.add("Title: " + diary.getDiaryTitle());
+    //     formattedEntry.add("Date: " + diary.getDiaryDate().toLocalDate());
+    //     formattedEntry.add("Mood: " + diary.getMood());
+    //     formattedEntry.add("Content: " + RichTextCSVExporter.importFromCSV(diary.getDiaryContent()).getText());
+    //     formattedEntry.add("----------------------------------------");
+    //     return formattedEntry;
+    // }
+
+    private List<StyledText> formatDiaryEntryForExport(Diary diary) throws IOException {
+        List<StyledText> formattedEntry = new ArrayList<>();
+    
+        // Add title, date, and mood as plain text
+        formattedEntry.add(new StyledText(
+            "Title: " + diary.getDiaryTitle() + "\n",
+            "Helvetica",  // You can retrieve this dynamically if needed
+            14,  // Default font size
+            "#00000000",  // Black color (RGB)
+            "",  // Background color (optional)
+            false,  // Not italic
+            true,  // Bold
+            false,  // No strikethrough
+            false,  // No underline
+            false,  // No bulleted list
+            false   // Not a numbered list
+        ));
+        
+        formattedEntry.add(new StyledText(
+            "Date: " + diary.getDiaryDate().toLocalDate(),
+            "Helvetica",
+            12,  // Font size for date
+            "#00000000",  // Black color
+            "",
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ));
+        
+        formattedEntry.add(new StyledText(
+            "Mood: " + diary.getMood() + "\n",
+            "Helvetica",
+            12,
+            "#00000000",  // Black color
+            "",
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ));
+
+        formattedEntry.add(new StyledText(
+            "Content: \n",
+            "Helvetica",
+            12,
+            "#00000000",  // Black color
+            "",
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ));
+    
+        // Decode content with styles from diary content
+        List<StyledText> contentFragments = RichTextCSVExporter.parseStyledText(diary.getDiaryContent());
+
+        formattedEntry.addAll(contentFragments);
+    
         return formattedEntry;
     }
+    
   
     //image methods
     // public List<String> addOrRemovePic(List<File> newImages, String diaryId)
