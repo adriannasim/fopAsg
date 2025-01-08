@@ -239,7 +239,7 @@ public class UserService
             fileIO.purgeFile(username + ".csv");
 
             //delete all images of the user
-            fileIO.purgeFile("images/" + username);
+            fileIO.purgeFolder("images/" + username);
 
             //done 
             return new ServiceResult(true, null, "Account deleted successfully.");

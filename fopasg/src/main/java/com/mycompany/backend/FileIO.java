@@ -251,4 +251,45 @@ public class FileIO
             System.out.println("Failed to delete file \""+ filename + "\". File may not exist or is in use.");
         }
     }
+
+    //purge folder
+    public void purgeFolder(String folderName) throws IOException, URISyntaxException 
+    {
+        File folder = loadFile(folderName);
+    
+        deleteFolderContents(folder);
+    
+        if (folder.delete())
+        {
+            System.out.println("Folder \"" + folderName + "\" deleted successfully.");
+        } 
+        else 
+        {
+            System.out.println("Failed to delete folder \"" + folderName + "\". It may be in use.");
+        }
+    }
+
+    //repeatly delete folder contents
+    private void deleteFolderContents(File folder) 
+    {
+        File[] files = folder.listFiles();
+        if (files != null) {
+            for (File file : files) 
+            {
+                if (file.isDirectory()) 
+                {
+                    deleteFolderContents(file);
+                }
+                if (file.delete()) 
+                {
+                    System.out.println("Deleted: " + file.getAbsolutePath());
+                } 
+                else 
+                {
+                    System.out.println("Failed to delete: " + file.getAbsolutePath());
+                }
+            }
+        }
+    }
+    
 }
