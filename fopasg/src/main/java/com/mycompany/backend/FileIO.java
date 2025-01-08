@@ -15,34 +15,58 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.jasypt.util.text.BasicTextEncryptor;
+
 import com.google.common.io.Files;
 
-
-public class FileIO 
-{
-    //Create file
-    public void createFile(String filename) throws IOException
-    {
-        File file = new File((System.getProperty("user.dir").contains("fopasg") ? "" : "fopasg/") + "src/main/resources/" + filename);
+public class FileIO {
+    // Create file
+    public void createFile(String filename) throws IOException {
+        File file;
+        if (filename.toLowerCase().contains("test")) {
+            file = new File((System.getProperty("user.dir").contains("fopasg") ? "" : "fopasg/")
+                    + "src/test/resources/tmp/" + filename);
+        } else {
+            file = new File((System.getProperty("user.dir").contains("fopasg") ? "" : "fopasg/") + "src/main/resources/"
+                    + filename);
+        }
         System.out.println("Attempting to create file to: " + file.getAbsolutePath());
 
         file.createNewFile();
     }
 
-    //Create folder
-    public void createFolder(String folderName) throws IOException
-    {
-        File folder = new File((System.getProperty("user.dir").contains("fopasg") ? "" : "fopasg/") + "src/main/resources/" + folderName);
+    // Create folder
+    public void createFolder(String folderName) throws IOException {
+        File folder;
+        if (folderName.toLowerCase().contains("test")) {
+            folder = new File((System.getProperty("user.dir").contains("fopasg") ? "" : "fopasg/")
+                    + "src/test/resources/tmp/" + folderName);
+        } else {
+            folder = new File((System.getProperty("user.dir").contains("fopasg") ? "" : "fopasg/")
+                    + "src/main/resources/" + folderName);
+        }
         System.out.println("Attempting to create folder at: " + folder.getAbsolutePath());
 
         // create the folder
         folder.mkdirs();
     }
 
-    //Load file
-    public File loadFile(String filename) throws URISyntaxException, FileNotFoundException
-    {
-        return new File((System.getProperty("user.dir").contains("fopasg") ? "" : "fopasg/") + "src/main/resources/" + filename);
+    // Load file
+    public File loadFile(String filename) throws URISyntaxException, FileNotFoundException {
+        File file;
+        if (filename.equals("TestUsers.txt") || filename.equals("testApple.jpg") || filename.equals("testBanana.jpg")
+                || filename.equals("testGrape.jpg") || filename.equals("testOrange.jpg")) {
+            file = new File((System.getProperty("user.dir").contains("fopasg") ? "" : "fopasg/") + "src/test/resources/"
+                    + filename);
+        } else if (filename.toLowerCase().contains("test")) {
+            file = new File((System.getProperty("user.dir").contains("fopasg") ? "" : "fopasg/")
+                    + "src/test/resources/tmp/" + filename);
+        } else {
+            file = new File((System.getProperty("user.dir").contains("fopasg") ? "" : "fopasg/") + "src/main/resources/"
+                    + filename);
+        }
+
+        return file;
 
         // ClassLoader classLoader = getClass().getClassLoader();
         // URL resource = classLoader.getResource(filename);
@@ -58,6 +82,14 @@ public class FileIO
         List<File> files = new ArrayList<>();
         File filePath = new File((System.getProperty("user.dir").contains("fopasg") ? "" : "fopasg/") + "src/main/resources/" + folderName);
 
+        if (folderName.toLowerCase().contains("test")) {
+            filePath = new File((System.getProperty("user.dir").contains("fopasg") ? "" : "fopasg/")
+                    + "src/test/resources/" + folderName);
+        } else {
+            filePath = new File((System.getProperty("user.dir").contains("fopasg") ? "" : "fopasg/")
+                    + "src/main/resources/" + folderName);
+        }
+
         // get files that matches the key
         if (filePath.listFiles() != null) {
             for (File file : filePath.listFiles()) {
@@ -68,6 +100,14 @@ public class FileIO
         }
 
         return files;
+
+        // ClassLoader classLoader = getClass().getClassLoader();
+        // URL resource = classLoader.getResource(filename);
+        // if (resource == null)
+        // {
+        // throw new FileNotFoundException("File not found: " + filename);
+        // }
+        // return new File(resource.toURI());
     }
 
     // TXT file manipulation methods
@@ -330,6 +370,22 @@ public class FileIO
             System.out.println("File \"" + filename + "\" deleted successfully.");
         } else {
             System.out.println("Failed to delete file \"" + filename + "\". File may not exist or is in use.");
+        }
+    }
+
+    // Clear tmp folder
+    public void clearTmpFolder() throws URISyntaxException, IOException {
+        // load folder
+        File folder = new File(
+                (System.getProperty("user.dir").contains("fopasg") ? "" : "fopasg/") + "src/test/resources/tmp");
+        if (folder.listFiles() != null) {
+            for (File file : folder.listFiles()) {
+                if (!file.getName().equals("images")) {
+                    if (!file.delete()) {
+                        continue;
+                    }
+                }
+            }
         }
     }
 }

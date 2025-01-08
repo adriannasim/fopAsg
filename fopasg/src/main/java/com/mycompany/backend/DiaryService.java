@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+import com.gluonhq.richtextarea.model.TextDecoration;
 import com.gluonhq.richtextarea.model.Document;
 import com.google.common.io.Files;
 
