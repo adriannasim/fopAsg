@@ -210,6 +210,4 @@ public class SearchResultController extends SharedPaneCharacteristics{
         // Show a view page
         mainMenuController.loadNewContent("diary-view-page");
     }
-
-
 }

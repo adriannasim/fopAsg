@@ -2,7 +2,6 @@ package com.mycompany.frontend.exportOptions;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.Month;
 
 import com.mycompany.backend.DiaryService;
 import com.mycompany.backend.ServiceResult;
