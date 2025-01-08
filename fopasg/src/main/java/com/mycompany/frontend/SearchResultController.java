@@ -181,7 +181,8 @@ public class SearchResultController extends SharedPaneCharacteristics{
         try {
             // show a confimation pop up
             App.openConfirmationPopUp("Confirm to delete this entry?",
-                    () -> diaryService.moveEntryToBin(UserSession.getSession().getCurrentDiary()));
+                    () -> diaryService.moveEntryToBin(UserSession.getSession().getCurrentDiary()),
+                    () -> {});
             mainMenuController.reloadContent("diary-history-page");
         } catch (IOException ex) {
             ex.printStackTrace();

@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="472.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.frontend.exportOptions.ExportByDayController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="472.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.frontend.exportOptions.ExportByMonthController">
    <children>
       <Pane prefHeight="472.0" prefWidth="700.0" style="-fx-background-color: #ffffff;">
          <children>
@@ -26,10 +26,10 @@
                </font>
             </Label>
             <Label layoutX="98.0" layoutY="155.0" text="Month:" />
-            <ComboBox id="month" editable="true" layoutX="146.0" layoutY="151.0" prefHeight="25.0" prefWidth="117.0" promptText="Choose Month" />
+            <ComboBox fx:id="month" editable="true" layoutX="146.0" layoutY="151.0" prefHeight="25.0" prefWidth="117.0" promptText="Choose Month" />
             <Label layoutX="292.0" layoutY="155.0" text="Year:" />
-            <Spinner id="year" editable="true" layoutX="328.0" layoutY="151.0" prefHeight="25.0" prefWidth="117.0" />
-            <Button id="exportBtn" layoutX="481.0" layoutY="148.0" mnemonicParsing="false" prefWidth="124.0" style="-fx-background-color: #9ABF80; -fx-background-radius: 20px;" text="Export" textFill="WHITE">
+            <Spinner fx:id="year" editable="true" layoutX="328.0" layoutY="151.0" prefHeight="25.0" prefWidth="117.0" />
+            <Button fx:id="exportBtn" layoutX="481.0" layoutY="148.0" mnemonicParsing="false" prefWidth="124.0" style="-fx-background-color: #9ABF80; -fx-background-radius: 20px;" text="Export" textFill="WHITE">
                <font>
                   <Font name="Roboto Bold" size="15.0" />
                </font>

@@ -13,8 +13,6 @@ import com.mycompany.frontend.SharedPaneCharacteristics;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
-import javafx.scene.layout.Pane;
-import javafx.scene.text.Text;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
@@ -51,6 +49,9 @@ public class ExportByDayController extends SharedPaneCharacteristics {
     @FXML
     public void initialize() 
     {
+        // Inherit Super Class's initialization
+        super.initialize();
+        
         // Get user session
         sessionUsername = UserSession.getSession().getUsername();
 
@@ -67,7 +68,7 @@ public class ExportByDayController extends SharedPaneCharacteristics {
 
     //method to handle export button when clicked
     private void handleExportButtonClick(ActionEvent event) {
-        String filename = "Diary_From_Date_"+ startDate + "_To_" + endDate + "-" + sessionUsername;
+        String filename = "Diary_From_Date_"+ startDate.getValue() + "_To_" + endDate.getValue() + "-" + sessionUsername;
 
         ServiceResult result = diaryService.exportDiaryToPDF(startDate.getValue(), endDate.getValue(), filename);
         try

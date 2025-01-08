@@ -188,7 +188,8 @@ public class RecycleBinController extends SharedPaneCharacteristics {
         try {
             // show a confimation pop up
             App.openConfirmationPopUp("Confirm to delete this entry permanently?",
-                    () -> diaryService.deleteDiaryEntry(diary.getDiaryId()));
+                    () -> diaryService.deleteDiaryEntry(diary.getDiaryId()),
+                    () -> {});
             mainMenuController.reloadContent("diary-recycle-bin");
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -204,8 +205,9 @@ public class RecycleBinController extends SharedPaneCharacteristics {
         UserSession.getSession().setCurrentDiary(diary);
         try {
             // show a confimation pop up
-            App.openConfirmationPopUp("Confirm to retore this entry?",
-                    () -> diaryService.restoreDiaryEntry(diary));
+            App.openConfirmationPopUp("Confirm to restore this entry?",
+                    () -> diaryService.restoreDiaryEntry(diary),
+                    () -> {});
             mainMenuController.reloadContent("diary-recycle-bin");
         } catch (IOException ex) {
             ex.printStackTrace();

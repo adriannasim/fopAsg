@@ -2,9 +2,12 @@ package com.mycompany.frontend;
 
 import java.io.IOException;
 
+import org.jasypt.util.password.StrongPasswordEncryptor;
+
 import com.mycompany.backend.User;
 import com.mycompany.backend.UserService;
 import com.mycompany.backend.UserSession;
+import com.mycompany.frontend.helper.TogglePasswordField;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -18,7 +21,7 @@ import javafx.scene.text.Text;
  * 
  ***/
 
-public class ProfilePageController extends SharedPaneCharacteristics {
+public class ProfilePageControllerOld extends SharedPaneCharacteristics {
 
     private UserService userService = new UserService();
 
@@ -39,13 +42,13 @@ public class ProfilePageController extends SharedPaneCharacteristics {
     private ImageView emailEdit; // this is used to enable email edit
 
     @FXML
+    private ImageView passwordEdit; // this is used to enable password edit
+
+    @FXML
+    private Text passwordMsg; // this is used to display password error message
+
+    @FXML
     private Text emailMsg; // this is used to display email error message
-
-    @FXML
-    private Button changePasswordBtn;
-
-    @FXML
-    private Button deleteAccountBtn;
 
     @FXML
     private Button submitBtn;
@@ -55,6 +58,8 @@ public class ProfilePageController extends SharedPaneCharacteristics {
      * 
      ***/
     private boolean isEmailValid = true;
+    private boolean isPasswordValid = true;
+    private StrongPasswordEncryptor passwordEncryptor;
 
     /***
      * INITILIZATION OF THE CONTROLLER
@@ -71,19 +76,65 @@ public class ProfilePageController extends SharedPaneCharacteristics {
         // get user info
         User user = userService.getUserByUsername(sessionUsername);
 
+        //password encryptor to decrypt password
+        passwordEncryptor = new StrongPasswordEncryptor();
+
+        // Add in togglePasswordFields that can have password visibility toggle
+        // functions
+        TogglePasswordField password = new TogglePasswordField();
+        password.setLayoutX(134.0);
+        password.setLayoutY(342.0);
+        password.setPrefHeight(26.0);
+        password.setPrefWidth(453);
+        password.setStyle("-fx-background-color: #D9D9D9");
+        pane.getChildren().add(password);
+
         // Set the data
         username.setText(sessionUsername);
         email.setText(user.getEmail());
+        password.setText(user.getPassword());
 
         // Default cannot edit
         username.setEditable(false);
         email.setEditable(false);
+        password.setEditable(false);
 
         // Unless user click on edit icon
         emailEdit.setOnMouseClicked(_ -> {
             email.setEditable(true);
             email.setStyle("-fx-background-color: #F1F1F1;");
             email.requestFocus();
+        });
+
+        passwordEdit.setOnMouseClicked(_ -> {
+            password.setEditable(true);
+            password.setStyle("-fx-background-color: #F1F1F1;");
+            password.requestFocus();
+        });
+
+        // Check for password strength & Validate password format
+        password.setOnKeyTyped(_ -> {
+            // Weak password
+            if (password.getText().length() < 6) { // Less than 6 characters
+                password.setStyle("-fx-background-color: #FF9696;");
+                passwordMsg.setText("Password strength weak.");
+                passwordMsg.setStyle("-fx-fill: #FF9696;");
+                isPasswordValid = false;
+            }
+            // Moderate password
+            else if (password.getText().matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d]{6,}$")) { // Small letters + capital letters + number && > 6 characters
+                password.setStyle("-fx-background-color: #669A9D;");
+                passwordMsg.setText("Password strength moderate.");
+                passwordMsg.setStyle("-fx-fill: #669A9D;");
+                isPasswordValid = true;
+            }
+            // Strong password
+            else if (password.getText().matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&#])[A-Za-z\\d@$!%*?&#]{6,}$")) { // Small letters + capital letters + number + special characters && > 6 characters
+                password.setStyle("-fx-background-color: #9ABF80;");
+                passwordMsg.setText("Password strength strong.");
+                passwordMsg.setStyle("-fx-fill: #9ABF80;");
+                isPasswordValid = true;
+            }
         });
 
         // When user click on submit button
@@ -98,6 +149,12 @@ public class ProfilePageController extends SharedPaneCharacteristics {
                 emailMsg.setText("");
                 isEmailValid = true;
             }
+            // 2. password
+            if (password.getText().isEmpty()) {
+                passwordMsg.setText("Please enter a password.");
+            } else {
+                passwordMsg.setText("");
+            }
 
             // If user entered the details, validate them
             // 1. Validate email
@@ -111,47 +168,18 @@ public class ProfilePageController extends SharedPaneCharacteristics {
             }
 
             // If no issue then try to update profile
-            if (isEmailValid) {
+            if (isEmailValid && isPasswordValid) {
                 try {
                     // Pop up a confimation message
                     App.openConfirmationPopUp("Confirm to change your details?",
-                        () -> userService.userEdit(username.getText(), email.getText(), null),
-                        () -> {});
+                            () -> userService.userEdit(username.getText(), email.getText(), password.getText()),
+                            () -> {});
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
             }
         });
 
-        // handle change password btn
-        changePasswordBtn.setOnMouseClicked(_ -> {
-            mainMenuController.loadNewContent("change-password");
-        });
-
-        // handle delete account btn
-        deleteAccountBtn.setOnMouseClicked(_ -> {
-            try {
-                // Pop up a confimation message
-                App.openConfirmationPopUp("Confirm to delete your account? This action is irreversible!",
-                    () -> userService.userDelete(username.getText()),
-                    () -> 
-                    {
-                        //logout
-                        UserSession.getSession().setUsername("");
-                        try
-                        {
-                            App.switchScene("login-page");
-                        }
-                        catch (IOException ex)
-                        {
-                            ex.printStackTrace();
-                        }
-                    }
-                );
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        });
     }
 
     /***

@@ -9,18 +9,12 @@ import java.time.Month;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
-import com.gluonhq.richtextarea.model.TextDecoration;
 import com.google.common.io.Files;
 
 import com.mycompany.frontend.RichTextCSVExporter;
-
-import javafx.scene.text.FontPosture;
-import javafx.scene.text.FontWeight;
 
 public class DiaryService
 {
@@ -181,7 +175,7 @@ public class DiaryService
 
         for (Diary diary : diaries)
         {
-            if (diary.getDiaryTitle().contains(searchInput))
+            if (diary.getDiaryTitle().toLowerCase().contains(searchInput))
             {
                 searchResult.add(diary);
             }
@@ -380,7 +374,7 @@ public class DiaryService
             if (!entries.isEmpty())
             {
                 fileIO.exportToPDFUsingPDFBox(pdfFilename + ".pdf", entries);
-                return new ServiceResult(true, null, "Diary entries exported to PDF successfully.");
+                return new ServiceResult(true, null, "Diary entries exported to PDF successfully and saved in Downloads folder.");
             }
             else
             {
@@ -402,7 +396,7 @@ public class DiaryService
             
             // Filter entries by date range
             for (Diary diary : diaryList) {
-                if (diary.getDiaryDate().toLocalDate().isAfter(startDate) && diary.getDiaryDate().toLocalDate().isBefore(endDate)) {
+                if (diary.getDiaryDate().toLocalDate().isAfter(startDate.minusDays(1)) && diary.getDiaryDate().toLocalDate().isBefore(endDate.plusDays(1))) {
                     filteredDiaries.add(diary);
                 }
             }
@@ -464,7 +458,7 @@ public class DiaryService
             // Filter entries
             for (Diary diary : diaryList) 
             {
-                if (diary.getDiaryDate().toLocalDate().isAfter(startDate) && diary.getDiaryDate().toLocalDate().isBefore(startDate.plusWeeks(weeks))) 
+                if (diary.getDiaryDate().toLocalDate().isAfter(startDate.minusDays(1)) && diary.getDiaryDate().toLocalDate().isBefore(startDate.plusWeeks(weeks).plusDays(1))) 
                 {
                     filteredDiaries.add(diary);
                 }
@@ -666,7 +660,7 @@ public class DiaryService
         List<Diary> diaries = getAllDiary();
         for (Diary diary : diaries)
         {
-            if (diary.getDiaryDate().toLocalDate().isAfter(startDate) && diary.getDiaryDate().toLocalDate().isBefore(endDate))
+            if (diary.getDiaryDate().toLocalDate().isAfter(startDate.minusDays(1)) && diary.getDiaryDate().toLocalDate().isBefore(endDate.plusDays(1)))
             {
                 switch(diary.getMood())
                 {

@@ -10,11 +10,9 @@ import com.mycompany.backend.UserSession;
 import com.mycompany.frontend.App;
 import com.mycompany.frontend.SharedPaneCharacteristics;
 
-import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
@@ -51,6 +49,9 @@ public class ExportByWeekController extends SharedPaneCharacteristics {
     @FXML
     public void initialize() 
     {
+        // Inherit Super Class's initialization
+        super.initialize();
+        
         // Get user session
         sessionUsername = UserSession.getSession().getUsername();
 
@@ -70,7 +71,7 @@ public class ExportByWeekController extends SharedPaneCharacteristics {
 
     //method to handle export button when clicked
     private void handleExportButtonClick(ActionEvent event) {
-        String filename = "Diary_For_"+ week + "_Weeks_From" + startDate + "-" + sessionUsername;
+        String filename = "Diary_For_"+ week.getValue() + "_Weeks_From_" + startDate.getValue() + "-" + sessionUsername;
 
         ServiceResult result = diaryService.exportDiaryToPDF(startDate.getValue(), week.getValue(), filename);
         try

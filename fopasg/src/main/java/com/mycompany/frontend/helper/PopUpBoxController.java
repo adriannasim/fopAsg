@@ -102,31 +102,50 @@ public class PopUpBoxController {
     /*** METHOD TO HANDLE YES BUTTON CLICK.
      * 
      * ***/
-    public void handleYesButtonClick() {
-        boolean success;
-        String message;
-
+    private void handleYesButtonClick() 
+    {
+        if (serviceOperation != null) {
+            ServiceResult result = serviceOperation.get();
+            // Handle success or failure messages here as needed
+            try 
+            {
+                App.openPopUpAtTop(result.isSuccessful() ? "success-message" : "error-message", result.getReturnMessage());
+            } 
+            catch (IOException ex) 
+            {
+                ex.printStackTrace();
+            }
+        }
         // Close the pop-up
         Stage stage = (Stage) yesButton.getScene().getWindow();
         stage.close();
-        
-        //Get the result of the operation
-        // success = (boolean) serviceOperation.get().getReturnObject();
-        success = (boolean) serviceOperation.get().isSuccessful();
-
-        if (success){
-            filename = "success-message";
-            message = serviceOperation.get().getReturnMessage();
-        } else {
-            filename = "error-message";
-            message = serviceOperation.get().getReturnMessage();
-        }
-
-        // Display the message box to users
-        try {
-            App.openPopUpAtTop(filename, message);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
     }
+
+    // public void handleYesButtonClick() {
+    //     boolean success;
+    //     String message;
+
+    //     // Close the pop-up
+    //     Stage stage = (Stage) yesButton.getScene().getWindow();
+    //     stage.close();
+        
+    //     //Get the result of the operation
+    //     // success = (boolean) serviceOperation.get().getReturnObject();
+    //     success = (boolean) serviceOperation.get().isSuccessful();
+
+    //     if (success){
+    //         filename = "success-message";
+    //         message = serviceOperation.get().getReturnMessage();
+    //     } else {
+    //         filename = "error-message";
+    //         message = serviceOperation.get().getReturnMessage();
+    //     }
+
+    //     // Display the message box to users
+    //     try {
+    //         App.openPopUpAtTop(filename, message);
+    //     } catch (IOException ex) {
+    //         ex.printStackTrace();
+    //     }
+    // }
 }

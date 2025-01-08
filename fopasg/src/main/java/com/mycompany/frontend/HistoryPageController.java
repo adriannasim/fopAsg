@@ -17,6 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import com.mycompany.backend.DiaryService;
+import com.mycompany.backend.ServiceResult;
 import com.mycompany.backend.UserSession;
 import com.mycompany.backend.Diary;
 
@@ -143,7 +144,22 @@ public class HistoryPageController extends SharedPaneCharacteristics {
         basedOnPickedEntries.setOnMouseClicked(_ -> {
             exportOptions.setVisible(false);
             // Operation here
-            diaryService.exportDiaryToPDF(diariesSelected, "Diaries_" + LocalDate.now() + "-" + sessionUsername);
+            ServiceResult result = diaryService.exportDiaryToPDF(diariesSelected, "Diaries_" + LocalDate.now() + "-" + sessionUsername);
+            try 
+            {
+                if (result.isSuccessful())
+                {
+                    App.openPopUpAtTop("success-message", result.getReturnMessage());
+                }
+                else
+                {
+                    App.openPopUpAtTop("error-message", result.getReturnMessage());
+                }
+            }
+            catch (IOException ex)
+            {
+                ex.printStackTrace();
+            }
         });
 
         // When user chosen to pick by date range to export
@@ -362,7 +378,8 @@ public class HistoryPageController extends SharedPaneCharacteristics {
         try {
             // show a confimation pop up
             App.openConfirmationPopUp("Confirm to delete this entry?",
-                    () -> diaryService.moveEntryToBin(UserSession.getSession().getCurrentDiary()));
+                () -> diaryService.moveEntryToBin(UserSession.getSession().getCurrentDiary()),
+                () -> {});
             mainMenuController.reloadContent("diary-history-page");
         } catch (IOException ex) {
             ex.printStackTrace();

@@ -17,8 +17,8 @@ import org.junit.Test;
 public class DiaryServiceTests 
 {
     static String userFile = "TestUsers.txt";
-    static UserService userService = new UserService(userFile);
-    static FileIO fileIO = new FileIO();
+    static TestUserService userService = new TestUserService(userFile);
+    static TestFileIO fileIO = new TestFileIO();
     
     DiaryService diaryService;
         

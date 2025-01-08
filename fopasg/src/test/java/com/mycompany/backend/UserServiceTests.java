@@ -11,8 +11,8 @@ import org.junit.*;
 public class UserServiceTests 
 {
     static String filename = "TestUsers.txt";
-    static UserService userService = new UserService(filename);
-    static FileIO fileIO = new FileIO();
+    static TestUserService userService = new TestUserService(filename);
+    static TestFileIO fileIO = new TestFileIO();
     StrongPasswordEncryptor passwordEncryptor = new StrongPasswordEncryptor();
         
     @BeforeClass

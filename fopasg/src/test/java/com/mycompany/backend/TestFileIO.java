@@ -13,12 +13,12 @@ import java.util.List;
 import com.google.common.io.Files;
 
 
-public class FileIO 
+public class TestFileIO 
 {
     //Create file
     public void createFile(String filename) throws IOException
     {
-        File file = new File((System.getProperty("user.dir").contains("fopasg") ? "" : "fopasg/") + "src/main/resources/" + filename);
+        File file = new File((System.getProperty("user.dir").contains("fopasg") ? "" : "fopasg/") + "src/test/resources/tmp/" + filename);
         System.out.println("Attempting to create file to: " + file.getAbsolutePath());
         
         file.createNewFile();
@@ -27,7 +27,7 @@ public class FileIO
     //Create folder
     public void createFolder(String folderName) throws IOException
     {
-        File folder = new File((System.getProperty("user.dir").contains("fopasg") ? "" : "fopasg/") + "src/main/resources/" + folderName);
+        File folder = new File((System.getProperty("user.dir").contains("fopasg") ? "" : "fopasg/") + "src/test/resources/tmp/" + folderName);
         System.out.println("Attempting to create folder at: " + folder.getAbsolutePath());
         
         //create the folder
@@ -37,7 +37,18 @@ public class FileIO
     //Load file
     public File loadFile(String filename) throws URISyntaxException, FileNotFoundException
     {
-        return new File((System.getProperty("user.dir").contains("fopasg") ? "" : "fopasg/") + "src/main/resources/" + filename);
+        File file;
+        if (filename.equals("TestUsers.txt") || filename.equals("testApple.jpg") || filename.equals("testBanana.jpg")
+            || filename.equals("testGrape.jpg") || filename.equals("testOrange.jpg"))
+        {
+            file = new File((System.getProperty("user.dir").contains("fopasg") ? "" : "fopasg/") + "src/test/resources/" + filename);
+        }
+        else
+        {
+            file = new File((System.getProperty("user.dir").contains("fopasg") ? "" : "fopasg/") + "src/test/resources/tmp/" + filename);
+        }
+
+        return file;
 
         // ClassLoader classLoader = getClass().getClassLoader();
         // URL resource = classLoader.getResource(filename);
@@ -52,7 +63,7 @@ public class FileIO
     public List<File> loadFiles(String folderName, String key) throws URISyntaxException, FileNotFoundException
     {
         List<File> files = new ArrayList<>();
-        File filePath = new File((System.getProperty("user.dir").contains("fopasg") ? "" : "fopasg/") + "src/main/resources/" + folderName);
+        File filePath = new File((System.getProperty("user.dir").contains("fopasg") ? "" : "fopasg/") + "src/test/resources/" + folderName);
 
         //get files that matches the key
         if (filePath.listFiles() != null) 
@@ -249,6 +260,26 @@ public class FileIO
         else 
         {
             System.out.println("Failed to delete file \""+ filename + "\". File may not exist or is in use.");
+        }
+    }
+
+    //Clear tmp folder
+    public void clearTmpFolder() throws URISyntaxException, IOException
+    {
+        //load folder
+        File folder = new File((System.getProperty("user.dir").contains("fopasg") ? "" : "fopasg/") + "src/test/resources/tmp");
+        if (folder.listFiles() != null)
+        {
+            for (File file : folder.listFiles())
+            {
+                if (!file.getName().equals("images"))
+                {
+                    if (!file.delete())
+                    {
+                        continue;
+                    }
+                }
+            }
         }
     }
 }

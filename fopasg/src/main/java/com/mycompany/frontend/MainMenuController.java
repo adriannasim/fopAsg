@@ -104,6 +104,7 @@ public class MainMenuController {
         logoutBtn.setOnMouseClicked(_ -> {
             try{
                 // LOGOUT OPERATION HERE...
+                UserSession.getSession().setUsername("");
                 App.switchScene("login-page");
             } catch (IOException ex){
                 ex.printStackTrace();
