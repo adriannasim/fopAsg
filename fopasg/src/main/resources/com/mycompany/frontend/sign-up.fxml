@@ -13,38 +13,12 @@
    <children>
       <AnchorPane fx:id="anchorPane" prefHeight="440.0" prefWidth="303.0" style="-fx-background-radius: 20px;">
          <children>
-            <Label layoutX="40.0" layoutY="40.0" prefHeight="35.0" prefWidth="138.0" text="SIGN UP">
+            <Label layoutX="40.0" layoutY="54.0" prefHeight="35.0" prefWidth="138.0" text="SIGN UP">
                <font>
                   <Font name="System Bold" size="24.0" />
                </font>
             </Label>
-            <Text fx:id="passwordMsg" layoutX="47.0" layoutY="281.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-background-color: #ffffff;" styleClass="errorMsg" wrappingWidth="208.0">
-               <font>
-                  <Font name="Roboto Bold" size="10.0" />
-               </font>
-            </Text>
-            <Text fx:id="confirmPasswordMsg" layoutX="47.0" layoutY="343.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-background-color: #ffffff;" styleClass="errorMsg" wrappingWidth="208.0">
-               <font>
-                  <Font name="Roboto Bold" size="10.0" />
-               </font>
-            </Text>
-            <Label layoutX="40.0" layoutY="223.0" text="Password">
-               <font>
-                  <Font name="System Bold" size="11.0" />
-               </font>
-            </Label>
-            <Label layoutX="40.0" layoutY="285.0" text="Password confirmation">
-               <font>
-                  <Font name="System Bold" size="11.0" />
-               </font>
-            </Label>
-            <TextField fx:id="email" layoutX="40.0" layoutY="183.0" prefHeight="27.0" prefWidth="219.0" style="-fx-background-color: #D9D9D9;" />
-            <Text fx:id="emailMsg" layoutX="47.0" layoutY="221.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-background-color: #ffffff;" styleClass="errorMsg" wrappingWidth="208.0">
-               <font>
-                  <Font name="Roboto Bold" size="10.0" />
-               </font>
-            </Text>
-            <Label layoutX="40.0" layoutY="163.0" text="Email">
+            <Label layoutX="40.0" layoutY="104.0" text="Username">
                <font>
                   <Font name="System Bold" size="11.0" />
                </font>
@@ -55,14 +29,48 @@
                   <Font name="Roboto Bold" size="10.0" />
                </font>
             </Text>
-            <Label layoutX="40.0" layoutY="104.0" text="Username">
+            <Label layoutX="40.0" layoutY="163.0" text="Email">
                <font>
                   <Font name="System Bold" size="11.0" />
                </font>
             </Label>
+            <TextField fx:id="email" layoutX="40.0" layoutY="183.0" prefHeight="27.0" prefWidth="219.0" style="-fx-background-color: #D9D9D9;" />
+            <Text fx:id="emailMsg" layoutX="47.0" layoutY="221.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-background-color: #ffffff;" styleClass="errorMsg" wrappingWidth="208.0">
+               <font>
+                  <Font name="Roboto Bold" size="10.0" />
+               </font>
+            </Text>
+            <Label layoutX="40.0" layoutY="223.0" text="Password">
+               <font>
+                  <Font name="System Bold" size="11.0" />
+               </font>
+            </Label>
+            <Text fx:id="passwordMsg" layoutX="47.0" layoutY="281.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-background-color: #ffffff;" styleClass="errorMsg" wrappingWidth="208.0">
+               <font>
+                  <Font name="Roboto Bold" size="10.0" />
+               </font>
+            </Text>
+            <Label layoutX="40.0" layoutY="285.0" text="Password confirmation">
+               <font>
+                  <Font name="System Bold" size="11.0" />
+               </font>
+            </Label>
+            <Text fx:id="confirmPasswordMsg" layoutX="47.0" layoutY="343.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-background-color: #ffffff;" styleClass="errorMsg" wrappingWidth="208.0">
+               <font>
+                  <Font name="Roboto Bold" size="10.0" />
+               </font>
+            </Text>
             <Button fx:id="submitBtn" layoutX="88.0" layoutY="358.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="123.0" style="-fx-background-color: #9ABF80; -fx-background-radius: 50;" text="Complete" textFill="WHITE">
                <font>
                   <Font name="Roboto Black" size="12.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Button fx:id="backButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" style="-fx-background-color: #ffffff;" text="Back" textFill="#8f8f8f">
+               <font>
+                  <Font name="Roboto" size="12.0" />
                </font>
                <cursor>
                   <Cursor fx:constant="HAND" />

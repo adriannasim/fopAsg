@@ -49,7 +49,7 @@ public class App extends Application {
      ***/
     @Override
     public void start(Stage stage) throws IOException {
-        this.stage = stage;
+        App.stage = stage;
         // Landing page here
         Scene initialScene = new Scene(loadFXML("login-page").getRoot(), 900, 600);
         stage.setScene(initialScene);
@@ -73,7 +73,7 @@ public class App extends Application {
      * METHOD TO SHOW A CONFIRMATION POP UP.
      * 
      ***/
-    public static void openConfirmationPopUp(String confirmationText, Supplier<ServiceResult> serviceOperation)
+    public static void openConfirmationPopUp(String confirmationText, Supplier<ServiceResult> serviceOperation, Runnable onSuccess)
             throws IOException {
         FXMLLoader loader = loadFXML("pop-up-box");
         Parent root = loader.getRoot();
@@ -81,15 +81,15 @@ public class App extends Application {
         PopUpBoxController controller = loader.getController();
         // Use the controller to set the confirmation text that displayed to users.
         controller.setConfirmationText(confirmationText);
-        // // Use the controller to set the success message that displayed to the users
-        // // when user wanted action performed correctly.
-        // controller.setSuccessMessageText(successMessage);
-        // // Use the controller to set the failed message that displayed to the users
-        // // when user wanted action performed wrongly.
-        // controller.setFailedMessageText(failedMessage);
 
         // set what service function to invoke if user press yes
-        controller.setServiceOperation(serviceOperation);
+        controller.setServiceOperation(() -> {
+            ServiceResult result = serviceOperation.get();
+            if (result.isSuccessful()) {
+                onSuccess.run(); // Call the post-confirmation action if successful
+            }
+            return result;
+        });
 
         Stage popupStage = new Stage();
         // Remove the default window decorations (title bar, close, minimize, and
@@ -308,7 +308,7 @@ public class App extends Application {
         // After 3 seconds, close the pop-up
         javafx.animation.PauseTransition pause = new javafx.animation.PauseTransition(
                 javafx.util.Duration.seconds(3));
-        pause.setOnFinished(e -> messageBoxStage.close());
+        pause.setOnFinished(_ -> messageBoxStage.close());
         pause.play();
     }
 

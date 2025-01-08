@@ -1,5 +1,6 @@
 package com.mycompany.frontend;
 
+import java.io.IOException;
 import java.time.LocalDate;
 
 import com.mycompany.backend.DiaryService;
@@ -7,6 +8,7 @@ import com.mycompany.backend.UserSession;
 
 import javafx.fxml.FXML;
 import javafx.scene.chart.BarChart;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.DatePicker;
 
@@ -38,13 +40,23 @@ public class MoodTrackerController extends SharedPaneCharacteristics{
     @FXML
     public void initialize()
     {
+        super.initialize();
+        
         //set default values
         start.setValue(LocalDate.now().minusMonths(1));
         end.setValue(LocalDate.now());
 
+        //configure bar chart's y axis
+        NumberAxis yAxis = (NumberAxis) barChart.getYAxis();
+        yAxis.setTickUnit(1);
+        yAxis.setMinorTickCount(0);
+        yAxis.setAutoRanging(false);
+        yAxis.setLowerBound(0);
+        yAxis.setUpperBound(3);
+
         //attach listeners so that the bar chart will be generated dynamically when there's an input
-        start.valueProperty().addListener((observable, oldValue, newValue) -> generateBarChart());
-        end.valueProperty().addListener((observable, oldValue, newValue) -> generateBarChart());
+        start.valueProperty().addListener((_, _, _) -> generateBarChart());
+        end.valueProperty().addListener((_, _, _) -> generateBarChart());
 
         //generate bar chart
         generateBarChart();
@@ -61,7 +73,14 @@ public class MoodTrackerController extends SharedPaneCharacteristics{
 
         if (endDate.isBefore(startDate))
         {
-            //can like put a small msg say end date cnt be before start date
+            try 
+            {
+                App.openPopUpAtTop("error-message", "End Date cannot be before Start Date.");
+            }
+            catch (IOException ex)
+            {
+                ex.printStackTrace();
+            }
         }
 
         //get mood counts from service
@@ -69,14 +88,36 @@ public class MoodTrackerController extends SharedPaneCharacteristics{
 
         //create data series for the bar chart
         XYChart.Series<String, Number> series = new XYChart.Series<>();
-        series.setName("Mood From " + startDate + " To " + endDate);
 
         //add data points to the series
-        series.getData().add(new XYChart.Data<>("Happy", moodCounts[0]));
-        series.getData().add(new XYChart.Data<>("Normal", moodCounts[1]));
-        series.getData().add(new XYChart.Data<>("Sad", moodCounts[2]));
+        XYChart.Data<String, Number> happy = new XYChart.Data<>("Happy", moodCounts[0]);
+        XYChart.Data<String, Number> normal = new XYChart.Data<>("Normal", moodCounts[1]);
+        XYChart.Data<String, Number> sad = new XYChart.Data<>("Sad", moodCounts[2]);
+        
+        series.getData().add(happy);
+        series.getData().add(normal);
+        series.getData().add(sad);
+
+        applyStyleToDataNode(happy, "-fx-bar-fill:rgb(149, 241, 28);");
+        applyStyleToDataNode(normal, "-fx-bar-fill:rgb(215, 228, 30);");
+        applyStyleToDataNode(sad, "-fx-bar-fill:rgb(13, 201, 226);");
 
         //add series to the chart
         barChart.getData().add(series);
+
+        //hide legend
+        barChart.setLegendVisible(false);
+    }
+
+    //apply the colour to each nodes once it is created
+    private void applyStyleToDataNode(XYChart.Data<String, Number> data, String style) 
+    {
+        data.nodeProperty().addListener((observable, oldNode, newNode) -> 
+        {
+            if (newNode != null) 
+            {
+                newNode.setStyle(style);
+            }
+        });
     }
 }

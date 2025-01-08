@@ -2,9 +2,7 @@ package com.mycompany.frontend;
 
 import java.io.IOException;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -37,7 +35,7 @@ public class LoginPageController extends SharedPaneCharacteristics {
                                 // get the value
 
     @FXML
-    private PasswordField password; // This will store the user input for password, use password.getText() to get
+    private TogglePasswordField password; // This will store the user input for password, use password.getText() to get
                                     // the value
 
     @FXML
@@ -58,10 +56,9 @@ public class LoginPageController extends SharedPaneCharacteristics {
      ***/
     @FXML
     public void initialize() {
-
         // Add in togglePasswordFields that can have password visibility toggle
         // functions
-        TogglePasswordField password = new TogglePasswordField();
+        password = new TogglePasswordField();
         password.setLayoutX(87.0);
         password.setLayoutY(273.0);
         password.setPrefHeight(38.0);
@@ -72,8 +69,11 @@ public class LoginPageController extends SharedPaneCharacteristics {
         password.setStyle("-fx-background-color:#6ABC6A; -fx-background-radius: 50; -fx-text-inner-color: #ffffff;");
         pane.getChildren().add(password);
 
+        //custom traversal
+        setFocusTraversal();
+
         // When user want to sign up, open sign up page
-        signUpBtn.setOnMouseClicked(e -> {
+        signUpBtn.setOnMouseClicked(_ -> {
             try {
                 App.openPopUpSignUp("sign-up");
             } catch (IOException ex) {
@@ -81,25 +81,68 @@ public class LoginPageController extends SharedPaneCharacteristics {
             }
         });
 
-        // When user want to login, process the user details
-        submitBtn.setOnMouseClicked(e -> {
-            try {
-                // pass the username and password input by user to the service
-                ServiceResult result = userService.userLogin(username.getText(), password.getText());
-
-                // If successfully logged in
-                if (result.getReturnObject() != null) {
-                    App.openPopUpAtTop("success-message", result.getReturnMessage());
-                    UserSession.getSession().setUsername(username.getText());
-                    App.switchScene("main-menu");
-                } else {
-                    // pop up fail msg
-                    App.openPopUpAtTop("error-message", result.getReturnMessage());
-                }
-            } catch (IOException ex) {
-                ex.printStackTrace();
+        //when user press enter at the password field
+        password.setOnKeyPressed(e -> {
+            if (e.getCode() == javafx.scene.input.KeyCode.ENTER) {
+                login();
+                e.consume();
             }
+        });
+        
+        //handle submit button
+        submitBtn.setOnMouseClicked(_ -> {
+            login();
         });
     }
 
+    //Login Method
+    private void login()
+    {
+        try {
+            // pass the username and password input by user to the service
+            ServiceResult result = userService.userLogin(username.getText(), password.getText());
+    
+            // If successfully logged in
+            if (result.getReturnObject() != null) {
+                App.openPopUpAtTop("success-message", result.getReturnMessage());
+                UserSession.getSession().setUsername(username.getText());
+                App.switchScene("main-menu");
+            } else {
+                // pop up fail msg
+                App.openPopUpAtTop("error-message", result.getReturnMessage());
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void setFocusTraversal() {
+        username.setOnKeyPressed(e -> {
+            if (e.getCode() == javafx.scene.input.KeyCode.TAB) {
+                password.requestFocus();
+                e.consume();
+            }
+        });
+
+        password.setOnKeyPressed(e -> {
+            if (e.getCode() == javafx.scene.input.KeyCode.TAB) {
+                submitBtn.requestFocus();
+                e.consume();
+            }
+        });
+
+        submitBtn.setOnKeyPressed(e -> {
+            if (e.getCode() == javafx.scene.input.KeyCode.TAB) {
+                signUpBtn.requestFocus();
+                e.consume();
+            }
+        });
+
+        signUpBtn.setOnKeyPressed(e -> {
+            if (e.getCode() == javafx.scene.input.KeyCode.TAB) {
+                username.requestFocus();
+                e.consume();
+            }
+        });
+    }
 }

@@ -5,16 +5,19 @@ import com.gluonhq.richtextarea.model.Document;
 import com.gluonhq.richtextarea.model.DecorationModel;
 import com.gluonhq.richtextarea.model.Decoration;
 import com.gluonhq.richtextarea.model.TextDecoration;
+import com.mycompany.backend.StyledText;
 import com.gluonhq.richtextarea.model.ParagraphDecoration.GraphicType;
 import com.gluonhq.richtextarea.model.ParagraphDecoration;
 import com.gluonhq.richtextarea.model.TableDecoration;
 
 import java.io.IOException;
 
+import javafx.scene.paint.Color;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.List;
 import java.util.ArrayList;
@@ -24,7 +27,7 @@ import java.util.ArrayList;
  * 
  ***/
 
-class RichTextCSVExporter {
+public class RichTextCSVExporter {
 
     /***
      * SOME FORMAT DELIMETERS.
@@ -217,7 +220,7 @@ class RichTextCSVExporter {
      * HELPER METHOD TO UNESCAPE SOME SPECIAL CHARACTERS.
      * 
      ***/
-    private static String unescapeCSV(String value) {
+    public static String unescapeCSV(String value) {
         if (value == null || value.isEmpty()) {
             return "";
         }
@@ -242,7 +245,7 @@ class RichTextCSVExporter {
      * HELPER METHOD TO DECODE THE TEXTDECORATION.
      * 
      ***/
-    private static TextDecoration decodeTextDecorations(String encoded) {
+    public static TextDecoration decodeTextDecorations(String encoded) {
         if (encoded == null || encoded.isEmpty()) {
             return null;
         }
@@ -350,7 +353,7 @@ class RichTextCSVExporter {
      * HELPER METHOD TO SAFELY SPLIT CSV BY DELIMETER ",".
      * 
      ***/
-    private static String[] splitCSVLine(String line) {
+    public static String[] splitCSVLine(String line) {
         List<String> columns = new ArrayList<>();
         int start = 0;
         boolean insideQuotes = false;
@@ -408,4 +411,75 @@ class RichTextCSVExporter {
 
         return updatedDoc;
     }
+
+    /***
+     * METHOD TO PARSE THE CSV DIARY CONTENTS AND RETURN A STYLEDTExT OBJECT.
+     * 
+     ***/
+    public static List<StyledText> parseStyledText(String contents) throws IOException {
+        List<StyledText> styledTexts = new ArrayList<>();
+
+        String[] lines = contents.split("###SPLIT###");
+
+        for (int i = 0; i < lines.length; i++) {
+            String[] columns = splitCSVLine(lines[i]);
+
+            // Handle case where there are not enough columns
+            if (columns.length < 3) {
+                continue;
+            }
+
+            // Parse the CSV columns
+            String text = unescapeCSV(columns[0]);
+            String decorations = columns[1];
+            String paragraphDecorations = columns[2];
+
+            // Decode text decorations
+            TextDecoration textDecoration = (decorations != null && !decorations.isEmpty())
+                    ? decodeTextDecorations(decorations)
+                    : TextDecoration.builder().presets().build();
+
+            // Decode paragraph decorations
+            ParagraphDecoration paragraphDecoration = (paragraphDecorations != null && !paragraphDecorations.isEmpty())
+                    ? decodeParagraphDecorations(paragraphDecorations)
+                    : ParagraphDecoration.builder().presets().build();
+
+            boolean isItalic = textDecoration.getFontPosture() == FontPosture.ITALIC;
+            
+            boolean isBold = textDecoration.getFontWeight() == FontWeight.BOLD;
+            boolean isBulletedList = paragraphDecoration.getGraphicType() != null &&
+                    paragraphDecoration.getGraphicType() == GraphicType.BULLETED_LIST;
+            boolean isNumberedList = paragraphDecoration.getGraphicType() != null &&
+                    paragraphDecoration.getGraphicType() == GraphicType.NUMBERED_LIST;
+
+            // Convert decorations to StyledText
+            StyledText styledText = new StyledText(
+                    text,
+                    textDecoration.getFontFamily(),
+                    (float) textDecoration.getFontSize(),
+                    textDecoration.getForeground(), 
+                    textDecoration.getBackground(), 
+                    isItalic,
+                    isBold,
+                    textDecoration.isStrikethrough().booleanValue(),
+                    textDecoration.isUnderline().booleanValue(),
+                    isBulletedList,
+                    isNumberedList);
+
+            styledTexts.add(styledText);
+        }
+
+        return styledTexts;
+    }
+
+    // Helper method to convert color to RGB string format
+    private static String convertColorToRGB(Color color) {
+        if (color == null)
+            return "";
+        return String.format("%d,%d,%d",
+                color.getRed(),
+                color.getGreen(),
+                color.getBlue());
+    }
+
 }

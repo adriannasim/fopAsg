@@ -10,7 +10,6 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
@@ -58,6 +57,9 @@ public class SignupController {
     @FXML
     private Button submitBtn; // This is used to allow user submit the form
 
+    @FXML
+    private Button backButton;
+
     /***
      * VARIABLES
      * 
@@ -68,6 +70,9 @@ public class SignupController {
 
     private boolean isConfirmPasswordMatched = false;
 
+    private TogglePasswordField password;
+    private TogglePasswordField confirmPassword;
+
     /***
      * INITILIZATION OF THE CONTROLLER
      * 
@@ -77,10 +82,8 @@ public class SignupController {
         //set pointer to username textbox
         Platform.runLater(() -> username.requestFocus());
 
-        email.setFocusTraversable(true);
-
         // Add in togglePasswordFields that can have password visibility toggle functions
-        TogglePasswordField password = new TogglePasswordField();
+        password = new TogglePasswordField();
         password.setLayoutX(40.0);
         password.setLayoutY(243.0);
         password.setPrefHeight(26.0);
@@ -88,7 +91,7 @@ public class SignupController {
         password.setStyle("-fx-background-color: #D9D9D9");
         anchorPane.getChildren().add(password);
 
-        TogglePasswordField confirmPassword = new TogglePasswordField();
+        confirmPassword = new TogglePasswordField();
         confirmPassword.setLayoutX(40.0);
         confirmPassword.setLayoutY(305.0);
         confirmPassword.setPrefHeight(26.0);
@@ -96,78 +99,16 @@ public class SignupController {
         confirmPassword.setStyle("-fx-background-color: #D9D9D9");
         anchorPane.getChildren().add(confirmPassword);
 
+        //custom tab to focus
+        setFocusTraversal();
+
         // When user submit sign up form
-        submitBtn.setOnMouseClicked(e -> {
-            // If user not entered the details, display error message accordingly
-            // 1. email
-            if (email.getText().isEmpty()){
-                emailMsg.setText("Please enter an email.");
-            } else {
-                emailMsg.setText("");
-            }
-            // 2. password
-            if (password.getText().isEmpty()){
-                passwordMsg.setText("Please enter a password.");
-            } else {
-                passwordMsg.setText("");
-            }
-            // 3. confirm password
-            if (confirmPassword.getText().isEmpty()){
-                confirmPasswordMsg.setText("Please enter the password again.");
-            } else {
-                confirmPasswordMsg.setText("");
-            }
-            // 4. username
-            if (username.getText().isEmpty()){
-                usernameMsg.setText("Please enter a username.");
-            } else {
-                usernameMsg.setText("");
-            }
-
-            // If user entered the details, validate them
-            // 1. Validate email
-            isEmailValid = checkEmail(email.getText());
-            if(!isEmailValid && !email.getText().isEmpty()){
-                emailMsg.setText("Invalid email format.");
-            } else if (isEmailValid && !email.getText().isEmpty()){
-                emailMsg.setText("");
-            }
-
-            // 2. Validate password confirmation matching
-            isConfirmPasswordMatched = checkPasswordconfirmation(password.getText(), confirmPassword.getText());
-            if(!isConfirmPasswordMatched && !password.getText().isEmpty() && !confirmPassword.getText().isEmpty()){
-                confirmPasswordMsg.setText("Passwords do not matched.");
-            } else if (isConfirmPasswordMatched && !password.getText().isEmpty() && !confirmPassword.getText().isEmpty()){
-                confirmPasswordMsg.setText("");
-            }
-
-
-            // If no issue then try to sign up
-            if (isEmailValid && isPasswordValid && isConfirmPasswordMatched) {
-                // Close the pop-up
-                Stage stage = (Stage) submitBtn.getScene().getWindow();
-                stage.close();
-
-                ServiceResult result = userService.userSignUp(username.getText(), email.getText(), password.getText());
-                try {
-                    if ((boolean) result.isSuccessful() == true) {
-                        // Pop up sign up successful
-                        App.openPopUpAtTop("success-message", result.getReturnMessage());
-                        // then switch to login
-                        App.switchScene("login-page");
-                    } else {
-                        // Display error message
-                        App.openPopUpAtTop("error-message", result.getReturnMessage());
-                    }
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-            }
-
+        submitBtn.setOnMouseClicked(_ -> {
+            signup();
         });
 
         // Check for password strength & Validate password format
-        password.setOnKeyTyped(e -> {
+        password.setOnKeyTyped(_ -> {
             // Weak password
             if (password.getText().length() < 6) { // Less than 6 characters
                 password.setStyle("-fx-background-color: #FF9696;");
@@ -190,8 +131,92 @@ public class SignupController {
                 isPasswordValid = true;
             }
         });
+
+        //when user press enter at the password field
+        password.setOnKeyPressed(e -> {
+            if (e.getCode() == javafx.scene.input.KeyCode.ENTER) {
+                signup();
+                e.consume();
+            }
+        });
+
+        /*** GO BACK FUNCTION ***/
+        backButton.setOnMouseClicked(_ -> {
+            // Close the pop-up
+            Stage stage = (Stage) backButton.getScene().getWindow();
+            stage.close();
+       });
     }
 
+    //sign up method
+    private void signup() 
+    {
+        // If user not entered the details, display error message accordingly
+        // 1. email
+        if (email.getText().isEmpty()){
+            emailMsg.setText("Please enter an email.");
+        } else {
+            emailMsg.setText("");
+        }
+        // 2. password
+        if (password.getText().isEmpty()){
+            passwordMsg.setText("Please enter a password.");
+        } else {
+            passwordMsg.setText("");
+        }
+        // 3. confirm password
+        if (confirmPassword.getText().isEmpty()){
+            confirmPasswordMsg.setText("Please enter the password again.");
+        } else {
+            confirmPasswordMsg.setText("");
+        }
+        // 4. username
+        if (username.getText().isEmpty()){
+            usernameMsg.setText("Please enter a username.");
+        } else {
+            usernameMsg.setText("");
+        }
+
+        // If user entered the details, validate them
+        // 1. Validate email
+        isEmailValid = checkEmail(email.getText());
+        if(!isEmailValid && !email.getText().isEmpty()){
+            emailMsg.setText("Invalid email format.");
+        } else if (isEmailValid && !email.getText().isEmpty()){
+            emailMsg.setText("");
+        }
+
+        // 2. Validate password confirmation matching
+        isConfirmPasswordMatched = checkPasswordconfirmation(password.getText(), confirmPassword.getText());
+        if(!isConfirmPasswordMatched && !password.getText().isEmpty() && !confirmPassword.getText().isEmpty()){
+            confirmPasswordMsg.setText("Passwords do not matched.");
+        } else if (isConfirmPasswordMatched && !password.getText().isEmpty() && !confirmPassword.getText().isEmpty()){
+            confirmPasswordMsg.setText("");
+        }
+
+
+        // If no issue then try to sign up
+        if (isEmailValid && isPasswordValid && isConfirmPasswordMatched) {
+            // Close the pop-up
+            Stage stage = (Stage) submitBtn.getScene().getWindow();
+            stage.close();
+
+            ServiceResult result = userService.userSignUp(username.getText(), email.getText(), password.getText());
+            try {
+                if ((boolean) result.isSuccessful() == true) {
+                    // Pop up sign up successful
+                    App.openPopUpAtTop("success-message", result.getReturnMessage());
+                    // then switch to login
+                    App.switchScene("login-page");
+                } else {
+                    // Display error message
+                    App.openPopUpAtTop("error-message", result.getReturnMessage());
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
     /***
      * HELPER METHOD TO VALIDATE EMAIL
      * 
@@ -208,4 +233,40 @@ public class SignupController {
         return (password.equals(passwordConfirmation));
     }
 
-}
+    private void setFocusTraversal() {
+        username.setOnKeyPressed(e -> {
+            if (e.getCode() == javafx.scene.input.KeyCode.TAB) {
+                email.requestFocus();
+                e.consume();
+            }
+        });
+
+        email.setOnKeyPressed(e -> {
+            if (e.getCode() == javafx.scene.input.KeyCode.TAB) {
+                password.requestFocus();
+                e.consume();
+            }
+        });
+
+        password.setOnKeyPressed(e -> {
+            if (e.getCode() == javafx.scene.input.KeyCode.TAB) {
+                confirmPassword.requestFocus();
+                e.consume();
+            }
+        });
+
+        confirmPassword.setOnKeyPressed(e -> {
+            if (e.getCode() == javafx.scene.input.KeyCode.TAB) {
+                submitBtn.requestFocus();
+                e.consume();
+            }
+        });
+
+        submitBtn.setOnKeyPressed(e -> {
+            if (e.getCode() == javafx.scene.input.KeyCode.TAB) {
+                username.requestFocus();
+                e.consume();
+            }
+        });
+    }
+} 

@@ -1,53 +1,69 @@
 /* Rich Text Area styling ***/
 .rich-text-area {
     -fx-background-radius: 14px;  
-    -fx-background-color: #E5E3D4;       
-    -fx-border-radius: 14px;         
-    -fx-border-color: transparent;     
-    -fx-border-width: 0;               
+    -fx-background-color: #E5E3D4;  
+    background-color: #E5E3D4;       
+    -fx-border-radius: 14px;     
+    border-radius: 14px;         
+    -fx-border-color: transparent; 
+    border-color: transparent;     
+    -fx-border-width: 0;  
+    border-width: 0;               
     -fx-focus-color: transparent;     
     -fx-faint-focus-color: transparent; 
     -fx-background-insets: 0; 
-    -fx-padding: 20px 20px 20px 20px;           
+    -fx-padding: 20px 20px 20px 20px; 
+    padding: 20px 20px 20px 20px;           
 }
 
 #pt .rich-text-area {
-    -fx-padding: 60px 20px 20px 20px;   
+    -fx-padding: 60px 20px 20px 20px;
+    padding: 60px 20px 20px 20px;   
 }
 
 .rich-text-area .paragraph-list-view {
     -fx-background-color: #E5E3D4;
+    background-color: #E5E3D4;
 }
 
 .rich-text-area .paragraph-tile {
     -fx-background-color: #E5E3D4;
+    background-color: #E5E3D4;
 }
 
 .rich-text-area .paragraph-tile > .content-area {
     -fx-background-color: #E5E3D4;
+    background-color: #E5E3D4;
 }
 
 .rich-text-area .paragraph-tile > .graphic-box {
     -fx-background-color: #E5E3D4;
+    background-color: #E5E3D4;
 }
 
 
 .rich-text-area .list-cell {
     -fx-background: #E5E3D4;
+    background: #E5E3D4;
 }
 
 .error .rich-text-area {
-    -fx-border-color: #FF9696;     
-    -fx-border-width: 2px;          
+    -fx-border-color: #FF9696; 
+    border-color: #FF9696;     
+    -fx-border-width: 2px;   
+    border-width: 2px;          
 }
 
 .text-field.error {
     -fx-border-color: #FF9696;     
-    -fx-border-width: 2px;          
+    border-color: #FF9696;     
+    -fx-border-width: 2px;     
+    border-width: 2px;          
 }
 
 .errorMsg {
     -fx-fill: #FF9696;
+    fill: #FF9696;
     -fx-text-fill: #FF9696;
 }
 
@@ -68,13 +84,17 @@
 /* Recycle Bin styling */
 .diary-item-pane {
     -fx-background-color: #F1F1F1;
+    background-color: #F1F1F1;
     -fx-cursor: hand;
+    cursor: hand;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);
     -fx-transition: all 0.2s ease;
+    transition: all 0.2s ease;
 }
 
 .diary-item-pane:hover {
     -fx-background-color: #E6E6E6;
+    background-color: #E6E6E6;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 4);
     -fx-scale-x: 1.02;
     -fx-scale-y: 1.02;
@@ -83,37 +103,47 @@
 .diary-title {
     -fx-text-fill: #9abf80;
     -fx-font-family: 'Roboto Bold';
+    font-family: 'Roboto Bold';
     -fx-font-size: 15px;
+    font-size: 15px;
 }
 
 .days-left {
     -fx-text-fill: #1c325b;
     -fx-font-family: 'Roboto Bold';
+    font-family: 'Roboto Bold';
     -fx-font-size: 8px;
+    font-size: 8px;
 }
 
 .date {
     -fx-text-fill: #8f8f8f;
     -fx-font-family: 'Roboto Bold';
+    font-family: 'Roboto Bold';
     -fx-font-size: 6px;
+    font-size: 6px;
 }
 
 /* ScrollPane styling */
 .scroll-pane {
     -fx-background-color: transparent;
+    background-color: transparent;
 }
 
 .scroll-pane .viewport {
     -fx-background-color: transparent;
+    background-color: transparent;
 }
 
 .scroll-bar:vertical {
     -fx-background-color: transparent;
+    background-color: transparent;
     -fx-pref-width: 10px;
 }
 
 .scroll-bar:vertical .thumb {
     -fx-background-color: #8F8F8F;
+    background-color: #8F8F8F;
     -fx-background-radius: 5px;
 }
 
@@ -121,5 +151,7 @@
 .combo-box .arrow-button,
 .color-picker .arrow-button{
     -fx-background-color: transparent;
+    background-color: transparent;
     -fx-padding: 4;
+    padding: 4;
 }

@@ -8,19 +8,19 @@ import java.util.List;
 import org.jasypt.util.password.StrongPasswordEncryptor;
 
 
-public class UserService
+public class TestUserService
 {
     private String filename;
     private FileIO fileIO = new FileIO();
     StrongPasswordEncryptor passwordEncryptor = new StrongPasswordEncryptor();
 
     //if no arg passing through constructor, default to Users.txt
-    public UserService() {
+    public TestUserService() {
         this.filename = "Users.txt";
     }
 
     //for testing purposes
-    public UserService(String filename) {
+    public TestUserService(String filename) {
         this.filename = filename;
     }
 
@@ -239,7 +239,7 @@ public class UserService
             fileIO.purgeFile(username + ".csv");
 
             //delete all images of the user
-            fileIO.purgeFolder("images/" + username);
+            fileIO.purgeFile("images/" + username);
 
             //done 
             return new ServiceResult(true, null, "Account deleted successfully.");

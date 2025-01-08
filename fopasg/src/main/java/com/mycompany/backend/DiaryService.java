@@ -5,14 +5,16 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
 import com.google.common.io.Files;
 
-
+import com.mycompany.frontend.RichTextCSVExporter;
 
 public class DiaryService
 {
@@ -173,7 +175,7 @@ public class DiaryService
 
         for (Diary diary : diaries)
         {
-            if (diary.getDiaryTitle().contains(searchInput))
+            if (diary.getDiaryTitle().toLowerCase().contains(searchInput))
             {
                 searchResult.add(diary);
             }
@@ -357,62 +359,204 @@ public class DiaryService
         }
     }
 
-    
-    // Export diary entries within a range to PDF
-    public ServiceResult exportDiaryToPDF(LocalDateTime startDate, LocalDateTime endDate, String pdfFilename, String rangeType) {
-    try {
-        // Fetch all diary entries
-        List<Diary> diaryList = getAllDiary();
+    //Export diary to pdf
+    public ServiceResult exportDiaryToPDF(List<Diary> diaries, String pdfFilename)
+    {
+        List<StyledText> entries = new ArrayList<>();
+        //format diary
+        try
+        {
+            for (Diary diary : diaries)
+            {
+                entries.addAll(formatDiaryEntryForExport(diary));
+            }
 
-        LocalDateTime now = LocalDateTime.now();
-
-        switch (rangeType.toLowerCase()) {
-            case "week":
-                startDate = now.minusDays(7);
-                endDate = now;
-                break;
-            case "month":
-                startDate = now.minusMonths(1);
-                endDate = now;
-                break;
-            case "day":
-                break;
-            default:
-                return new ServiceResult(false, null, "Invalid rangeType. Please choose 'week', 'month', 'day', or 'custom'.");
+            if (!entries.isEmpty())
+            {
+                fileIO.exportToPDFUsingPDFBox(pdfFilename + ".pdf", entries);
+                return new ServiceResult(true, null, "Diary entries exported to PDF successfully and saved in Downloads folder.");
+            }
+            else
+            {
+                return new ServiceResult(false, null, "Failed to export diary entries to PDF.");
+            }
         }
-
-
+        catch (IOException e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    // Export diary entries within a date range to PDF
+    public ServiceResult exportDiaryToPDF(LocalDate startDate, LocalDate endDate, String pdfFilename) {
+        List<Diary> filteredDiaries = new ArrayList<>();
+        try {
+            //Fetch all diary entries
+            List<Diary> diaryList = getAllDiary();
+            
             // Filter entries by date range
-            List<String> entriesInRange = new ArrayList<>();
             for (Diary diary : diaryList) {
-                if (!diary.getDiaryDate().isBefore(startDate) && !diary.getDiaryDate().isAfter(endDate)) {
-                    // Format each diary entry for PDF export
-                    entriesInRange.add(formatDiaryEntryForExport(diary));
+                if (diary.getDiaryDate().toLocalDate().isAfter(startDate.minusDays(1)) && diary.getDiaryDate().toLocalDate().isBefore(endDate.plusDays(1))) {
+                    filteredDiaries.add(diary);
                 }
             }
 
-            if (entriesInRange.isEmpty()) {
-                return new ServiceResult(false, null, "No diary entries found in the specified date range.");
+            if (!diaryList.isEmpty())
+            {
+                return exportDiaryToPDF(filteredDiaries, pdfFilename);
             }
-
-            // Export filtered entries to PDF using FileIO
-            fileIO.exportToPDFUsingPDFBox(pdfFilename, entriesInRange); // Replace with `exportToPDFUsingIText` if preferred
-      
-            return new ServiceResult(true, null, "Diary entries exported to PDF successfully.");
+            else
+            {
+                return new ServiceResult(false, null, "No diary entries found within the specified date range.");
+            }
         } catch (Exception e) {
-            return new ServiceResult(false, null, "Error exporting diary entries to PDF: " + e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 
-    // Helper method to format a diary entry for PDF export
-    private String formatDiaryEntryForExport(Diary diary) {
-        return "Title: " + diary.getDiaryTitle() + "\n" +
-              "Date: " + diary.getDiaryDate() + "\n" +
-              "Content:\n" + diary.getDiaryContent() + "\n" +
-              "----------------------------------------";
-    }   
-    
+    //export diary entries by month and year
+    public ServiceResult exportDiaryToPDF(Month month, int year, String pdfFilename) 
+    {
+        List<Diary> filteredDiaries = new ArrayList<>();
+        try 
+        {
+            // Fetch all diary entries
+            List<Diary> diaryList = getAllDiary();
 
+            // Filter entries
+            for (Diary diary : diaryList) 
+            {
+                if (diary.getDiaryDate().getMonth() == month  && diary.getDiaryDate().getYear() == year) 
+                {
+                    filteredDiaries.add(diary);
+                }
+            }
+            if (!diaryList.isEmpty())
+            {
+                return exportDiaryToPDF(filteredDiaries, pdfFilename);
+            }
+            else
+            {
+                return new ServiceResult(false, null, "No diary entries found within the specified month.");
+            }
+        } 
+        catch (Exception e) 
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    //export diary entries by start date and weeks
+    public ServiceResult exportDiaryToPDF(LocalDate startDate, int weeks, String pdfFilename) 
+    {
+        List<Diary> filteredDiaries = new ArrayList<>();
+        try 
+        {
+            // Fetch all diary entries
+            List<Diary> diaryList = getAllDiary();
+
+            // Filter entries
+            for (Diary diary : diaryList) 
+            {
+                if (diary.getDiaryDate().toLocalDate().isAfter(startDate.minusDays(1)) && diary.getDiaryDate().toLocalDate().isBefore(startDate.plusWeeks(weeks).plusDays(1))) 
+                {
+                    filteredDiaries.add(diary);
+                }
+            }
+            if (!diaryList.isEmpty())
+            {
+                return exportDiaryToPDF(filteredDiaries, pdfFilename);
+            }
+            else
+            {
+                return new ServiceResult(false, null, "No diary entries found within the specified week range.");
+            }
+        } 
+        catch (Exception e) 
+        {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    // //format diary for export
+    // private List<String> formatDiaryEntryForExport(Diary diary) throws IOException{
+    //     List<String> formattedEntry = new ArrayList<>();
+    //     formattedEntry.add("Title: " + diary.getDiaryTitle());
+    //     formattedEntry.add("Date: " + diary.getDiaryDate().toLocalDate());
+    //     formattedEntry.add("Mood: " + diary.getMood());
+    //     formattedEntry.add("Content: " + RichTextCSVExporter.importFromCSV(diary.getDiaryContent()).getText());
+    //     formattedEntry.add("----------------------------------------");
+    //     return formattedEntry;
+    // }
+
+    private List<StyledText> formatDiaryEntryForExport(Diary diary) throws IOException {
+        List<StyledText> formattedEntry = new ArrayList<>();
+    
+        // Add title, date, and mood as plain text
+        formattedEntry.add(new StyledText(
+            "Title: " + diary.getDiaryTitle() + "\n",
+            "Helvetica",  // You can retrieve this dynamically if needed
+            14,  // Default font size
+            "#00000000",  // Black color (RGB)
+            "",  // Background color (optional)
+            false,  // Not italic
+            true,  // Bold
+            false,  // No strikethrough
+            false,  // No underline
+            false,  // No bulleted list
+            false   // Not a numbered list
+        ));
+        
+        formattedEntry.add(new StyledText(
+            "Date: " + diary.getDiaryDate().toLocalDate(),
+            "Helvetica",
+            12,  // Font size for date
+            "#00000000",  // Black color
+            "",
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ));
+        
+        formattedEntry.add(new StyledText(
+            "Mood: " + diary.getMood() + "\n",
+            "Helvetica",
+            12,
+            "#00000000",  // Black color
+            "",
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ));
+
+        formattedEntry.add(new StyledText(
+            "Content: \n",
+            "Helvetica",
+            12,
+            "#00000000",  // Black color
+            "",
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ));
+    
+        // Decode content with styles from diary content
+        List<StyledText> contentFragments = RichTextCSVExporter.parseStyledText(diary.getDiaryContent());
+
+        formattedEntry.addAll(contentFragments);
+    
+        return formattedEntry;
+    }
+    
   
     //image methods
     // public List<String> addOrRemovePic(List<File> newImages, String diaryId)
@@ -499,6 +643,7 @@ public class DiaryService
         
         List<String> imagePaths = new ArrayList<>();
         List<File> existing = new ArrayList<>();
+        List<Integer> indexes = new ArrayList<>();
             
         try {
             // Get existing images in user folder
@@ -519,6 +664,9 @@ public class DiaryService
                     if (Files.asByteSource(existingImage).contentEquals(Files.asByteSource(newImage))) {
                         existing.add(existingImage);
                         matched = true;
+                        String fileName = existingImage.getName();
+                        int currentIndex = Integer.parseInt(fileName.substring(fileName.lastIndexOf('-') + 1, fileName.lastIndexOf('.')));
+                        indexes.add(currentIndex);
                         break;
                     }
                 }
@@ -530,10 +678,6 @@ public class DiaryService
     
             // Second pass: Add new images, reusing existing indices where possible
             int newIndex = 1; // Start from 1 if no existing images found
-            if (!existing.isEmpty()) {
-                // Find the highest existing index and continue from there
-                newIndex = existing.size() + 1;
-            }
     
             for (File newImage : newImages) {
                 boolean isAlreadyAdded = false;
@@ -549,10 +693,19 @@ public class DiaryService
                         break;
                     }
                 }
+
+                Collections.sort(indexes); 
+                for (int index:indexes){
+                    if (newIndex == index){
+                        newIndex++;
+                    } else {
+                        break;
+                    }
+                }
     
-                String username = filename.replaceFirst("[.][^.]+$", "");
+                //String username = filename.replaceFirst("[.][^.]+$", "");
                 String index = isAlreadyAdded ? currentIndex : String.valueOf(newIndex);
-                String imagePath = "src/main/resources/images/" + username + "/" + diaryId + "-" + index + ".jpg";
+                String imagePath = diaryId + "-" + index + ".jpg";
                 
                 imagePaths.add(imagePath);
     
@@ -576,7 +729,7 @@ public class DiaryService
         List<Diary> diaries = getAllDiary();
         for (Diary diary : diaries)
         {
-            if (diary.getDiaryDate().toLocalDate().isAfter(startDate) && diary.getDiaryDate().toLocalDate().isBefore(endDate))
+            if (diary.getDiaryDate().toLocalDate().isAfter(startDate.minusDays(1)) && diary.getDiaryDate().toLocalDate().isBefore(endDate.plusDays(1)))
             {
                 switch(diary.getMood())
                 {

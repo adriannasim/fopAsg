@@ -21,33 +21,23 @@
                   <Font name="System Bold" size="24.0" />
                </font>
             </Label>
-            <TextField fx:id="username" layoutX="134.0" layoutY="233.0" prefHeight="26.0" prefWidth="453.0" style="-fx-background-color: #D9D9D9;" />
-            <TextField fx:id="email" layoutX="134.0" layoutY="286.0" prefHeight="26.0" prefWidth="453.0" style="-fx-background-color: #D9D9D9;" />
-            <Label layoutX="134.0" layoutY="212.0" text="Username">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
-            </Label>
-            <Label layoutX="134.0" layoutY="266.0" text="Email">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
-            </Label>
-            <Text fx:id="emailMsg" layoutX="134.0" layoutY="321.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-background-color: #ffffff;" styleClass="errorMsg" wrappingWidth="208.0">
-               <font>
-                  <Font name="Roboto Bold" size="10.0" />
-               </font>
-            </Text>
-            <Label layoutX="134.0" layoutY="322.0" text="Password (At least 6 characters)">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
-            </Label>
             <ImageView fitHeight="60.0" fitWidth="60.0" layoutX="329.0" layoutY="119.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@images/avatar.png" />
                </image>
             </ImageView>
+            <Label layoutX="134.0" layoutY="212.0" text="Username">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <TextField fx:id="username" layoutX="134.0" layoutY="233.0" prefHeight="26.0" prefWidth="453.0" style="-fx-background-color: #D9D9D9;" />
+            <Label layoutX="134.0" layoutY="266.0" text="Email">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <TextField fx:id="email" layoutX="134.0" layoutY="286.0" prefHeight="26.0" prefWidth="453.0" style="-fx-background-color: #D9D9D9;" />
             <ImageView fx:id="emailEdit" fitHeight="15.0" fitWidth="15.0" layoutX="592.0" layoutY="292.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@images/edit-profile-icon.png" />
@@ -56,14 +46,27 @@
                      <Cursor fx:constant="HAND" />
                </cursor>
             </ImageView>
-            <ImageView fx:id="passwordEdit" fitHeight="15.0" fitWidth="15.0" layoutX="592.0" layoutY="348.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@images/edit-profile-icon.png" />
-               </image>
+            <Text fx:id="emailMsg" layoutX="134.0" layoutY="321.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-background-color: #ffffff;" styleClass="errorMsg" wrappingWidth="208.0">
+               <font>
+                  <Font name="Roboto Bold" size="10.0" />
+               </font>
+            </Text>
+            <Button fx:id="changePasswordBtn" layoutX="136.0" layoutY="339.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="208.0" text="Change Password">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
                <cursor>
-                     <Cursor fx:constant="HAND" />
+                  <Cursor fx:constant="HAND" />
                </cursor>
-            </ImageView>
+            </Button>
+            <Button fx:id="deleteAccountBtn" layoutX="379.0" layoutY="339.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="208.0" style="-fx-background-color: #913030;" text="Delete Account" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
             <Button fx:id="submitBtn" layoutX="305.0" layoutY="404.0" mnemonicParsing="false" style="-fx-background-color: #9ABF80; -fx-background-radius: 20px;" text="Save" textFill="WHITE">
                <font>
                   <Font name="Roboto Bold" size="15.0" />
@@ -75,20 +78,15 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button fx:id="backButton" layoutX="38.0" layoutY="40.0" mnemonicParsing="false" style="-fx-background-color: #ffffff;" text="Back" textFill="#8f8f8f">
-               <font>
-                  <Font name="Roboto" size="12.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-            <Text fx:id="passwordMsg" layoutX="139.0" layoutY="380.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-background-color: #ffffff;">
-               <font>
-                  <Font name="Roboto Bold" size="10.0" />
-               </font>
-            </Text>
          </children>
       </Pane>
+      <Button fx:id="backButton" layoutX="28.0" layoutY="30.0" mnemonicParsing="false" style="-fx-background-color: #ffffff;" text="Back" textFill="#8f8f8f">
+         <font>
+            <Font name="Roboto" size="12.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
    </children>
 </AnchorPane>
