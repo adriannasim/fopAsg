@@ -159,7 +159,7 @@ public class UserService
         else
         {
             //if use change password method
-            if (password.equals(null))
+            if (password == null)
             {
                 password = getUserByUsername(username).getPassword();
             }
