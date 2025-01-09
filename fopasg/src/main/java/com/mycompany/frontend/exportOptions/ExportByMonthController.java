@@ -63,6 +63,19 @@ public class ExportByMonthController extends SharedPaneCharacteristics {
         month.setItems(FXCollections.observableArrayList(Month.values()));
         year.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1900, 2100, LocalDate.now().getYear()));
 
+        // Set a StringConverter for the ComboBox to display month names
+        month.setConverter(new javafx.util.StringConverter<>() {
+            @Override
+            public String toString(Month object) {
+                return object == null ? "" : object.name(); // Display month name
+            }
+
+            @Override
+            public Month fromString(String string) {
+                return string == null || string.isEmpty() ? null : Month.valueOf(string);
+            }
+        });
+
         //set default values
         month.setValue(LocalDate.now().getMonth());
         year.getValueFactory().setValue(LocalDate.now().getYear());
@@ -75,9 +88,9 @@ public class ExportByMonthController extends SharedPaneCharacteristics {
     private void handleExportButtonClick(ActionEvent event) {
         String filename = "Diary_For_"+ month.getValue() + "_Year_" + year.getValue() + "-" + sessionUsername;
 
-        ServiceResult result = diaryService.exportDiaryToPDF(month.getValue(), year.getValue(), filename);
         try
         {
+            ServiceResult result = diaryService.exportDiaryToPDF(month.getValue().name(), year.getValue(), filename);
             //pop up export successful
             if (result.isSuccessful())
             {

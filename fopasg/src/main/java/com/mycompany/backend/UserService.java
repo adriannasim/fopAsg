@@ -86,6 +86,12 @@ public class UserService
                     //then check password
                     if (passwordEncryptor.checkPassword(password, userInfo[2]))
                     {
+                        //check if user has a csv file, if not create one
+                        if (!fileIO.loadFile(userInfo[0] + ".csv").exists())
+                        {
+                            fileIO.createFile(userInfo[0] + ".csv");
+                        }
+
                         //login successful
                         return new ServiceResult(true, userInfo[0], "Logged in successfully. Welcome " + userInfo[0] + ".");
                     }

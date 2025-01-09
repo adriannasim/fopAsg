@@ -336,15 +336,16 @@ public class DiaryService {
     }
 
     // export diary entries by month and year
-    public ServiceResult exportDiaryToPDF(Month month, int year, String pdfFilename) {
+    public ServiceResult exportDiaryToPDF(String month, int year, String pdfFilename) {
         List<Diary> filteredDiaries = new ArrayList<>();
         try {
             // Fetch all diary entries
             List<Diary> diaryList = getAllDiary();
 
+           // Month month = Month.valueOf(monthString.toUpperCase());
             // Filter entries
             for (Diary diary : diaryList) {
-                if (diary.getDiaryDate().getMonth() == month && diary.getDiaryDate().getYear() == year) {
+                if (diary.getDiaryDate().getMonth().toString().equals(month) && diary.getDiaryDate().getYear() == year) {
                     filteredDiaries.add(diary);
                 }
             }
