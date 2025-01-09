@@ -139,7 +139,7 @@ public class LoginPageController extends SharedPaneCharacteristics {
                 // If successfully logged in
                 if (result.getReturnObject() != null) {
                     App.openPopUpAtTop("success-message", result.getReturnMessage());
-                    UserSession.getSession().setUsername(username.getText());
+                    UserSession.getSession().setUsername((String) result.getReturnObject());
                     App.switchScene("main-menu");
                 } else {
                     // pop up fail msg
