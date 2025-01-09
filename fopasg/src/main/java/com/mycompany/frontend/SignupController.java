@@ -133,7 +133,7 @@ public class SignupController {
         });
 
         //when user press enter at the password field
-        password.setOnKeyPressed(e -> {
+        confirmPassword.setOnKeyPressed(e -> {
             if (e.getCode() == javafx.scene.input.KeyCode.ENTER) {
                 signup();
                 e.consume();

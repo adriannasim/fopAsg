@@ -28,4 +28,6 @@ replay_pid*
 
 .vscode/
 
-/fopasg/src/main/resources/
+*.txt
+*.csv
+fopasg/src/main/resources/images/*
