@@ -143,6 +143,7 @@ public class DiaryService {
     public List<Diary> searchDiariesByTitle(String searchInput) {
         List<Diary> diaries = getAllDiary();
         List<Diary> searchResult = new ArrayList<>();
+        searchInput = searchInput.toLowerCase();
 
         for (Diary diary : diaries) {
             if (diary.getDiaryTitle().toLowerCase().contains(searchInput)) {
