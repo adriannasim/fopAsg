@@ -66,7 +66,7 @@ public class MoodTrackerController extends SharedPaneCharacteristics{
     private void generateBarChart()
     {
         //clear old bar chart data
-        barChart.getData().clear();
+        //barChart.getData().clear();
 
         //get date range
         LocalDate startDate = start.getValue();
@@ -96,24 +96,36 @@ public class MoodTrackerController extends SharedPaneCharacteristics{
         }
         yAxis.setUpperBound(maxCount + 2);
 
-        //create data series for the bar chart
-        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        //if no data = initialise the series
+        if (barChart.getData().isEmpty())
+        {
+            //create data series for the bar chart
+            XYChart.Series<String, Number> series = new XYChart.Series<>();
+    
+            //add data points to the series
+            XYChart.Data<String, Number> happy = new XYChart.Data<>("Happy", moodCounts[0]);
+            XYChart.Data<String, Number> normal = new XYChart.Data<>("Normal", moodCounts[1]);
+            XYChart.Data<String, Number> sad = new XYChart.Data<>("Sad", moodCounts[2]);
+            
+            series.getData().add(happy);
+            series.getData().add(normal);
+            series.getData().add(sad);
+    
+            applyStyleToDataNode(happy, "-fx-bar-fill:rgb(149, 241, 28);");
+            applyStyleToDataNode(normal, "-fx-bar-fill:rgb(215, 228, 30);");
+            applyStyleToDataNode(sad, "-fx-bar-fill:rgb(13, 201, 226);");
 
-        //add data points to the series
-        XYChart.Data<String, Number> happy = new XYChart.Data<>("Happy", moodCounts[0]);
-        XYChart.Data<String, Number> normal = new XYChart.Data<>("Normal", moodCounts[1]);
-        XYChart.Data<String, Number> sad = new XYChart.Data<>("Sad", moodCounts[2]);
-        
-        series.getData().add(happy);
-        series.getData().add(normal);
-        series.getData().add(sad);
-
-        applyStyleToDataNode(happy, "-fx-bar-fill:rgb(149, 241, 28);");
-        applyStyleToDataNode(normal, "-fx-bar-fill:rgb(215, 228, 30);");
-        applyStyleToDataNode(sad, "-fx-bar-fill:rgb(13, 201, 226);");
-
-        //add series to the chart
-        barChart.getData().add(series);
+            //add series to the chart
+            barChart.getData().add(series);
+        }
+        //if already have data, just update it
+        else
+        {
+            XYChart.Series<String, Number> series = barChart.getData().get(0);
+            series.getData().get(0).setYValue(moodCounts[0]);
+            series.getData().get(1).setYValue(moodCounts[1]);
+            series.getData().get(2).setYValue(moodCounts[2]);
+        }
 
         //hide legend
         barChart.setLegendVisible(false);
